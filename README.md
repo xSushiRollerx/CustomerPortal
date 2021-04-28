@@ -1,2 +1,2 @@
 # CustomerPortal
-UI for users
+UI for customers
