@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "express": "^4.17.1",
+    "http": "*",
+    "nodemailer": "^6.5.0"
+  }
+}
