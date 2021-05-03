@@ -21,7 +21,16 @@ class Order extends Component {
     }
 
     checkOut = () => {
-        this.props.history.push('/delivery-address');
+        if (this.state.order.orderItems.length === 0 && (this.state.order.address.street === null | this.state.order.address.city === null | this.state.order.address.state === null | this.state.order.address.zipCode === null)) {
+            alert("There are No Order Items In Your Basket And You Haven't Filled Out The Delivery Form Completely");
+        } else if (this.state.order.orderItems.length === 0) {
+            alert("There are No Order Items In Your Basket");
+        } else if (this.state.order.address.street === null | this.state.order.address.city === null | this.state.order.address.state === null | this.state.order.address.zipCode === null) {
+            alert("You Haven't Filled Out The Delivery Form Completely");
+        } else {
+            this.props.history.push('/delivery-address');
+        }
+        
     }
 
     changeDeleteOrderItem = (itemPosition) => {
@@ -89,14 +98,17 @@ class Order extends Component {
             return (<h1>LOADING</h1>);
         }
 
-        console.log("order.orderItems " + JSON.stringify(this.state.order.orderItems));
-        console.log("state.address " + JSON.stringify(this.state.order.address));
-
-        let items = this.state.order.orderItems.map((item, index) =>
+        let items = null;
+        if (this.state.order.orderItems.length !== 0) {
+            items = this.state.order.orderItems.map((item, index) =>
                 <tr>
-                    <OrderItem id={index} item={item} quantityHandler={this.changeItemQuantity} deleteItemHandler={ this.changeDeleteOrderItem}/>
+                    <OrderItem id={index} item={item} quantityHandler={this.changeItemQuantity} deleteItemHandler={this.changeDeleteOrderItem} />
                 </tr>
             );
+        } else {
+            items = <p className="text-center">No Items . . . Go Shopping!</p>;
+        }
+      
       
         let subTotal = 0;
         this.state.order.orderItems.map(item => subTotal += (item.quantity * item.price));
