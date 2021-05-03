@@ -10,34 +10,35 @@ class Order extends Component {
         this.state = {
 
             order: {},
-            orderItems: [],
+            //don't delete address idk why but it fails if deleted
             address: {},
             showDropOffForm: false
         }
         this.changeItemQuantity = this.changeItemQuantity.bind(this);
         this.changeDeliveryAddress = this.changeDeliveryAddress.bind(this);
         this.changeShowDropOffForm = this.changeShowDropOffForm.bind(this);
+        this.checkOut = this.checkOut.bind(this);
     }
 
+    checkOut = () => {
+        this.props.history.push('/delivery-address');
+    }
 
     changeDeleteOrderItem = (itemPosition) => {
-        this.state.order.orderItems = this.state.order.orderItems.splice(itemPosition, 1);
+        this.state.order.orderItems.splice(itemPosition, 1);
         this.setState({ order: this.state.order });
-        this.setState({ orderItems: this.state.order.orderItems });
         localStorage.setItem('order', JSON.stringify(this.state.order));
     }
 
     changeItemQuantity = (value, key) => {
         this.state.order.orderItems[key].quantity = value;
         this.setState({ order: this.state.order });
-        this.setState({ orderItems: this.state.order.orderItems });
         localStorage.setItem('order', JSON.stringify(this.state.order));
     }
 
     changeDeliveryAddress = (delivery) => {
         this.state.order.address = delivery;
         this.setState({ order: this.state.order });
-        this.setState({ address: this.state.order.address });
         localStorage.setItem('order', JSON.stringify(this.state.order));
     }
 
@@ -115,9 +116,9 @@ class Order extends Component {
                 </table>
             </div>
                 <div className='col-4'>
-                        <OrderSummary key={this.state.order.id} address={this.state.address} subtotal={subTotal}
+                        <OrderSummary key={this.state.order.id} address={this.state.order.address} subtotal={subTotal}
                             deliveryfee={0.00} taxes={0.00} showDropOffFormHandler={this.changeShowDropOffForm}
-                            showDropOffForm={this.showDropOffForm} />
+                            showDropOffForm={this.showDropOffForm} checkOut={ this.checkOut } />
                     </div>
                     <div className='position-fixed'>
                         <DropOffForm address={this.state.order.address} addressHandler={this.changeDeliveryAddress} showDropOffFormHandler={this.changeShowDropOffForm} showDropOffForm={this.state.showDropOffForm} />

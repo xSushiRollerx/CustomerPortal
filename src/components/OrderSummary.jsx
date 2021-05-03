@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 
 class OrderSummary extends Component {
 
+
+    checkOutHandler = () => {
+            this.props.checkOut();
+    }
+
     render() {
 
         console.log("ordersumary address: " + this.props.address);
@@ -50,7 +55,7 @@ class OrderSummary extends Component {
                     </tr>
                 </tbody>
             </table>
-                <button className='w-100 btn btn-secondary rounded-0'>Check Out</button>
+                <button className='w-100 btn btn-secondary rounded-0' onClick={this.checkOutHandler}>Check Out</button>
             </div>
         )
     }
