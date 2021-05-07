@@ -28,7 +28,7 @@ class Order extends Component {
         } else if (this.state.order.address.street === null | this.state.order.address.city === null | this.state.order.address.state === null | this.state.order.address.zipCode === null) {
             alert("You Haven't Filled Out The Delivery Form Completely");
         } else {
-            this.props.history.push('/delivery-address');
+            this.props.history.push('/confirmation');
         }
         
     }
@@ -40,7 +40,7 @@ class Order extends Component {
     }
 
     changeItemQuantity = (value, key) => {
-        this.state.order.orderItems[key].quantity = value;
+        this.state.order.orderItems[key].quantity = parseInt(value);
         this.setState({ order: this.state.order });
         localStorage.setItem('order', JSON.stringify(this.state.order));
     }
@@ -56,38 +56,6 @@ class Order extends Component {
     }
 
     componentDidMount() {
-        let foodOrder = {
-             'address': {'city': null, 'deliveryTime': null,
-                'id': null,
-                'state': null,
-                'street': null,
-                'zipCode': null
-            },
-            'customerId': 96,
-            'id': null,
-            'orderItems': [
-                {
-                    'foodId': 1,
-                    'id': null,
-                    'isActive': 1,
-                    'name': "Miso Soup",
-                    'price': 3.99,
-                    'quantity': 2
-                },
-                {
-                    'foodId': 2,
-                    'id': null,
-                    'isActive': 1,
-                    'name': "California Roll",
-                    'price': 6.99,
-                    'quantity': 4
-                }
-            ],
-            'refunded': 0,
-            'state': 0
-        }
-
-        localStorage.setItem('order', JSON.stringify(foodOrder));
         this.setState({ order: JSON.parse(localStorage.getItem('order')) });
     }
 
@@ -106,7 +74,7 @@ class Order extends Component {
                 </tr>
             );
         } else {
-            items = <p className="text-center">No Items . . . Go Shopping!</p>;
+            items = <p className="text-center" data-testid="NoItems">No Items . . . Go Shopping!</p>;
         }
       
       
@@ -115,7 +83,7 @@ class Order extends Component {
         
         
         return (
-            <div>
+            <div className="d-flex" data-testid="Order">
             <div className='row'>
             <div className='col-8'>     
             <table className='table table-bordered'>
@@ -133,7 +101,8 @@ class Order extends Component {
                             showDropOffForm={this.showDropOffForm} checkOut={ this.checkOut } />
                     </div>
                     <div className='position-fixed'>
-                        <DropOffForm address={this.state.order.address} addressHandler={this.changeDeliveryAddress} showDropOffFormHandler={this.changeShowDropOffForm} showDropOffForm={this.state.showDropOffForm} />
+                        <DropOffForm address={this.state.order.address} addressHandler={this.changeDeliveryAddress} 
+                            showDropOffFormHandler={this.changeShowDropOffForm} showDropOffForm={this.state.showDropOffForm} />
                     </div>
                 </div>  
             </div>   

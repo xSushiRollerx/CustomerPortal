@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import DeliveryAddress from './components/DeliveryAddressForm';
 import React, { Component } from 'react';
 import Order from './components/Order';
+import Confirmation from './components/Confirmation';
 
 class App extends Component {
     constructor(props) {
@@ -22,8 +23,8 @@ class App extends Component {
                         <Switch>
                             <Route path='/orders' component={OrderList}></Route>
                             <Route path='/delivery-address' component={DeliveryAddress}></Route>
-                            <Route path='/active' ref={this.orderRef} component={Order} onLeave={ this.orderRef.saveOrder} ></Route>
-                            <OrderList />
+                            <Route path='/active' ref={this.orderRef} component={Order}></Route>
+                            <Route path='/confirmation' component={Confirmation}></Route>
                         </Switch>
                     </div>
                     <Footer />
