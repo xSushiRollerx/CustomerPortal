@@ -1,2 +1,2 @@
-# CustomerPortal
-UI for customers
+# UserFrontend
+Contains front-end environment for user-related services

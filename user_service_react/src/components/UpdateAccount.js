@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Redirect } from 'react-router';
 import UserService from '../services/UserService'
 
-export default class Register extends Component {
+export default class UpdateAccount extends Component {
     render() {
         function submit(e) {
             e.preventDefault();
@@ -16,12 +16,10 @@ export default class Register extends Component {
             }
             user.username = document.getElementById('username').value;
             user.password = document.getElementById('password').value;
-            user.firstName = document.getElementById('firstName').value;
-            user.lastName = document.getElementById('lastName').value;
             user.email = document.getElementById('email').value;
             user.phone = document.getElementById('phone').value;
-            UserService.register(user).then((resp)=>{
-                alert(user.username + ' has been successfully registered');
+            UserService.update(user).then((resp)=>{
+                alert(user.username + ' has been updated. Please log out for the changes to be applied.');
             }).catch((error)=>{
                 alert(error);
             });
@@ -32,7 +30,7 @@ export default class Register extends Component {
         };
         return (
             <div>
-                <h2>Log in</h2>
+                <h2>Update Account</h2>
                 <form>
                     <label>Username: </label>
                     <input 
@@ -50,23 +48,6 @@ export default class Register extends Component {
                     className='form-control'
                     type='password' 
                     id='password'
-                    />
-                    <label>First Name: </label>
-                    <input 
-                    placeholder='firstName'
-                    name='First'
-                    className='form-control'
-                    type='text' 
-                    id='firstName'
-                    />
-                    <br/>
-                    <label>Last Name: </label>
-                    <input 
-                    placeholder='Last'
-                    name='lastName'
-                    className='form-control'
-                    type='text' 
-                    id='lastName'
                     />
                     <label>Email: </label>
                     <input 

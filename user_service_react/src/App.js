@@ -1,6 +1,6 @@
 import './App.css';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
-import UserPortal from "./components/UserPortal";
+import CustomerPortal from "./components/CustomerPortal";
 import HeaderComponent from "./components/HeaderComponent";
 import FooterComponent from "./components/FooterComponent";
 
@@ -10,7 +10,7 @@ function App() {
       <HeaderComponent/>
       <div className="container">
           <Switch>
-              <Route path = "/" exact component = {UserPortal}></Route>
+              <Route path = "/*" exact component = {CustomerPortal}></Route>
           </Switch>
       </div>
       <FooterComponent/>
