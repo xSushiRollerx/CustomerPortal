@@ -3,17 +3,17 @@ import React, { Component } from 'react'
 class OrderItem extends Component {
 
     quantityChange = (event) => {
-        this.props.quantityHandler(event.target.value, this.props.id);
+        this.props.quantityHandler(event.target.value, this.props.id, this.props.orderId);
     }
 
     deleteItemChange = () => {
-        this.props.deleteItemHandler(this.props.id);
+        this.props.deleteItemHandler(this.props.id, this.props.orderId);
     }
 
     render() {
 
         return (
-            <div className='row d-flex align-items-center' data-testid={"OrderItem " + this.props.id} key={this.props.id}>
+            <div className='row d-flex align-items-center border-bottom' data-testid={"OrderItem " + this.props.id} key={this.props.id} style={{marginBottom: "10px"} }>
                 <div className='col-3'>
   
                 </div>
