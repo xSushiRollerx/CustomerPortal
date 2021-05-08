@@ -65,7 +65,6 @@ class OrderCart extends Component {
 
     componentDidMount() {
         
-        console.log("componenetdid mount " + localStorage.getItem('orders'));
         this.setState({ orders: JSON.parse(localStorage.getItem('orders')) });
         this.setState({ address: JSON.parse(localStorage.getItem('dropOffAddress')) });
 
