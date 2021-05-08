@@ -1,114 +1,32 @@
 import React, { Component } from 'react'
 import OrderItem from './OrderItem';
-import OrderSummary from './OrderSummary';
-import DropOffForm from './DropOffForm';
-
 
 class Order extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-
-            order: {},
-            //don't delete address idk why but it fails if deleted
-            address: {},
-            showDropOffForm: false
-        }
-        this.changeItemQuantity = this.changeItemQuantity.bind(this);
-        this.changeDeliveryAddress = this.changeDeliveryAddress.bind(this);
-        this.changeShowDropOffForm = this.changeShowDropOffForm.bind(this);
-        this.checkOut = this.checkOut.bind(this);
-    }
-
-    checkOut = () => {
-        if (this.state.order.orderItems.length === 0 && (this.state.order.address.street === null | this.state.order.address.city === null | this.state.order.address.state === null | this.state.order.address.zipCode === null)) {
-            alert("There are No Order Items In Your Basket And You Haven't Filled Out The Delivery Form Completely");
-        } else if (this.state.order.orderItems.length === 0) {
-            alert("There are No Order Items In Your Basket");
-        } else if (this.state.order.address.street === null | this.state.order.address.city === null | this.state.order.address.state === null | this.state.order.address.zipCode === null) {
-            alert("You Haven't Filled Out The Delivery Form Completely");
-        } else {
-            this.props.history.push('/confirmation');
-        }
-        
-    }
-
-    changeDeleteOrderItem = (itemPosition) => {
-        this.state.order.orderItems.splice(itemPosition, 1);
-        this.setState({ order: this.state.order });
-        localStorage.setItem('order', JSON.stringify(this.state.order));
-    }
-
-    changeItemQuantity = (value, key) => {
-        this.state.order.orderItems[key].quantity = parseInt(value);
-        this.setState({ order: this.state.order });
-        localStorage.setItem('order', JSON.stringify(this.state.order));
-    }
-
-    changeDeliveryAddress = (delivery) => {
-        this.state.order.address = delivery;
-        this.setState({ order: this.state.order });
-        localStorage.setItem('order', JSON.stringify(this.state.order));
-    }
-
-    changeShowDropOffForm = () => {
-        this.state.showDropOffForm ? this.setState({ showDropOffForm: false }) : this.setState({ showDropOffForm: true });
-    }
-
-    componentDidMount() {
-        this.setState({ order: JSON.parse(localStorage.getItem('order')) });
-    }
+    /**
+    props needs
+    - order : restaurantname, orderItems
+    - changeDelteOrderItem()
+    - changeItemQuantity()
+    **/
 
 
     render() {
+        let items = this.props.order.orderItems.map((item, index) =>
+                <OrderItem id={index} item={item} quantityHandler={this.props.quantityHandler} deleteItemHandler={this.props.deleteItemHandler} orderId={this.props.id} />
+        );
 
-        if (this.state.order.orderItems === undefined | this.state.order.address === undefined) {
-            return (<h1>LOADING</h1>);
-        }
-
-        let items = null;
-        if (this.state.order.orderItems.length !== 0) {
-            items = this.state.order.orderItems.map((item, index) =>
-                <tr>
-                    <OrderItem id={index} item={item} quantityHandler={this.changeItemQuantity} deleteItemHandler={this.changeDeleteOrderItem} />
-                </tr>
-            );
-        } else {
-            items = <p className="text-center" data-testid="NoItems">No Items . . . Go Shopping!</p>;
-        }
-      
-      
-        let subTotal = 0;
-        this.state.order.orderItems.map(item => subTotal += (item.quantity * item.price));
-        
-        
+        let total = 0;
+        this.props.order.orderItems.map(item => total += (item.quantity * item.price));
         return (
-            <div className="d-flex" data-testid="Order">
-            <div className='row'>
-            <div className='col-8'>     
-            <table className='table table-bordered'>
-                <thead>
-                    <th><h3>My Basket</h3></th>
-                </thead>
-                <tbody>
-                    {items}
-                </tbody>
-                </table>
+            <div style={{ marginBottom: "20px" }} data-testid={"Order " + this.props.id} style={{ marginBottom: "10px" }}>
+                <div className="border-bottom"><h5>{this.props.order.name}</h5></div>
+                <div>{items}</div>
+                <div className="row">
+                    <h5 className='col text-right'>Total:    ${(total).toFixed(2)}</h5>
+                </div>
             </div>
-                <div className='col-4'>
-                        <OrderSummary key={this.state.order.id} address={this.state.order.address} subtotal={subTotal}
-                            deliveryfee={0.00} taxes={0.00} showDropOffFormHandler={this.changeShowDropOffForm}
-                            showDropOffForm={this.showDropOffForm} checkOut={ this.checkOut } />
-                    </div>
-                    <div className='position-fixed'>
-                        <DropOffForm address={this.state.order.address} addressHandler={this.changeDeliveryAddress} 
-                            showDropOffFormHandler={this.changeShowDropOffForm} showDropOffForm={this.state.showDropOffForm} />
-                    </div>
-                </div>  
-            </div>   
-            
         )
-          
+
     }
 }
 
