@@ -9,9 +9,6 @@ import OrderCart from './components/OrderCart';
 import Confirmation from './components/Confirmation';
 
 class App extends Component {
-    constructor(props) {
-        super(props)
-    }
 
     render() {
         let foodOrder = [
@@ -104,7 +101,7 @@ class App extends Component {
                         <Switch>
                             <Route path='/orders' component={OrderList}></Route>
                             <Route path='/delivery-address' component={DeliveryAddress}></Route>
-                            <Route path='/active' component={OrderCart}></Route>
+                            <Route path='/cart' component={OrderCart}></Route>
                             <Route path='/confirmation' component={Confirmation}></Route>
                         </Switch>
                     </div>

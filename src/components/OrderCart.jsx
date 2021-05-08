@@ -57,6 +57,7 @@ class OrderCart extends Component {
         this.setState({ address: delivery });
 
         localStorage.setItem('orders', JSON.stringify(this.state.orders));
+        localStorage.setItem('dropOffAddress', JSON.stringify(this.state.orders));
     }
 
     changeShowDropOffForm = () => {
@@ -73,7 +74,7 @@ class OrderCart extends Component {
 
     render() {
 
-        if (this.state.orders=== undefined) {
+        if (this.state.orders === undefined) {
             return (<h1>LOADING</h1>);
         }
 
