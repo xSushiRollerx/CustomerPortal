@@ -16,6 +16,8 @@ export default class UpdateAccount extends Component {
             }
             user.username = document.getElementById('username').value;
             user.password = document.getElementById('password').value;
+            user.firstName = document.getElementById('firstName').value;
+            user.lastName = document.getElementById('lastName').value;
             user.email = document.getElementById('email').value;
             user.phone = document.getElementById('phone').value;
             UserService.update(user).then((resp)=>{
@@ -31,6 +33,7 @@ export default class UpdateAccount extends Component {
         return (
             <div>
                 <h2>Update Account</h2>
+                <h3>Fill in the fields you want changed</h3>
                 <form>
                     <label>Username: </label>
                     <input 
@@ -39,6 +42,22 @@ export default class UpdateAccount extends Component {
                     className='form-control'
                     type='text' 
                     id='username'
+                    />
+                    <label>First Name: </label>
+                    <input 
+                    placeholder='firstName'
+                    name='firstName'
+                    className='form-control'
+                    type='text' 
+                    id='firstName'
+                    />
+                    <label>Last Name: </label>
+                    <input 
+                    placeholder='lastName'
+                    name='lastName'
+                    className='form-control'
+                    type='text' 
+                    id='lastName'
                     />
                     <br/>
                     <label>Password: </label>

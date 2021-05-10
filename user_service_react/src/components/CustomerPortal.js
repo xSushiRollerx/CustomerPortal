@@ -5,6 +5,7 @@ import DropdownItem from 'react-bootstrap/esm/DropdownItem';
 import Login from "./Login"
 import UserInfo from "./UserInfo"
 import Register from "./Register"
+import UpdateAccount from "./UpdateAccount"
 import {BrowserRouter as Router, Redirect, Route, Switch} from 'react-router-dom';
 
 class UserPortal extends Component {
@@ -40,6 +41,7 @@ class UserPortal extends Component {
                         <Route path = "/login" exact component = {Login}></Route>
                         <Route path = "/register" exact component = {Register}></Route>
                         <Route path = "/profile" exact component = {UserInfo}></Route>
+                        <Route path = "/update" exact component = {UpdateAccount}></Route>
                     </Switch>
                 </Router>
                 

@@ -1,17 +1,28 @@
 import React, { Component, useState } from 'react'
-import jwt_decode from 'jwt-decode'
-import { Redirect } from 'react-router';
 import UserService from '../services/UserService'
 import Button from 'react-bootstrap/Button'
 import Collapse from 'react-bootstrap/Collapse'
 
-function isLoggedIn() {
-  let token = localStorage.getItem('jwt');
-  return token;
-}
-
 export default class UserInfo extends Component {
-  
+  constructor(props) {
+    super(props);
+    this.state = {
+        user: {}
+    }
+  }
+  componentDidMount() {
+    try{
+      UserService.read().then(res => {
+        this.setState({user: res.data});
+      }).catch((error)=>{
+        alert(error);
+      });
+    }
+    catch(e){
+      alert('Please log in')
+    }
+    
+  }
   render (){
     function closeAccount() {
       alert('Not implemented yet');
@@ -40,10 +51,17 @@ export default class UserInfo extends Component {
     }
     return (
     <div className="UserInfo">
-      <header className="User-header" >
         <h1>Welcome to the User Info </h1>
-        <button onClick={isLoggedIn}>Render Name</button>
-      </header>
+        <h2>Username: </h2>
+        <p1 id='username'>{this.state.user.username}</p1>
+        <h2>First Name:</h2>
+        <p1 id='firstName'>{this.state.user.firstName}</p1>
+        <h2>Last Name:</h2>
+        <p1 id='lastName'>{this.state.user.lastName}</p1>
+        <h2>Email:</h2>
+        <p1 id='email'>{this.state.user.email}</p1>
+        <h2>Phone:</h2>
+        <p1 id='phone'>{this.state.user.phone}</p1>
       <div>
         <a href='../update'>Update your Account</a>
       </div>
