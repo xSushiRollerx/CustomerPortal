@@ -20,12 +20,9 @@ class OrderCart extends Component {
     }
 
     checkOut = () => {
-        if (this.state.orders.length === 0 && (this.state.orders[0].address.street === null)) {
-            alert("There are No Order Items In Your Basket And You Haven't Filled Out The Delivery Form Completely");
-        } else if (this.state.orders.length === 0) {
-            alert("There are No Order Items In Your Basket");
-        } else if (this.state.orders[0].address.street === null) {
-            alert("You Haven't Filled Out The Delivery Form Completely");
+        console.log(this.state.orders.length);
+        if (this.state.orders.length === 0 || (this.state.orders[0].address.street === null)) {
+            alert("There are No Order Items In Your Basket And/Or You Haven't Filled Out The Delivery Form Completely");
         } else {
             this.props.history.push('/confirmation');
         }
