@@ -4,3 +4,7 @@ import UserInfo from '../components/UserInfo';
 test('renders without crashing', () => {
   render(<UserInfo />);
 });
+
+it('Makes request on load when logged in', ()=>{
+
+});

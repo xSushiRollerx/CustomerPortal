@@ -4,3 +4,7 @@ import Register from '../components/Register';
 test('renders without crashing', () => {
   render(<Register />);
 });
+
+it('Makes axios request on correct inputs',()=>{
+
+});

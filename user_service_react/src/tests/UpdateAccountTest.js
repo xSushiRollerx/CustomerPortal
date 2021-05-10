@@ -4,3 +4,7 @@ import UpdateAccount from '../components/UpdateAccount';
 test('renders without crashing', () => {
   render(<UpdateAccount />);
 });
+
+it('Sends request on valid inputs', ()=>{
+
+});

@@ -63,7 +63,7 @@ export default class UserInfo extends Component {
         <h2>Phone:</h2>
         <p1 id='phone'>{this.state.user.phone}</p1>
       <div>
-        <a href='../update'>Update your Account</a>
+        <a href='../put'>Update your Account</a>
       </div>
       <CloseConfirmation/>
     </div>
