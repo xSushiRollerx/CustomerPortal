@@ -1,6 +1,6 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
-import Confirmation from '../components/Confirmation';
+import OrderCompletion from '../components/OrderCompletion';
 import { unmountComponentAtNode } from "react-dom";
 
 let container = null;
@@ -86,7 +86,6 @@ beforeEach(() => {
     };
 
     localStorage.setItem('orders', JSON.stringify(foodOrder));
-    localStorage.setItem('dropOffAddress', JSON.stringify(address));
 
 	// setup a DOM element as a render target
 	container = document.createElement("div");
@@ -100,72 +99,36 @@ afterEach(() => {
 	container = null;
 });
 
-it("drop off form renders", () => {
-    const {getByTestId} = render(<Confirmation/>, container);
-    expect(getByTestId('DropOffForm')).toBeInTheDocument();
+it("Order Completion renders", () => {
+    const {getByTestId} = render(<OrderCompletion/>, container);
+    expect(getByTestId('OrderCompletion')).toBeInTheDocument();
 });
 
-it("order summary renders", () => {
-    const { getByTestId } = render(<Confirmation />, container);
-    expect(getByTestId('OrderSummary')).toBeInTheDocument();
-});
-
-it("drop off form visibility tests", () => {
-    const { getByTestId } = render(<Confirmation />, container);
-
-    let dropOffForm = getByTestId('DropOffForm');
-    expect(dropOffForm.style.display).toBe('none');
-
-    fireEvent.click(getByTestId('EditAddress'));
-    expect(dropOffForm.style.display).toBe('block');
-
-    fireEvent.click(getByTestId('DropOffFormCancel'));
-    expect(dropOffForm.style.display).toBe('none');
-
-    fireEvent.click(getByTestId('EditAddress'));
-    expect(dropOffForm.style.display).toBe('block');
-
-    fireEvent.click(getByTestId('DropOffFormSubmit'));
-    expect(dropOffForm.style.display).toBe('none');
+it("Orders Submitted Success Renders Correctly", () => {
+    localStorage.setItem('orders', "[]");
     
-});
-
-it("drop off form fillout", () => {
-    const { getByTestId } = render(<Confirmation />, container);
-    fireEvent.click(getByTestId('EditAddress'));
-
-    fireEvent.change(getByTestId("DropOffFormStreet"), { target: { value: "1946 Yellow Brick Road" } });
-    fireEvent.change(getByTestId("DropOffFormCity"), { target: { value: "MunchkinVille" } });
-    fireEvent.change(getByTestId("DropOffFormState"), { target: { value: "Oz" } });
-    fireEvent.change(getByTestId("DropOffFormZipCode"), { target: { value: 30449 } });
-
-    fireEvent.click(getByTestId('DropOffFormSubmit'));
-
-    //renders in order summary
-    expect(getByTestId("OrderSummaryStreet").textContent).toBe("1946 Yellow Brick Road");
-    expect(getByTestId("OrderSummaryCityState").textContent).toBe("MunchkinVille, Oz");
-    expect(getByTestId("OrderSummaryZipCode").textContent).toBe("30449");
-
-    //saves to local storage properly
-    expect(JSON.parse(localStorage.getItem('orders'))[0].address.street).toBe("1946 Yellow Brick Road");
-    expect(JSON.parse(localStorage.getItem('orders'))[0].address.city).toBe("MunchkinVille");
-    expect(JSON.parse(localStorage.getItem('orders'))[0].address.state).toBe("Oz");
-    expect(JSON.parse(localStorage.getItem('orders'))[0].address.zipCode).toBe(30449);
-});
-
-xit("place order button functionality", () => {
     const historyMock = { push: jest.fn() };
-    const { getByTestId } = render(<Confirmation history={historyMock} />, container);
+    const { getByTestId } = render(<OrderCompletion history={historyMock} />, container);
 
-    fireEvent.click(getByTestId('EditAddress'));
+    expect(getByTestId('OrderCompletion Icon').getAttribute("d")).toBe("M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z");
+    expect(getByTestId('OrderCompletion Message').textContent).toBe("Order(s) Sumbitted Sucessfully");
+    expect(getByTestId('OrderCompletion Next').textContent).toBe("Go To View Orders");
 
-    fireEvent.click(getByTestId('DropOffFormSubmit'));
-
-    fireEvent.click(getByTestId('OrderSummaryCheckOut'));
-
-    expect(historyMock.push.mock.calls[0]).toEqual(['/confirmation'], getByTestId("Confirmation"));
+    fireEvent.click(getByTestId('OrderCompletion Next'));
+    expect(historyMock.push.mock.calls[0]).toEqual(['/orders'], getByTestId("OrderCompletion"));
 });
 
+it("Something Went Wrong Renders Correctly", () => {
+    const historyMock = { push: jest.fn() };
+    const { getByTestId } = render(<OrderCompletion history={historyMock} />, container);
+
+    expect(getByTestId('OrderCompletion Icon').getAttribute("d")).toBe("M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z");
+    expect(getByTestId('OrderCompletion Message').textContent).toBe("Something Went Wrong Not All Orders Could Be Submitted Successfully");
+    expect(getByTestId('OrderCompletion Next').textContent).toBe("Go Back To Cart");
+
+    fireEvent.click(getByTestId('OrderCompletion Next'));
+    expect(historyMock.push.mock.calls[0]).toEqual(['/confirmation'], getByTestId("OrderCompletion"));
+});
 
 
 
