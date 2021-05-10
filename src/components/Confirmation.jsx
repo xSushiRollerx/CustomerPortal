@@ -35,17 +35,18 @@ class Confirmation extends Component {
     }
 
     placeOrder = () => {
+        let orders = [];
         for (let i = 0; i < this.state.orders.length; i++) {
             let order = this.state.orders[i];
+          
             delete order.name;
             console.log(order);
-            if (CustomerOrderService.submitOrder(order) === 204) {
-                this.state.orders = this.state.orders.splice(i, 1);
-                this.setState({ orders: this.state.orders });
-                localStorage.setItem('orders', this.state.orders);
+            if (CustomerOrderService.submitOrder(order) !== 204) {
+                orders.push(this.state.orders[i]);
             }     
         }
-        //this.props.history.push('/orders');
+        localStorage.setItem("orders", orders);
+        this.props.history.push('/completion');
     }
 
     componentDidMount() {

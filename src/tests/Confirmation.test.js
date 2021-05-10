@@ -153,7 +153,7 @@ it("drop off form fillout", () => {
     expect(JSON.parse(localStorage.getItem('orders'))[0].address.zipCode).toBe(30449);
 });
 
-xit("place order button functionality", () => {
+it("place order button functionality", () => {
     const historyMock = { push: jest.fn() };
     const { getByTestId } = render(<Confirmation history={historyMock} />, container);
 
@@ -163,7 +163,8 @@ xit("place order button functionality", () => {
 
     fireEvent.click(getByTestId('OrderSummaryCheckOut'));
 
-    expect(historyMock.push.mock.calls[0]).toEqual(['/confirmation'], getByTestId("Confirmation"));
+    expect(localStorage.getItem('orders').length).toBe(0);
+    expect(historyMock.push.mock.calls[0]).toEqual(['/completion'], getByTestId("Confirmation"));
 });
 
 

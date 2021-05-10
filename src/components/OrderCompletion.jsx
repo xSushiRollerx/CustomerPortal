@@ -2,18 +2,6 @@ import React, { Component } from 'react';
 //import { useTimer } from 'react-timer-hook';
 
 class OrderCompletion extends Component {
-    /** 
-    timer = () => {
-        const {
-            seconds,
-            isRunning,
-            start,
-        } = useTimer({ expiryTimestamp, onExpire: () => console.warn('onExpire called') });
-
-        expiration = new Date()
-        expiration.setSeconds(expiration.getSeconds + 30);
-    }
-    **/
 
     move = () => {
         if (JSON.parse(localStorage.getItem('orders')).length === 0) {
@@ -28,7 +16,7 @@ class OrderCompletion extends Component {
         let display = null;
         let words = null;
         let button = null;
-        if (JSON.parse(localStorage.getItem('orders')).length === 0) {
+        if (JSON.parse(localStorage.getItem('orders')).length === 0 | localStorage.getItem('orders') === undefined ) {
             display = "M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z";
             words = "Order(s) Sumbitted Sucessfully";
             button = "Go To View Orders";

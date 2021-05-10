@@ -14,7 +14,7 @@ const config = {
 class CustomerOrderService {
 
     submitOrder(foodOrder) {
-        return axios.post((CUSTOMER_ORDER_SERVICE_BASE_URL), { foodOrder }, config).then(response => {
+        return axios.post((CUSTOMER_ORDER_SERVICE_BASE_URL), foodOrder, config).then(response => {
             console.log("status: " + response.status);
             return (response.status);
         });
