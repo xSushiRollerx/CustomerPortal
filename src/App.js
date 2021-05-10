@@ -4,50 +4,46 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import DeliveryAddress from './components/DeliveryAddressForm';
-import React, { Component } from 'react';
 import OrderCart from './components/OrderCart';
 import Confirmation from './components/Confirmation';
+import OrderCompletion from './components/OrderCompletion';
 
-class App extends Component {
-    constructor(props) {
-        super(props)
-    }
+function App()  {
 
-    render() {
         let foodOrder = [
             {
-                'name': 'Tokyo Sushi',
-                'restaurantId': 1,
-                'address': {
-                    'city': 'nowhere', 'deliveryTime': null,
-                    'id': null,
-                    'state': 'KN',
-                    'street': 'XXXX YOLO',
-                    'zipCode': 66666
+                "name": "Tokyo Sushi",
+                "restaurantId": 1,
+                "address": {
+                    "city": "nowhere", "deliveryTime": null,
+                    "id": null,
+                    "state": "KN",
+                    "street": "XXXX YOLO",
+                    "zipCode": 66666
                 },
-                'customerId': 96,
-                'id': null,
-                'orderItems': [
+                "customerId": 96,
+                "id": null,
+                "orderItems": [
                     {
-                        'foodId': 1,
-                        'id': null,
-                        'isActive': 1,
-                        'name': "Miso Soup",
-                        'price': 3.99,
-                        'quantity': 2
-                        },
-                     {
-                        'foodId': 2,
-                         'id': null,
-                        'isActive': 1,
-                        'name': "California Roll",
-                        'price': 6.99,
-                        'quantity': 4
-                     }
+                        "foodId": 1,
+                        "id": null,
+                        "isActive": 1,
+                        "name": "Miso Soup",
+                        "price": 3.99,
+                        "quantity": 2
+                    },
+                    {
+                        "foodId": 2,
+                        "id": null,
+                        "isActive": 1,
+                        "name": "California Roll",
+                        "price": 6.99,
+                        "quantity": 4
+                    }
                 ],
-                'dateSubmitted': null,
-                'refunded': 0,
-                'state': 0
+                "dateSubmitted": null,
+                "refunded": 0,
+                "state": 0
             },
             {
                 'name': 'French Bistro',
@@ -63,7 +59,7 @@ class App extends Component {
                 'id': null,
                 'orderItems': [
                     {
-                        'foodId': 1,
+                        'foodId': 4,
                         'id': null,
                         'isActive': 1,
                         'name': "Croissant",
@@ -71,7 +67,7 @@ class App extends Component {
                         'quantity': 2
                     },
                     {
-                        'foodId': 2,
+                        'foodId': 5,
                         'id': null,
                         'isActive': 1,
                         'name': "Pan Francaise",
@@ -104,8 +100,9 @@ class App extends Component {
                         <Switch>
                             <Route path='/orders' component={OrderList}></Route>
                             <Route path='/delivery-address' component={DeliveryAddress}></Route>
-                            <Route path='/active' component={OrderCart}></Route>
+                            <Route path='/cart' component={OrderCart}></Route>
                             <Route path='/confirmation' component={Confirmation}></Route>
+                            <Route path='/completion' component={OrderCompletion}></Route>
                         </Switch>
                     </div>
                     <Footer />
@@ -113,7 +110,6 @@ class App extends Component {
             </div>
 
         );
-    }
 }
 
 export default App;

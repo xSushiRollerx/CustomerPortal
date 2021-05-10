@@ -18,7 +18,7 @@ class Order extends Component {
         let total = 0;
         this.props.order.orderItems.map(item => total += (item.quantity * item.price));
         return (
-            <div style={{ marginBottom: "20px" }} data-testid={"Order " + this.props.id} style={{ marginBottom: "10px" }}>
+            <div style={{ marginBottom: "20px" }} data-testid={"Order " + this.props.id}>
                 <div className="border-bottom"><h5>{this.props.order.name}</h5></div>
                 <div>{items}</div>
                 <div className="row">

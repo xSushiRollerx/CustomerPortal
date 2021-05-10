@@ -20,12 +20,9 @@ class OrderCart extends Component {
     }
 
     checkOut = () => {
-        if (this.state.orders.length === 0 && (this.state.orders[0].address.street === null)) {
-            alert("There are No Order Items In Your Basket And You Haven't Filled Out The Delivery Form Completely");
-        } else if (this.state.orders.length === 0) {
-            alert("There are No Order Items In Your Basket");
-        } else if (this.state.orders[0].address.street === null) {
-            alert("You Haven't Filled Out The Delivery Form Completely");
+        console.log(this.state.orders.length);
+        if (this.state.orders.length === 0 || (this.state.orders[0].address.street === null)) {
+            alert("There are No Order Items In Your Basket And/Or You Haven't Filled Out The Delivery Form Completely");
         } else {
             this.props.history.push('/confirmation');
         }
@@ -57,6 +54,7 @@ class OrderCart extends Component {
         this.setState({ address: delivery });
 
         localStorage.setItem('orders', JSON.stringify(this.state.orders));
+        localStorage.setItem('dropOffAddress', JSON.stringify(this.state.orders));
     }
 
     changeShowDropOffForm = () => {
@@ -73,7 +71,7 @@ class OrderCart extends Component {
 
     render() {
 
-        if (this.state.orders=== undefined) {
+        if (this.state.orders === undefined) {
             return (<h1>LOADING</h1>);
         }
 
@@ -94,7 +92,7 @@ class OrderCart extends Component {
         
         
         return (
-            <div className="" data-testid="Order">
+            <div data-testid="Order">
             <div className='row'>
             <div className='col-8'>     
             <table className='table table-bordered'>
@@ -109,7 +107,7 @@ class OrderCart extends Component {
                 <div className='col-4'>
                         <OrderSummary address={this.state.address} subtotal={subTotal}
                             deliveryfee={0.00} taxes={0.00} showDropOffFormHandler={this.changeShowDropOffForm}
-                            showDropOffForm={this.showDropOffForm} checkOut={ this.checkOut } />
+                            showDropOffForm={this.showDropOffForm} checkOut={this.checkOut} buttonName="Place Order" orders={this.state.orders}/>
                     </div>
                     <div className='position-fixed'>
                         <DropOffForm address={this.state.address} addressHandler={this.changeDeliveryAddress} 
