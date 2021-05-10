@@ -9,13 +9,35 @@ class OrderSummary extends Component {
 
     render() {
 
+        let orders = null;
+
+        if (this.props.orders.length !== 0 && this.props.orders !== null) {
+            
+            orders = this.props.orders.map(order => {
+                let total = 0;
+                order.orderItems.map(item => total += item.quantity * item.price);
+                return (<tr className='row border-0'>
+                    <div className='col-6'>
+                        <p className='m-0'>{order.name} </p>
+                    </div>
+
+                    <div className='col-6'>
+                        <p className='m-0'>${(total).toFixed(2)}</p>
+                    </div>
+                </tr>
+                );
+            }
+            );
+        }
+
         return (
             <div data-testid="OrderSummary">
             <table className='table table-bordered'>
                 <thead>
                     <th><h3>Order Summary</h3></th>
                 </thead>
-                <tbody>
+                    <tbody>
+                        { orders}
                     <tr className='row border-0'>
                         <div className='col-6'>
                                 <p className='m-0'>Subtotal: </p>
@@ -30,7 +52,7 @@ class OrderSummary extends Component {
                         </div>
 
                     </tr>
-                        <tr className='row border-top'>
+                       <tr className='row border-top'>
                             <div className='col-6'>
                                 <p className='m-0'>Total</p>
                             </div>
@@ -57,7 +79,7 @@ class OrderSummary extends Component {
                     </tr>
                 </tbody>
             </table>
-            <button className='w-100 btn btn-secondary rounded-0' data-testid="OrderSummaryCheckOut" onClick={this.checkOutHandler}>Check Out</button>
+                <button className='w-100 btn btn-secondary rounded-0' data-testid="OrderSummaryCheckOut" onClick={this.checkOutHandler}>{this.props.buttonName}</button>
             </div>
         )
     }

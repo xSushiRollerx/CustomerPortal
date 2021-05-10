@@ -7,6 +7,7 @@ import DeliveryAddress from './components/DeliveryAddressForm';
 import React, { Component } from 'react';
 import OrderCart from './components/OrderCart';
 import Confirmation from './components/Confirmation';
+import OrderCompletion from './components/OrderCompletion';
 
 class App extends Component {
 
@@ -103,6 +104,7 @@ class App extends Component {
                             <Route path='/delivery-address' component={DeliveryAddress}></Route>
                             <Route path='/cart' component={OrderCart}></Route>
                             <Route path='/confirmation' component={Confirmation}></Route>
+                            <Route path='/completion' component={OrderCompletion}></Route>
                         </Switch>
                     </div>
                     <Footer />

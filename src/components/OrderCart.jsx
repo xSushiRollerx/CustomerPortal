@@ -95,7 +95,7 @@ class OrderCart extends Component {
         
         
         return (
-            <div className="" data-testid="Order">
+            <div data-testid="Order">
             <div className='row'>
             <div className='col-8'>     
             <table className='table table-bordered'>
@@ -110,7 +110,7 @@ class OrderCart extends Component {
                 <div className='col-4'>
                         <OrderSummary address={this.state.address} subtotal={subTotal}
                             deliveryfee={0.00} taxes={0.00} showDropOffFormHandler={this.changeShowDropOffForm}
-                            showDropOffForm={this.showDropOffForm} checkOut={ this.checkOut } />
+                            showDropOffForm={this.showDropOffForm} checkOut={this.checkOut} buttonName="Place Order" orders={this.state.orders}/>
                     </div>
                     <div className='position-fixed'>
                         <DropOffForm address={this.state.address} addressHandler={this.changeDeliveryAddress} 
