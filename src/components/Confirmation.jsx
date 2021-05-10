@@ -35,17 +35,16 @@ class Confirmation extends Component {
     }
 
     placeOrder = () => {
-        let orders = [];
+        
+        localStorage.setItem("orders", "[]")
         for (let i = 0; i < this.state.orders.length; i++) {
-            let order = this.state.orders[i];
-          
-            delete order.name;
-            console.log(order);
-            if (CustomerOrderService.submitOrder(order) !== 204) {
+            if (CustomerOrderService.submitOrder(this.state.orders[i]) !== 204) {
+                let orders = localStorage.getItem("orders");
                 orders.push(this.state.orders[i]);
-            }     
+                localStorage.setItem("orders", JSON.stringify(orders));
+            }
         }
-        localStorage.setItem("orders", orders);
+
         this.props.history.push('/completion');
     }
 
@@ -68,7 +67,7 @@ class Confirmation extends Component {
         this.state.orders.map(order => order.orderItems.map(item => subTotal += (item.quantity * item.price)));
 
         return (
-            <div className="" data-testid="Order">
+            <div data-testid="Confirmation">
                 <div className='row'>
                     <div className='col-8'>
                         <table className='table table-bordered'>
