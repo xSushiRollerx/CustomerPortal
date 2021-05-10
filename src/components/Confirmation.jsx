@@ -35,11 +35,10 @@ class Confirmation extends Component {
     }
 
     placeOrder = () => {
-        
         localStorage.setItem("orders", "[]")
         for (let i = 0; i < this.state.orders.length; i++) {
             if (CustomerOrderService.submitOrder(this.state.orders[i]) !== 204) {
-                let orders = localStorage.getItem("orders");
+                let orders = JSON.parse(localStorage.getItem("orders"));
                 orders.push(this.state.orders[i]);
                 localStorage.setItem("orders", JSON.stringify(orders));
             }
