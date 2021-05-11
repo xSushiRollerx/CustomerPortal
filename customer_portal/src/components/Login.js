@@ -2,6 +2,11 @@ import React, { Component } from 'react'
 import AuthenticationService from '../services/AuthenticationService'
 
 export default class Login extends Component {
+    constructor(props){
+        super(props);
+        this.state = {
+        }
+    }
     render() {
         function login(e) {
             e.preventDefault();
@@ -19,7 +24,7 @@ export default class Login extends Component {
         };
         function cancel(e) {
             e.preventDefault();
-            alert("Not implemented yet")
+            this.props.history.push('/');
         };
         return (
             <div>
