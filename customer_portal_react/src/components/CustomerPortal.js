@@ -8,6 +8,7 @@ import Register from "./Register"
 import UpdateAccount from "./UpdateAccount"
 import DeliveryAddress from './DeliveryAddressForm';
 import OrderCart from './OrderCart';
+import OrderList from './OrderList';
 import Confirmation from './Confirmation';
 import OrderCompletion from './OrderCompletion';
 
@@ -31,10 +32,10 @@ class UserPortal extends Component {
                 { this.state.redirect ? (<Redirect push to="/login"/>) : null }
                 <h1> Main Customer Portal </h1>
                 <Navbar>
-                    <Nav.Link href="make_order">Make new order</Nav.Link>
-                    <Nav.Link href="tracking">Make new order</Nav.Link>
-                    <Nav.Link href="restaurants">Make new order</Nav.Link>
-                    <Nav.Link href="news">Make new order</Nav.Link>
+                    <Nav.Link href="orders">Make new order</Nav.Link>
+                    <Nav.Link href="cart">Cart</Nav.Link>
+                    <Nav.Link href="restaurants">Restaurants</Nav.Link>
+                    <Nav.Link href="news">News</Nav.Link>
                 </Navbar>
                 <DropdownButton title="Account">
                     <DropdownItem href="/profile" >Profile</DropdownItem>
@@ -47,7 +48,7 @@ class UserPortal extends Component {
                         <Route path = "/login" exact component = {Login}></Route>
                         <Route path = "/register" exact component = {Register}></Route>
                         <Route path = "/profile" exact component = {UserInfo}></Route>
-                        <Route path = "/put" exact component = {UpdateAccount}></Route>
+                        <Route path = "/update" exact component = {UpdateAccount}></Route>
                         <Route path='/orders' component={OrderList}></Route>
                         <Route path='/delivery-address' component={DeliveryAddress}></Route>
                         <Route path='/cart' component={OrderCart}></Route>
