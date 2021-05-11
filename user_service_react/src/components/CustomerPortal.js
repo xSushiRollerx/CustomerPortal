@@ -1,10 +1,11 @@
 
 import React, {Component} from 'react';
-import { DropdownButton } from 'react-bootstrap';
+import { DropdownButton, Nav, Navbar } from 'react-bootstrap';
 import DropdownItem from 'react-bootstrap/esm/DropdownItem';
 import Login from "./Login"
 import UserInfo from "./UserInfo"
 import Register from "./Register"
+import UpdateAccount from "./UpdateAccount"
 import {BrowserRouter as Router, Redirect, Route, Switch} from 'react-router-dom';
 
 class UserPortal extends Component {
@@ -23,12 +24,13 @@ class UserPortal extends Component {
         return (
             <div>
                 { this.state.redirect ? (<Redirect push to="/login"/>) : null }
-                <h1> User Portal </h1>
-                <div className="tab">
-                <button className="tablinks" >Make New Order</button>
-                <button className="tablinks" >Track Delivery</button>
-                <button className="tablinks" >Restaurants</button>
-                <button className="tablinks" >News and Updates</button>
+                <h1> Main Customer Portal </h1>
+                <Navbar>
+                    <Nav.Link href="make_order">Make new order</Nav.Link>
+                    <Nav.Link href="tracking">Make new order</Nav.Link>
+                    <Nav.Link href="restaurants">Make new order</Nav.Link>
+                    <Nav.Link href="news">Make new order</Nav.Link>
+                </Navbar>
                 <DropdownButton title="Account">
                     <DropdownItem href="/profile" >Profile</DropdownItem>
                     <DropdownItem href="/login" >Log In</DropdownItem>
@@ -40,10 +42,13 @@ class UserPortal extends Component {
                         <Route path = "/login" exact component = {Login}></Route>
                         <Route path = "/register" exact component = {Register}></Route>
                         <Route path = "/profile" exact component = {UserInfo}></Route>
+                        <Route path = "/put" exact component = {UpdateAccount}></Route>
                     </Switch>
                 </Router>
-                
-                </div>
+                <Navbar>
+                    <Nav.Link href="admin">admin</Nav.Link>
+                    <Nav.Link href="driver">driver</Nav.Link>
+                </Navbar>
             </div>
         );
     }
