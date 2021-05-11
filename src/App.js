@@ -7,6 +7,7 @@ import DeliveryAddress from './components/DeliveryAddressForm';
 import OrderCart from './components/OrderCart';
 import Confirmation from './components/Confirmation';
 import OrderCompletion from './components/OrderCompletion';
+import CustomerPortal from "./components/CustomerPortal";
 
 function App()  {
 
@@ -103,6 +104,7 @@ function App()  {
                             <Route path='/cart' component={OrderCart}></Route>
                             <Route path='/confirmation' component={Confirmation}></Route>
                             <Route path='/completion' component={OrderCompletion}></Route>
+                            <Route path = "/*" exact component = {CustomerPortal}></Route>
                         </Switch>
                     </div>
                     <Footer />
