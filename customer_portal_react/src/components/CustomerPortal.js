@@ -6,6 +6,11 @@ import Login from "./Login"
 import UserInfo from "./UserInfo"
 import Register from "./Register"
 import UpdateAccount from "./UpdateAccount"
+import DeliveryAddress from './DeliveryAddressForm';
+import OrderCart from './OrderCart';
+import Confirmation from './Confirmation';
+import OrderCompletion from './OrderCompletion';
+
 import {BrowserRouter as Router, Redirect, Route, Switch} from 'react-router-dom';
 
 class UserPortal extends Component {
@@ -43,6 +48,11 @@ class UserPortal extends Component {
                         <Route path = "/register" exact component = {Register}></Route>
                         <Route path = "/profile" exact component = {UserInfo}></Route>
                         <Route path = "/put" exact component = {UpdateAccount}></Route>
+                        <Route path='/orders' component={OrderList}></Route>
+                        <Route path='/delivery-address' component={DeliveryAddress}></Route>
+                        <Route path='/cart' component={OrderCart}></Route>
+                        <Route path='/confirmation' component={Confirmation}></Route>
+                        <Route path='/completion' component={OrderCompletion}></Route>
                     </Switch>
                 </Router>
                 <Navbar>
