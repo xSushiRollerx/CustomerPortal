@@ -1,12 +1,12 @@
 import './App.css';
-import OrderList from './components/OrderList';
+import OrderList from './components/checkout/OrderList';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import DeliveryAddress from './components/DeliveryAddressForm';
+import DeliveryAddress from './components/checkout/DeliveryAddressForm';
 import React, { Component } from 'react';
-import OrderCart from './components/OrderCart';
-import Confirmation from './components/Confirmation';
+import OrderCart from './components/checkout/OrderCart';
+import Confirmation from './components/checkout/Confirmation';
 import CustomerPortal from "./components/CustomerPortal";
 
 class App extends Component {
