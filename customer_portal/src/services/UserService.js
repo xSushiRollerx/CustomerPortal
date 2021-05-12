@@ -9,7 +9,7 @@ class UserService {
         return axios.post(USER_API_BASE_URL + '/user', user);
     }
 
-    put(user){
+    update(user){
         return axios.put(USER_API_BASE_URL + '/user/' + jwt_decode(localStorage.getItem("jwt")).sub, user);
     }
 
