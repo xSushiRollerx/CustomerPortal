@@ -1,5 +1,6 @@
-
 import React, {Component} from 'react';
+import { DropdownButton, Nav, Navbar } from 'react-bootstrap';
+import DropdownItem from 'react-bootstrap/esm/DropdownItem';
 
 class HeaderComponent extends Component {
     constructor(props) {
@@ -18,6 +19,18 @@ class HeaderComponent extends Component {
                         <div><a href ="/" className="navbar-brand">Customer Portal App</a> </div>
                     </nav>
                 </header>
+                <Navbar>
+                    <Nav.Link href="orders">Make new order</Nav.Link>
+                    <Nav.Link href="cart">Cart</Nav.Link>
+                    <Nav.Link href="restaurants">Restaurants</Nav.Link>
+                    <Nav.Link href="news">News</Nav.Link>
+                </Navbar>
+                <DropdownButton title="Account">
+                    <DropdownItem href="/profile" >Profile</DropdownItem>
+                    <DropdownItem href="/login" >Log In</DropdownItem>
+                    <DropdownItem onClick={this.logout} >Log Out</DropdownItem>
+                    <DropdownItem href="/register">Register</DropdownItem>
+                </DropdownButton>
             </div>
         );
     }
