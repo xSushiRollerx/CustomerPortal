@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import CustomerOrderService from '../services/CustomerOrderService'
 
 class DeliveryAddressForm extends Component {
 
@@ -24,10 +23,7 @@ class DeliveryAddressForm extends Component {
         event.preventDefault();
         let deliveryAddress = { id: this.state.id, street: this.state.streetAddress, city: this.state.city, state: this.state.state };
         console.log('delivery address: ' + JSON.stringify(deliveryAddress));
-
-        CustomerOrderService.updateDeliveryAddress(deliveryAddress).then(response => {
-            this.props.history.push('/orders');
-        });
+        this.props.history.push('/orders');
     }
 
     cancel() {

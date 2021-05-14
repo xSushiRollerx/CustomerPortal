@@ -9,6 +9,10 @@ class HeaderComponent extends Component {
         }
     }
 
+    logout = () => {
+        this.props.history.push('/order');
+    }
+
     render() {
         return (
             <div>
