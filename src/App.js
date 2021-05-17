@@ -10,15 +10,16 @@ import OrderCart from './components/Checkout/OrderCart';
 import OrderList from './components/Checkout/OrderList';
 import Confirmation from './components/Checkout/Confirmation';
 import OrderCompletion from './components/Checkout/OrderCompletion';
+import RestaurantProfile from './components/Restaurants/RestaurantProfile';
+import MenuItem from './components/Restaurants/FoodItem';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 
 function App() {
   return (
   <div>
-    <HeaderComponent/>
     <div>
       <Router>
-        <div className="container">
+                  <div className="container">
             <Switch>
                 <Route path = "/login" exact component = {Login}></Route>
                 <Route path = "/register" exact component = {Register}></Route>
@@ -28,13 +29,12 @@ function App() {
                 <Route path='/delivery-address' component={DeliveryAddress}></Route>
                 <Route path='/cart' component={OrderCart}></Route>
                 <Route path='/confirmation' component={Confirmation}></Route>
-                <Route path='/completion' component={OrderCompletion}></Route>
+                          <Route path='/completion' component={OrderCompletion}></Route>
+                          <Route path='/restaurant' component={RestaurantProfile}></Route>
             </Switch>
         </div>
       </Router>
     </div>
-    
-    <FooterComponent/>
   </div>
   );
 }
