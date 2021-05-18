@@ -1,50 +1,64 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
 import Chip from '@material-ui/core/Chip';
 import MenuCategory from './MenuCategory';
+import { makeStyles } from '@material-ui/core/styles';
+import { useState, useEffect } from 'react';
+import { useParams } from "react-router-dom"
+import RestaurantService from './../../services/RestaurantService';
 
+const useStyles = makeStyles({
+    tags: {
+        marginBottom: 10
+    },
+    tag: {
+        marginRight: 8
+    },
+    address: {
+        marginBottom: 0,
+    },
+});
 
-class RestaurantProfile extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-        }
+export default function RestaurantProfile() {
+
+    const style = useStyles();
+    const { id } = useParams();
+    const [restaurant, setRestaurant] = useState({});
+    const response = () => {
+        RestaurantService.getRestaurant(id).then(response => setRestaurant(response.data));
     }
-
-
-    render() {
-
+    useEffect(() => {
+        response();
+    }, []) 
+    
+    let tags =  restaurant.tags.split(',').map(tag => {
+                return <Chip label={tag.toLowerCase()} variant="outlined" size="small" className={style.tag} />
+             });
+    console.log(restaurant);
+    
         return (
             <div>
                 <h1>RestaurantBanner</h1>
                 <Grid container direction="column" justify="flex-start" alignItems="stretch">
-                    <h3>Restaurant Name</h3>
+                    <h3>{restaurant.name}</h3>
                     <h6>Rating</h6>
-                    <Divider orientation="horizontal" flexItem style={{ marginBottom: "20px" }}/>
+                    <Divider orientation="horizontal" flexItem className={ style.divider}/>
                     <Grid container direction="column" justify="flex-start" alignItems="stretch" style={{marginBottom: "20px"}}>
-                        <p style={{ margin: "0px" }}>$$$$</p>
-                        <p style={{ margin: "0px" }}>Street</p>
-                        <p style={{ margin: "0px" }}>City, State</p>
-                        <p style={{ margin: "0px" }}>Zip Code</p>
+                        <p className={style.address}>$$$$</p>
+                        <p className={style.address}>{restaurant.streetAddress}</p>
+                        <p className={style.address}>{restaurant.city}, {restaurant.state}</p>
+                        <p className={style.address}>{ restaurant.zipCode}</p>
                     </Grid>
-                    <Grid container direction="row" justify="flex-start" alignItems="center" style={{ marginBottom: "20px" }}>
-                        <Chip label="tags" variant="outlined" size="small" />
-                        <Chip label="burger" variant="outlined" size="small" />
-                        <Chip label="american" variant="outlined" size="small" />
-                        <Chip label="comfort" variant="outlined" size="small" />
-                        <Chip label="southern" variant="outlined" size="small" />
+                    <Grid container direction="row" justify="flex-start" alignItems="center" className={style.tags}>
+                        {tags}
 
                     </Grid>
-                    <Divider orientation="horizontal" flexItem />
+                    <Divider orientation="horizontal" flexItem className={style.divider}/>
                     <Grid container direction="column" justify="flex-start">
                         <MenuCategory />
                         <MenuCategory />
                     </Grid>
                 </Grid>
             </div>);
-
-    }
 }
-
-export default RestaurantProfile;

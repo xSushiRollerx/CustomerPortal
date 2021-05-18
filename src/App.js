@@ -30,7 +30,7 @@ function App() {
                 <Route path='/cart' component={OrderCart}></Route>
                 <Route path='/confirmation' component={Confirmation}></Route>
                           <Route path='/completion' component={OrderCompletion}></Route>
-                          <Route path='/restaurant' component={RestaurantProfile}></Route>
+                          <Route path='/restaurant/:id' component={RestaurantProfile}></Route>
             </Switch>
         </div>
       </Router>
