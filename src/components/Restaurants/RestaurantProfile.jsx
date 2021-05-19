@@ -57,7 +57,7 @@ export default function RestaurantProfile() {
     }
 
     let categories = getCategories().map(c => {
-        return <MenuCategory category={c}/>
+        return <MenuCategory restaurantId={id} category={c}/>
     })
 
     

@@ -10,7 +10,7 @@ beforeEach(() => {
             'name': 'Tokyo Sushi',
             'restaurantId': 1,
             'address': {
-                'city': 'nowhere', 'deliveryTime': null,
+                'city': 'nowhere',
                 'id': null,
                 'state': 'KN',
                 'street': 'XXXX YOLO',

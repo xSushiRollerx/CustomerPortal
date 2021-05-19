@@ -19,17 +19,25 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.background.paper,
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
+        borderRadius: 15
     },
 
     card: {
-        width: '100%'
+        width: '100%',
+        borderRadius: 15
     },
 
     addNumber: {
-        width: 80,
-        marginBottom: 10
+        width: 70,
+        marginBottom: 10,
+        borderRadius: 30
 
-	}
+    },
+    addToBasket: {
+        width: '100%',
+        borderRadius: 30
+    }
+
 }));
 
 export default function MenuItem(props) {
@@ -44,7 +52,50 @@ export default function MenuItem(props) {
     const handleClose = () => {
         setOpen(false);
     };
-    console.log(props.item.summary);
+
+    //fix bugs
+    const addItem = (value) => {
+        console.log(localStorage.getItem('orders'));
+        let orders = JSON.parse(localStorage.getItem('orders'));
+        let order = orders.find((o) => o.restaurantId !== props.restaurantId);
+        console.log(order);
+        //adds to current order item if order by restaurant already exists
+        if (order !== undefined) {
+            orders.splice(orders.indexOf(order), 1);
+
+            let item = order.orderItems.find((i) => i.foodId === props.item.id);
+            //checks if orderItem with its id has already been added to order
+            if (item !== undefined) {
+                order.orderItems[order.orderItems.indexOf(item)].quantity += parseInt(value);
+            } else {
+                props.item.quantity = value;
+                order.orderItems.push(props.item);
+            }
+        } else {
+            let order = {
+                'name': props.restaurant.name,
+                'restaurantId': props.restaurantId,
+                'address': {
+                    'city': null,
+                    'state': null,
+                    'street': null,
+                    'zipCode': null
+                },
+                'customerId': localStorage.getItem('customer').id,
+                'orderItems': []
+            };
+            //sets value of local props
+            props.item.quantity = value;
+
+            //saves item to order which is then saved to local storage
+            order.orderItems.push(props.item);
+        }
+        orders.push(order);
+        localStorage.setItem('orders', JSON.stringify(orders));
+        handleClose();
+        console.log(JSON.parse(localStorage.getItem('orders')));
+    };
+
     return(
           
             <Grid container item alignItems="center" alignItems="stretch" xs={6}>
@@ -76,8 +127,11 @@ export default function MenuItem(props) {
                                 <p>${props.item.cost}</p>
                             </Grid>
                             <Grid container item direction="column" justify="center" alignItems="center">
-                            <TextField id="standard-number" type="number" className={style.addNumber} variant="filled" size="small" label="Quantity"/>
-                            <Button aria-label="Add Food To Cart" fontSize="large" variant="outlined" onClick={handleClose}>Add To Basket</Button>
+                            <TextField id="standard-number" type="number" className={style.addNumber} deaultValue="1" variant="outlined"
+                                InputLabelProps={{ shrink: true, }} size="small"  />
+                                <Button aria-label="Add Food To Cart" fontSize="large" variant="outlined" onClick={addItem} className={style.addToBasket}>
+                                Add To Basket
+                                </Button>
                             </Grid>
                     </CardContent>
                 </Card>

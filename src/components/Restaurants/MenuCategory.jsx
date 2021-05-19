@@ -26,7 +26,7 @@ export default function MenuCategory(props) {
 
     const style = useStyles();
     let food = props.category.map(m => {
-        return <MenuItem item={m} />
+        return <MenuItem restaurantId={props.restaurantId} item={m} />
     }); 
 
     return (
