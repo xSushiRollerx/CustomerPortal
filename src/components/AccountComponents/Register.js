@@ -7,118 +7,119 @@ export default class Register extends Component {
         this.state= {
         }
         this.cancel = this.cancel.bind(this);
+        this.submit = this.submit.bind(this);
     }
     cancel = (e)=> {
         e.preventDefault();
         this.props.history.push('/');
     };
+    submit = (e) => {
+        e.preventDefault();
+        let user = {
+            username: null,
+            password: null,
+            email: null,
+            firstName: null,
+            lastName: null,
+            phone: null
+        }
+        let validations = true;
+        user.username = document.getElementById('username').value;
+        if (user.username===null || user.username.trim()===""){
+            document.getElementById("unValid").textContent = 'Username cannot be empty';
+            validations = false;
+        }
+        else {
+            document.getElementById("unValid").textContent = null;
+            user.username = user.username.trim();
+        }
+        
+        user.password = document.getElementById('password').value;
+        let passwordConfirm = document.getElementById('passwordConfirmation').value;
+        if (user.password==="" || user.password===null){
+            document.getElementById("pwValid").textContent = 'Password cannot be empty'
+            validations = false;
+        }
+        else if (user.password.length <= 6 || user.password.length >= 20) {
+            document.getElementById("pwValid").textContent = 'Password length should be between 6 and 20 exclusive'
+            validations = false;
+        }
+        else if (user.password!==passwordConfirm) {
+            document.getElementById("pwValid").textContent = 'Passwords do not match'
+            validations = false;
+        }
+        else {
+            document.getElementById("pwValid").textContent = null;
+        }
+        
+        user.password = user.password.trim();
+        user.firstName = document.getElementById('firstName').value;
+        if (user.firstName === null || user.firstName==="" ){
+            document.getElementById("fnValid").textContent = 'Name cannot be empty'
+            validations = false;
+        }
+        else if (!/^[A-Za-z ]+$/.test(user.firstName)){
+            document.getElementById("fnValid").textContent  = 'Name must contain only letters'
+            validations = false;
+        }
+        else {
+            document.getElementById("fnValid").textContent = null;
+            user.firstName = user.firstName.trim();
+        }
+        
+        user.lastName = document.getElementById('lastName').value.trim();
+        if (user.firstName === null || user.firstName.trim()==="" ){
+            document.getElementById("lnValid").textContent = 'Name cannot be empty';
+            validations = false;
+        }
+        else if (!/^[A-Za-z ]+$/.test(user.lastName.trim())){
+            document.getElementById("lnValid").textContent = 'Name must contain only letters';
+            validations = false;
+        }
+        else{
+            document.getElementById("lnValid").textContent = null;
+            user.firstName = user.firstName.trim();
+        }
+
+        user.email = document.getElementById('email').value;
+        if (user.email === null || user.email.trim()==="" ){
+            document.getElementById("eValid").textContent = 'Email cannot be empty';
+            validations = false;
+        }
+        else if (!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(user.email.trim())){
+            document.getElementById("eValid").textContent = 'Email format unknown';
+            validations = false;
+        }
+        else {
+            document.getElementById("eValid").textContent = null;
+            user.email = user.email.trim();
+        }
+
+        user.phone = document.getElementById('phone').value.trim();
+        if (user.phone === null || user.phone === ""){
+            document.getElementById("pValid").textContent = 'Phone number cannot be empty';
+        }
+        else if (user.phone.trim().length!==10||!/^\d+$/.test(user.phone.trim())){
+            validations = false;
+            document.getElementById("pValid").textContent = 'Phone format not supported';
+        }
+        else{
+            document.getElementById("pValid").textContent = null;
+            user.phone = user.phone.trim();
+        }
+
+        if(!validations){
+            console.log("Check your fields");
+            return;
+        }
+        UserService.post(user).then((resp)=>{
+            console.log(user.username + ' has been successfully registered');
+            this.props.history.push('/');
+                    }).catch((error)=>{
+            console.log(error);
+        });
+    };
     render() {
-        function submit(e) {
-            e.preventDefault();
-            let user = {
-                username: null,
-                password: null,
-                email: null,
-                firstName: null,
-                lastName: null,
-                phone: null
-            }
-            let validations = true;
-            user.username = document.getElementById('username').value;
-            if (user.username===null || user.username.trim()===""){
-                document.getElementById("unValid").textContent = 'Username cannot be empty';
-                validations = false;
-            }
-            else {
-                document.getElementById("unValid").textContent = null;
-                user.username = user.username.trim();
-            }
-            
-            user.password = document.getElementById('password').value;
-            let passwordConfirm = document.getElementById('passwordConfirmation').value;
-            if (user.password==="" || user.password===null){
-                document.getElementById("pwValid").textContent = 'Password cannot be empty'
-                validations = false;
-            }
-            else if (user.password.length <= 6 || user.password.length >= 20) {
-                document.getElementById("pwValid").textContent = 'Password length should be between 6 and 20 exclusive'
-                validations = false;
-            }
-            else if (user.password!==passwordConfirm) {
-                document.getElementById("pwValid").textContent = 'Passwords do not match'
-                validations = false;
-            }
-            else {
-                document.getElementById("pwValid").textContent = null;
-            }
-            
-            user.password = user.password.trim();
-            user.firstName = document.getElementById('firstName').value;
-            if (user.firstName === null || user.firstName==="" ){
-                document.getElementById("fnValid").textContent = 'Name cannot be empty'
-                validations = false;
-            }
-            else if (!/^[A-Za-z ]+$/.test(user.firstName)){
-                document.getElementById("fnValid").textContent  = 'Name must contain only letters'
-                validations = false;
-            }
-            else {
-                document.getElementById("fnValid").textContent = null;
-                user.firstName = user.firstName.trim();
-            }
-            
-            user.lastName = document.getElementById('lastName').value.trim();
-            if (user.firstName === null || user.firstName.trim()==="" ){
-                document.getElementById("lnValid").textContent = 'Name cannot be empty';
-                validations = false;
-            }
-            else if (!/^[A-Za-z ]+$/.test(user.lastName.trim())){
-                document.getElementById("lnValid").textContent = 'Name must contain only letters';
-                validations = false;
-            }
-            else{
-                document.getElementById("lnValid").textContent = null;
-                user.firstName = user.firstName.trim();
-            }
-
-            user.email = document.getElementById('email').value;
-            if (user.email === null || user.email.trim()==="" ){
-                document.getElementById("eValid").textContent = 'Email cannot be empty';
-                validations = false;
-            }
-            else if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(user.email.trim())){
-                document.getElementById("eValid").textContent = 'Email format unknown';
-                validations = false;
-            }
-            else {
-                document.getElementById("eValid").textContent = null;
-                user.email = user.email.trim();
-            }
-
-            user.phone = document.getElementById('phone').value.trim();
-            if (user.phone === null || user.phone === ""){
-                document.getElementById("pValid").textContent = 'Phone number cannot be empty';
-            }
-            else if (user.phone.trim().length!==10||!/^[A-Za-z ]+$/.test(user.phone.trim())){
-                validations = false;
-                document.getElementById("pValid").textContent = 'Phone format not supported';
-            }
-            else{
-                document.getElementById("pValid").textContent = null;
-                user.phone = user.phone.trim();
-            }
-
-            if(!validations){
-                console.log("Check your fields");
-                return;
-            }
-            UserService.post(user).then((resp)=>{
-                console.log(user.username + ' has been successfully registered');
-                this.props.history.push('/');
-                        }).catch((error)=>{
-                console.log(error);
-            });
-        };
         return (
             <div>
                 <h2>Register</h2>
@@ -208,7 +209,7 @@ export default class Register extends Component {
                     }}></p1>
                     <br/>
                     <button className="btn btn-success" 
-                    onClick={submit}>
+                    onClick={this.submit}>
                         Submit
                     </button>
                     <button className="btn btn-danger" 

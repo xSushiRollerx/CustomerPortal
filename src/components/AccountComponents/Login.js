@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import AuthenticationService from '../../services/AuthenticationService'
+import jwt_decode from 'jwt-decode'
 
 export default class Login extends Component {
     constructor(props){
@@ -24,6 +25,7 @@ export default class Login extends Component {
         authrequest.password = document.getElementById('password').value;
         AuthenticationService.post(authrequest).then((resp)=>{
             localStorage.setItem("jwt",resp.data.jwt);
+            localStorage.setItem("userId", jwt_decode(resp.data.jwt).sub);
             this.props.history.push('/');
         }).catch((error)=>{
             alert(error);

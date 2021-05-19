@@ -49,6 +49,7 @@ class HeaderComponent extends Component {
                     <Tabs variant="fullWidth"
                         aria-label="nav tabs example" >
                         <LinkTab label="orders" onClick={()=>{this.props.history.push("orders")}} {...a11yProps(0)} />
+                        
                     </Tabs>
                     <Toolbar>
                         <Typography variant="title" color="inherit">
@@ -68,7 +69,11 @@ class HeaderComponent extends Component {
                 <DropdownButton title="Account">
                     <DropdownItem onClick={()=>{this.props.history.push('profile');}} >Profile</DropdownItem>
                     <DropdownItem onClick={()=>{this.props.history.push('login');}} >Log In</DropdownItem>
-                    <DropdownItem onClick={()=>{localStorage.removeItem('jwt');this.props.history.push('login');}} >Log Out</DropdownItem>
+                    <DropdownItem onClick={()=>{
+                        localStorage.removeItem('jwt');
+                        localStorage.removeItem('userId');
+                        this.props.history.push('login');
+                        }} >Log Out</DropdownItem>
                     <DropdownItem onClick={()=>{this.props.history.push('register');}}>Register</DropdownItem>
                 </DropdownButton>
             </div>

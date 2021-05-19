@@ -10,7 +10,7 @@ class UpdateAccount extends Component {
     }
     cancel = (e)=> {
         e.preventDefault();
-        this.props.history.push('/');
+        this.props.history.push('profile');
     };
     render() {
         function submit(e) {
