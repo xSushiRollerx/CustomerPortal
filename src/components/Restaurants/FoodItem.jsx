@@ -73,10 +73,6 @@ export default function MenuItem(props) {
         }
     }
 
-    const handleQuantityChange = (event) => {
-        setQuantity(event.target.value);
-    }
-
     //fix bugs
     const addItem = (value) => {
         //localStorage.setItem('orders', '[]')
@@ -173,7 +169,8 @@ export default function MenuItem(props) {
                         <Grid container item direction="column" justify="center" alignItems="center">
                             
                             <TextField id="standard-number" type="number" className={style.addNumber} deaultValue="1" variant="outlined"
-                                InputLabelProps={{ shrink: true, }} size="small" color="black" onChange={handleQuantityChange} />
+                                InputLabelProps={{ shrink: true, }} size="small" color="black" onChange={(event) => {setQuantity(event.target.value)}}
+                                InputProps={{ inputProps: { min: 1, max: 20 } }} />
                             <Button aria-label="Add Food To Cart" fontSize="large" variant="outlined" onClick={addItem} className={style.addToBasket} error={true}>
                                 Add To Basket
                                 </Button>
