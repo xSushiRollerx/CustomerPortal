@@ -7,6 +7,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom"
 import RestaurantService from './../../services/RestaurantService';
+import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
+import { Redirect } from 'react-router-dom'
 
 const useStyles = makeStyles({
     tags: {
@@ -15,9 +17,17 @@ const useStyles = makeStyles({
     tag: {
         marginRight: 8
     },
+    addressBlock: {
+        marginTop: 15,
+        marginBottom: 20
+    },
     address: {
         marginBottom: 0,
     },
+    divider: {
+        marginTop: 8,
+        marginBottom: 10
+    }
 });
 
 export default function RestaurantProfile() {
@@ -25,24 +35,33 @@ export default function RestaurantProfile() {
     const style = useStyles();
     const { id } = useParams();
     const [restaurant, setRestaurant] = useState({});
+    const [status, setStatus] = useState(0);
     const response = () => {
-        RestaurantService.getRestaurant(id).then(response => { console.log(response.data); setRestaurant(response.data); });
+        RestaurantService.getRestaurant(id).then(response => { setStatus(response.status); setRestaurant(response.data);});
     }
     useEffect(() => {
         response();
-    }, []) 
+    }, [])
 
+    
 
-    console.log(restaurant);
-    if (Object.entries(restaurant).length === 0) {
+    //wait for object to be loaded and promise fulfilled   
+    if (Object.entries(restaurant).length === 0 && !(status > 99) && !(status < 600)) {
+        console.log(status);
         return (<h1>LOADING</h1>)
+    } else {
+        return <Redirect to='/login'/>
     }
 
-    let tags =  restaurant.tags.split(',').map(tag => {
+    
+
+    
+
+    const tags =  restaurant.tags.split(',').map(tag => {
                 return <Chip label={tag.trim().toLowerCase()} variant="outlined" size="small" className={style.tag} />
     });
     
-    let getCategories = () => {
+    const getCategories = () => {
         let menu = restaurant.menu.sort((a, b) => a.category - b.category);
         let result = [];
         for (let i = 0; i < menu.length; i++) {
@@ -56,20 +75,29 @@ export default function RestaurantProfile() {
         return result;
     }
 
-    let categories = getCategories().map(c => {
+    const categories = getCategories().map(c => {
         return <MenuCategory restaurant={restaurant} category={c}/>
     })
 
+    const pricing = () => {
+        let icons = []
+        for (let i = 0; i < restaurant.priceCategory; i++) {
+            icons.push(1);
+        }
+        return icons.map((m, i) => <MonetizationOnIcon data-testid={"MonetizaitionIcon " + i} />);
+    };
     
         return (
             <div>
                 <h1>RestaurantBanner</h1>
                 <Grid container direction="column" justify="flex-start" alignItems="stretch">
                     <h3>{restaurant.name}</h3>
-                    <h6>Rating</h6>
-                    <Divider orientation="horizontal" flexItem className={ style.divider}/>
-                    <Grid container direction="column" justify="flex-start" alignItems="stretch" style={{marginBottom: "20px"}}>
-                        <p className={style.address}>$$$$</p>
+                    <Grid container item direction="row" justify="flex-start">
+                        {pricing()}
+                    </Grid>
+                    <h6>{restaurant.averageRating}</h6>
+                    <Divider orientation="horizontal" flexItem className={style.divider} />
+                    <Grid container direction="column" justify="flex-start" alignItems="stretch" className={style.addresssBlock}>
                         <p className={style.address}>{restaurant.streetAddress}</p>
                         <p className={style.address}>{restaurant.city}, {restaurant.state}</p>
                         <p className={style.address}>{ restaurant.zipCode}</p>
