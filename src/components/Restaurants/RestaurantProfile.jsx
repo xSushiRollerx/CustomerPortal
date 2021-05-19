@@ -41,7 +41,7 @@ export default function RestaurantProfile() {
     }
     useEffect(() => {
         response();
-    }, [])
+    }, []);
 
     
 
@@ -88,7 +88,7 @@ export default function RestaurantProfile() {
     };
     
         return (
-            <div>
+            <div data-testid="RestaurantProfile">
                 <h1>RestaurantBanner</h1>
                 <Grid container direction="column" justify="flex-start" alignItems="stretch">
                     <h3>{restaurant.name}</h3>

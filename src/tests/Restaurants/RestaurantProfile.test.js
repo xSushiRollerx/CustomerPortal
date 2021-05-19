@@ -1,7 +1,7 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
-import OrderCart from '../components/OrderCart';
 import { unmountComponentAtNode } from "react-dom";
+import RestaurantProfile from '../../components/Restaurants/RestaurantProfile';
 
 let container = null;
 beforeEach(() => {
@@ -20,7 +20,10 @@ afterEach(() => {
     container = null;
 });
 
-it("RestaurantProfile renders", () => {
-    const { getByTestId } = render(<OrderCart />, container);
-    expect(getByTestId('DropOffForm')).toBeInTheDocument();
+fit("RestaurantProfile renders", () => {
+    let match = {
+        'params': {'id': 2}
+    }
+    const { getByTestId } = render(<RestaurantProfile match={match}/>, container);
+    expect(getByTestId('RestaurantProfile')).toBeInTheDocument();
 });
