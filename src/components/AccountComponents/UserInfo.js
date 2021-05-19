@@ -10,14 +10,18 @@ export default class UserInfo extends Component {
         user: {},
         user_loaded: false,
     }
+    this.closeAccount = this.closeAccount.bind(this);
   }
+  //loads in user
+  //keeps user fields hidden when the user cannot be loaded
   componentDidMount() {
     try{
-      UserService.read().then(res => {
+      UserService.get().then(res => {
         this.setState({user: res.data});
         this.setState({user_loaded: true});
       }).catch((error)=>{
         console.log(error);
+        this.setState({user_loaded: false});
       });
     }
     catch(e){
@@ -25,10 +29,11 @@ export default class UserInfo extends Component {
     }
     
   }
-  closeAccount() {
+  //exits to root page on successful closing of the account
+  closeAccount = () => {
     try{
       UserService.delete().then(resp => {
-        this.props.history.push('/login');
+        this.props.history.push('/');
       }).catch((e)=>{
         console.log(e);
       });
@@ -61,9 +66,10 @@ export default class UserInfo extends Component {
       );
     }
     return (
-    <div className="UserInfo">
+      <div>
         <h1>Welcome to the User Info </h1>
-        <Collapse in={this.state.user_loaded}>
+        {this.state.user_loaded?(
+          <div>
           <h2>Username: </h2>
           <p1 id='username'>{this.state.user.username}</p1>
           <h2>First Name:</h2>
@@ -77,9 +83,9 @@ export default class UserInfo extends Component {
           <div>
             <a href='../update'>Update your Account</a>
           </div>
-        <CloseConfirmation/>
-        </Collapse>
-        
+          <CloseConfirmation/>
+          </div>
+        ):null}        
     </div>
     );
     }

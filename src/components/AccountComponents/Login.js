@@ -6,26 +6,30 @@ export default class Login extends Component {
         super(props);
         this.state = {
         }
+        this.cancel = this.cancel.bind(this);
+        this.login = this.login.bind(this);
     }
-    render() {
-        function login(e) {
-            e.preventDefault();
-            let authrequest = {
-                username: null,
-                password: null
-            }
-            authrequest.username = document.getElementById('username').value;
-            authrequest.password = document.getElementById('password').value;
-            AuthenticationService.login(authrequest).then((resp)=>{
-                localStorage.setItem("jwt",resp.data.jwt);
-            }).catch((error)=>{
-                alert(error);
-            });
-        };
-        function cancel(e) {
-            e.preventDefault();
+    cancel = (e)=> {
+        e.preventDefault();
+        this.props.history.push('/');
+    };
+    //sends user to home page on login
+    login = (e) => {
+        e.preventDefault();
+        let authrequest = {
+            username: null,
+            password: null
+        }
+        authrequest.username = document.getElementById('username').value;
+        authrequest.password = document.getElementById('password').value;
+        AuthenticationService.post(authrequest).then((resp)=>{
+            localStorage.setItem("jwt",resp.data.jwt);
             this.props.history.push('/');
-        };
+        }).catch((error)=>{
+            alert(error);
+        });
+    };
+    render() {
         return (
             <div>
                 <h2>Log in</h2>
@@ -48,11 +52,11 @@ export default class Login extends Component {
                     id='password'
                     />
                     <button className="btn btn-success" 
-                    onClick={login}>
+                    onClick={this.login}>
                         Submit
                     </button>
                     <button className="btn btn-danger" 
-                    onClick={cancel}
+                    onClick={this.cancel}
                     style={{marginLeft: "10px"}}>
                         Cancel
                     </button>

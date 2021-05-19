@@ -1,21 +1,28 @@
 import React, {Component} from 'react';
 import { DropdownButton, Nav, Navbar } from 'react-bootstrap';
 import DropdownItem from 'react-bootstrap/esm/DropdownItem';
+import { Redirect } from 'react-router-dom'
 
 class HeaderComponent extends Component {
     constructor(props) {
         super(props);
         this.state= {
+            redirect: false,
         }
+        this.logout = this.logout.bind(this);
     }
 
-    logout = () => {
-        this.props.history.push('/order');
+    //Currently redirect for logout and navigation as history.push is not working
+    //Removes jwt from local storage and redirects to login
+    logout = ()=>{
+        localStorage.removeItem('jwt');
+        this.setState({ redirect: true });
     }
 
     render() {
         return (
             <div>
+                {this.state.redirect?<Redirect push to ='/login'/>:null};
                 <header>
                     <title>Customer Portal Application</title>
                     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossOrigin="anonymous"/>
