@@ -21,6 +21,10 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(2, 4, 3),
     },
 
+    card: {
+        width: '100%'
+    },
+
     addNumber: {
         width: 80,
         marginBottom: 10
@@ -44,8 +48,8 @@ export default function MenuItem(props) {
     return(
           
             <Grid container item alignItems="center" alignItems="stretch" xs={6}>
-            <Card variant="outlined" >
-                    <CardContent>
+            <Card variant="outlined" className={style.card}>
+                <CardContent>
                         <Grid container direction="row" alignItems="stretch" justify="flex-start">
                             <Grid container item justify="center" alignItems="center" xs={4}>Image</Grid>
                             <Grid container item direction="column" justify="flex-start" alignItems="stretch" xs={7}>
