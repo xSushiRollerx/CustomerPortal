@@ -70,10 +70,10 @@ export default function MenuItem(props) {
                 <Card variant="outlined">
                     <CardContent className={style.paper}>
                             <Grid container item justify="center" alignItems="center" >Image</Grid>
-                            <Grid container item justify="flex-start" alignItems="stretch" >
+                            <Grid container item justify="flex-start" alignItems="stretch" direction="column">
                                 <h6>{props.item.name}</h6>
-                                <p>asdkla asldksdl asas asddkjkasd lkksd asdlk asd asdjkdn asdnkssd djkansd</p>
-                                <p>$XX.XX</p>
+                                <p>{props.item.summary}</p>
+                                <p>${props.item.cost}</p>
                             </Grid>
                             <Grid container item direction="column" justify="center" alignItems="center">
                             <TextField id="standard-number" type="number" className={style.addNumber} variant="filled" size="small" label="Quantity"/>
