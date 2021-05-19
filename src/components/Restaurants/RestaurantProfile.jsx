@@ -37,7 +37,7 @@ export default function RestaurantProfile() {
     const [restaurant, setRestaurant] = useState({});
     const [status, setStatus] = useState(0);
     const response = () => {
-        RestaurantService.getRestaurant(id).then(response => { setStatus(response.status); setRestaurant(response.data);});
+        RestaurantService.getRestaurant(id).then(response => { setRestaurant(response.data); });
     }
     useEffect(() => {
         response();
@@ -46,15 +46,17 @@ export default function RestaurantProfile() {
     
 
     //wait for object to be loaded and promise fulfilled   
-    if (Object.entries(restaurant).length === 0 && !(status > 99) && !(status < 600)) {
+    if ((Object.entries(restaurant).length === 0 && !(status > 99) && !(status < 600)) ) {
         console.log(status);
         return (<h1>LOADING</h1>)
-    } else {
-        return <Redirect to='/login'/>
+    } else if (status !== 200) {
+        console.log(status);
+        //return <Redirect to='/login'/>
     }
 
     
-
+    console.log(status);
+    console.log(restaurant);
     
 
     const tags =  restaurant.tags.split(',').map(tag => {

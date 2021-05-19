@@ -17,9 +17,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function NavBar() {
     const style = useStyles();
-    const handleClick = () => {
-
-    };
 
     return (
        
