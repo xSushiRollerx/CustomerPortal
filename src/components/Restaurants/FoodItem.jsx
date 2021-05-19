@@ -40,18 +40,18 @@ export default function MenuItem(props) {
     const handleClose = () => {
         setOpen(false);
     };
-
+    console.log(props.item.summary);
     return(
           
-            <Grid container item alignItems="center" xs={6}>
+            <Grid container item alignItems="center" alignItems="stretch" xs={6}>
             <Card variant="outlined" >
                     <CardContent>
                         <Grid container direction="row" alignItems="stretch" justify="flex-start">
                             <Grid container item justify="center" alignItems="center" xs={4}>Image</Grid>
-                            <Grid container item justify="flex-start" alignItems="stretch" xs={7}>
-                                <h6>Food Name</h6>
-                                <p>asdkla asldksdl asas asddkjkasd lkksd asdlk asd asdjkdn asdnkssd djkansd</p>
-                                <p>$XX.XX</p>
+                            <Grid container item direction="column" justify="flex-start" alignItems="stretch" xs={7}>
+                                <h6>{props.item.name}</h6>
+                                <p>{props.item.summary}</p>
+                                <p>${props.item.cost}</p>
                             </Grid>
                             <Grid container item justify="center" alignItems="center" xs={1}>
                             <IconButton aria-label="Add Food To Cart" fontSize="large" onClick={handleOpen}>
@@ -67,7 +67,7 @@ export default function MenuItem(props) {
                     <CardContent className={style.paper}>
                             <Grid container item justify="center" alignItems="center" >Image</Grid>
                             <Grid container item justify="flex-start" alignItems="stretch" >
-                                <h6>Food Name</h6>
+                                <h6>{props.item.name}</h6>
                                 <p>asdkla asldksdl asas asddkjkasd lkksd asdlk asd asdjkdn asdnkssd djkansd</p>
                                 <p>$XX.XX</p>
                             </Grid>

@@ -22,17 +22,18 @@ const useStyles = makeStyles({
     },
 });
 
-export default function MenuCategory() {
+export default function MenuCategory(props) {
 
     const style = useStyles();
+    let food = props.category.map(m => {
+        return <MenuItem item={m} />
+    }); 
 
     return (
             <Grid container direction="column" justify="flex-start" alignItems="stretch" >
-                <h3>Category Name</h3>
+            <h3>{props.category[0].category}</h3>
             <Grid container direction="row" justify="flex-start" alignItems="stretch" spacing={4}>
-                    <MenuItem />
-                    <MenuItem />
-                    <MenuItem />
+                {food}
                 </Grid>
             <Divider orientation="horizontal" flexItem className={style.divider } />
             </Grid>);

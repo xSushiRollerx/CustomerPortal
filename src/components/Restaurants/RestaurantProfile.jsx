@@ -31,11 +31,32 @@ export default function RestaurantProfile() {
     useEffect(() => {
         response();
     }, []) 
-    
-    let tags =  restaurant.tags.split(',').map(tag => {
-                return <Chip label={tag.toLowerCase()} variant="outlined" size="small" className={style.tag} />
-             });
+
+
     console.log(restaurant);
+
+    let tags =  restaurant.tags.split(',').map(tag => {
+                return <Chip label={tag.trim().toLowerCase()} variant="outlined" size="small" className={style.tag} />
+    });
+    
+    let getCategories = () => {
+        let menu = restaurant.menu.sort((a, b) => a.category - b.category);
+        let result = [];
+        for (let i = 0; i < menu.length; i++) {
+                if (i === 0 || result[result.length - 1][0].category !== menu[i].category) {
+                    result.push([menu[i]]);
+                   
+                } else {
+                    result[result.length - 1].push(menu[i]);
+                }
+        }
+        return result;
+    }
+
+    let categories = getCategories().map(c => {
+        return <MenuCategory category={c}/>
+    })
+
     
         return (
             <div>
@@ -52,12 +73,10 @@ export default function RestaurantProfile() {
                     </Grid>
                     <Grid container direction="row" justify="flex-start" alignItems="center" className={style.tags}>
                         {tags}
-
                     </Grid>
                     <Divider orientation="horizontal" flexItem className={style.divider}/>
                     <Grid container direction="column" justify="flex-start">
-                        <MenuCategory />
-                        <MenuCategory />
+                        {categories}
                     </Grid>
                 </Grid>
             </div>);
