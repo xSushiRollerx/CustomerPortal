@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Redirect } from 'react-router';
 import UserService from '../../services/UserService'
 
 class UpdateAccount extends Component {

@@ -15,9 +15,10 @@ import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 function App() {
   return (
   <div>
-    <HeaderComponent/>
+    
     <div>
       <Router>
+        <HeaderComponent/>
         <div className="container">
             <Switch>
                 <Route path = "/login" exact component = {Login}></Route>
