@@ -26,7 +26,7 @@ export default function RestaurantProfile() {
     const { id } = useParams();
     const [restaurant, setRestaurant] = useState({});
     const response = () => {
-        RestaurantService.getRestaurant(id).then(response => setRestaurant(response.data));
+        RestaurantService.getRestaurant(id).then(response => { console.log(response.data); setRestaurant(response.data); });
     }
     useEffect(() => {
         response();
@@ -34,6 +34,9 @@ export default function RestaurantProfile() {
 
 
     console.log(restaurant);
+    if (Object.entries(restaurant).length === 0) {
+        return (<h1>LOADING</h1>)
+    }
 
     let tags =  restaurant.tags.split(',').map(tag => {
                 return <Chip label={tag.trim().toLowerCase()} variant="outlined" size="small" className={style.tag} />
