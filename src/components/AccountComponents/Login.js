@@ -28,7 +28,7 @@ export default class Login extends Component {
             localStorage.setItem("userId", jwt_decode(resp.data.jwt).sub);
             this.props.history.push('/');
         }).catch((error)=>{
-            alert(error);
+            console.log(error);
         });
     };
     render() {
