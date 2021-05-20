@@ -10,6 +10,7 @@ import SearchFilter from './SearchFilter';
 import RestaurantTable from './RestaurantTable';
 import TablePagination from '@material-ui/core/TablePagination';
 import RestaurantTablePagination from './RestaurantTablePagination';
+import RestaurantService from './../../services/RestaurantService';
 import { useState, useEffect } from 'react';
 
 function createData(name, calories, fat) {
@@ -67,27 +68,44 @@ export default function RestaurantSearch(props) {
     const [sort, setSort] = useState('relevance');
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
-
     const [response, setResponse] = useState({});
     const [resolved, setResolved] = useState(false);
-    useEffect (() => {
-
-    }, [])
+    let results = [];
+    let status = 0;
+  
 
     const handleSort = (event) => {
         setSort(event.target.value);
     };
-    
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
-
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
 
+    useEffect(() => {
+        RestaurantService.getAllRestaurants(0).then(res => { setResponse(res); })
+            .then(() => setResolved(true))
+            .catch(err => { setResolved(true); status = 500; });
+    }, []);
+
+    if (!resolved) {
+        return (
+            <div class="d-flex justify-content-center">
+                <div class="spinner-border" className={style.loading} role="status">
+                    <span class="sr-only"></span>
+                </div>
+            </div>
+        );
+    } else {
+        results = response.data;
+        status = response.status;
+    }
+    console.log(response);
+    console.log(results);
 
     return (
         <Grid container direction="column">

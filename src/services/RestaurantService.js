@@ -17,7 +17,9 @@ class RestaurantService {
         return axios.get((RESTAURANT_SERVICE_BASE_URL) + "/" + id, config);
     }
 
-
+    getAllRestaurants(page) {
+        return axios.get((RESTAURANT_SERVICE_BASE_URL) + "s/all/" + page );
+    }
 }
 
 export default new RestaurantService();
