@@ -10,7 +10,7 @@ import SearchFilter from './SearchFilter';
 import RestaurantTable from './RestaurantTable';
 import TablePagination from '@material-ui/core/TablePagination';
 import RestaurantTablePagination from './RestaurantTablePagination';
-import { useState} from 'react';
+import { useState, useEffect } from 'react';
 
 function createData(name, calories, fat) {
     return { name, calories, fat };
@@ -31,12 +31,6 @@ const rows = [
     createData('Nougat', 360, 19.0),
     createData('Oreo', 437, 18.0),
 ].sort((a, b) => (a.calories < b.calories ? -1 : 1));
-
-const useStyles2 = makeStyles({
-    table: {
-        minWidth: 500,
-    },
-});
 
 const useStyles = makeStyles((theme) => ({
 
@@ -71,15 +65,19 @@ export default function RestaurantSearch(props) {
     const style = useStyles();
 
     const [sort, setSort] = useState('relevance');
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+
+    const [response, setResponse] = useState({});
+    const [resolved, setResolved] = useState(false);
+    useEffect (() => {
+
+    }, [])
 
     const handleSort = (event) => {
         setSort(event.target.value);
     };
-
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
-    const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+    
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
