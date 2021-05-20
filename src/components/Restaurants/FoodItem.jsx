@@ -9,6 +9,7 @@ import TextField from '@material-ui/core/TextField';
 import Modal from '@material-ui/core/Modal';
 import { useState} from 'react';
 import ControlPoint from '@material-ui/icons/ControlPoint';
+import { FormHelperText } from '@material-ui/core';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -47,12 +48,16 @@ export default function MenuItem(props) {
     const [open, setOpen] = useState(false);
     const [loginOpen, setLoginOpen] = useState(false);
     const [quantity, setQuantity] = useState(1);
+    const [error, setError] = useState(false);
+    const [errorText, setErrorText] = useState("");
 
     const handleOpen = () => {
         setOpen(true);
     };
 
     const handleClose = () => {
+        setError(false);
+        setErrorText("");
         setOpen(false);
     };
 
@@ -73,7 +78,19 @@ export default function MenuItem(props) {
         }
     }
 
-    //fix bugs
+    //returns max number of items that can be added to the cart
+    const maxItems = () => {
+        let orders = JSON.parse(localStorage.getItem('orders'));
+        let order = orders.find(o => o.restaurantId === props.restaurant.id);
+        if (order !== undefined) {
+            let item = order.find(o => o.foodId === item.id)
+            if (item !== undefined) {
+                return (20 - item.quantity);
+            }
+        }
+        return 20;
+    }
+    
     const addItem = (value) => {
         //localStorage.setItem('orders', '[]')
         console.log(localStorage.getItem('orders'));
@@ -86,7 +103,14 @@ export default function MenuItem(props) {
             let item = order.orderItems.find((i) => i.foodId === props.item.id);
             //checks if orderItem with its id has already been added to order
             if (item !== undefined) {
-                order.orderItems[order.orderItems.indexOf(item)].quantity += parseInt(quantity);
+                let added = order.orderItems[order.orderItems.indexOf(item)].quantity + parseInt(quantity);
+
+                if (added > 20) {
+                    setError(true);
+                    setErrorText("Cannot add more than 20 of a single item to your basket. You already have " + (added - parseInt(quantity)) + " of this item" );
+                    return;
+                }
+                order.orderItems[order.orderItems.indexOf(item)].quantity = added;
                 orders.push(order);
                 localStorage.setItem('orders', JSON.stringify(orders));
                 handleClose();
@@ -169,9 +193,10 @@ export default function MenuItem(props) {
                         <Grid container item direction="column" justify="center" alignItems="center">
                             
                             <TextField id="standard-number" type="number" className={style.addNumber} deaultValue="1" variant="outlined"
-                                InputLabelProps={{ shrink: true, }} size="small" color="black" onChange={(event) => {setQuantity(event.target.value)}}
-                                InputProps={{ inputProps: { min: 1, max: 20 } }} />
-                            <Button aria-label="Add Food To Cart" fontSize="large" variant="outlined" onClick={addItem} className={style.addToBasket} error={true}>
+                                InputLabelProps={{ shrink: true, }} size="small" color="black" onChange={(event) => { setQuantity(event.target.value) }}
+                                InputProps={{ inputProps: { min: 1, max: 20 } }} error={error} />
+                            <FormHelperText error={true}>{errorText}</FormHelperText>
+                            <Button aria-label="Add Food To Cart" fontSize="large" variant="outlined" onClick={addItem} className={style.addToBasket} >
                                 Add To Basket
                                 </Button>
                             </Grid>
