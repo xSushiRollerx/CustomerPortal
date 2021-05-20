@@ -26,7 +26,9 @@ export default function MenuCategory(props) {
 
     const style = useStyles();
     let food = props.category.map(m => {
-        return <MenuItem restaurant={props.restaurant} item={m} />
+        if (m.isActive === 1) {
+            return <MenuItem restaurant={props.restaurant} item={m} />
+        }
     }); 
 
     return (
