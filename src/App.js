@@ -1,6 +1,4 @@
 import './App.css';
-import HeaderComponent from "./components/HeaderComponent";
-import FooterComponent from "./components/FooterComponent";
 import Login from "./components/AccountComponents/Login"
 import UserInfo from "./components/AccountComponents/UserInfo"
 import Register from "./components/AccountComponents/Register"
@@ -11,6 +9,7 @@ import OrderList from './components/Checkout/OrderList';
 import Confirmation from './components/Checkout/Confirmation';
 import OrderCompletion from './components/Checkout/OrderCompletion';
 import RestaurantProfile from './components/Restaurants/RestaurantProfile';
+import RestaurantSearch from './components/Restaurants/RestaurantSearch';
 import NavBar from './components/NavBar';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 
@@ -31,7 +30,8 @@ function App() {
                     <Route path='/cart' component={OrderCart}></Route>
                     <Route path='/confirmation' component={Confirmation}></Route>
                     <Route path='/completion' component={OrderCompletion}></Route>
-                    <Route path='/restaurant/:id' component={RestaurantProfile}></Route>
+                          <Route path='/restaurant/:id' component={RestaurantProfile}></Route>
+                          <Route path='/restaurants' component={RestaurantSearch}></Route>
                 </Switch>
             </div>
       </Router>

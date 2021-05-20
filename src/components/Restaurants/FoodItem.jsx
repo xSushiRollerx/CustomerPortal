@@ -77,19 +77,6 @@ export default function MenuItem(props) {
             return handleLoginOpen();
         }
     }
-
-    //returns max number of items that can be added to the cart
-    const maxItems = () => {
-        let orders = JSON.parse(localStorage.getItem('orders'));
-        let order = orders.find(o => o.restaurantId === props.restaurant.id);
-        if (order !== undefined) {
-            let item = order.find(o => o.foodId === item.id)
-            if (item !== undefined) {
-                return (20 - item.quantity);
-            }
-        }
-        return 20;
-    }
     
     const addItem = (value) => {
         //localStorage.setItem('orders', '[]')
@@ -162,7 +149,7 @@ export default function MenuItem(props) {
 
     return(
           
-            <Grid container item alignItems="center" alignItems="stretch" xs={6}>
+        <Grid data-testid={"FoodItem " + props.item.id} container item alignItems="center" alignItems="stretch" xs={6}>
             <Card variant="outlined" className={style.card}>
                 <CardContent>
                         <Grid container direction="row" alignItems="stretch" justify="flex-start">
@@ -186,14 +173,14 @@ export default function MenuItem(props) {
                     <CardContent className={style.paper}>
                             <Grid container item justify="center" alignItems="center" >Image</Grid>
                             <Grid container item justify="flex-start" alignItems="stretch" direction="column">
-                                <h6>{props.item.name}</h6>
-                                <p>{props.item.summary}</p>
-                                <p>${props.item.cost}</p>
+                            <h6 name={"FoodItem Name " + props.item.id}>{props.item.name}</h6>
+                            <p data-testid={"FoodItem Summary " + props.item.id}>{props.item.summary}</p>
+                            <p data-testid={"FoodItem Cost " + props.item.id}>${props.item.cost}</p>
                             </Grid>
                         <Grid container item direction="column" justify="center" alignItems="center">
                             
                             <TextField id="standard-number" type="number" className={style.addNumber} deaultValue="1" variant="outlined"
-                                InputLabelProps={{ shrink: true, }} size="small" color="black" onChange={(event) => { setQuantity(event.target.value) }}
+                                InputLabelProps={{ shrink: false, }} size="small" color="black" onChange={(event) => { setQuantity(event.target.value) }}
                                 InputProps={{ inputProps: { min: 1, max: 20 } }} error={error} />
                             <FormHelperText error={true}>{errorText}</FormHelperText>
                             <Button aria-label="Add Food To Cart" fontSize="large" variant="outlined" onClick={addItem} className={style.addToBasket} >

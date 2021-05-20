@@ -20,7 +20,7 @@ afterEach(() => {
     container = null;
 });
 
-fit("RestaurantProfile renders", () => {
+xit("RestaurantProfile renders", () => {
     let match = {
         'params': {'id': 2}
     }
