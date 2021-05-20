@@ -6,9 +6,8 @@ import Select from '@material-ui/core/Select';
 import Divider from '@material-ui/core/Divider';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
-import RestaurantResult from './RestaurantResult';
 import SearchFilter from './SearchFilter';
-import DeliveryAddress from './DeliveryAddress';
+import RestaurantTable from './RestaurantTable';
 import { useState} from 'react';
 
 
@@ -72,13 +71,7 @@ export default function RestaurantSearch(props) {
                         </Grid>
                         <Grid item xs={9}>
                             <Grid container direction="column" alignItems="stretch" justify="flex-start">
-                                <RestaurantResult />
-                                <RestaurantResult />
-                                <RestaurantResult />
-                                <RestaurantResult />
-                                <RestaurantResult />
-                                <RestaurantResult />
-                                <RestaurantResult />
+                                <RestaurantTable />
                             </Grid>
                         </Grid>
                     </Grid>
