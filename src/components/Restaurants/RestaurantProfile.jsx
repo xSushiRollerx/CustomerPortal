@@ -9,24 +9,32 @@ import { useParams } from "react-router-dom"
 import RestaurantService from './../../services/RestaurantService';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import { Redirect } from 'react-router-dom'
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles({
     tags: {
-        marginBottom: 10
+        marginTop: 8,
+        marginBottom: 8
     },
     tag: {
-        marginRight: 8
+        marginRight: 8,
+        fontSize: 12
     },
     addressBlock: {
-        marginTop: 15,
-        marginBottom: 20
+        marginTop: 0,
+        marginBottom: 0
     },
     address: {
         marginBottom: 0,
+        fontSize: 12
     },
     divider: {
-        marginTop: 8,
         marginBottom: 10
+    },
+
+    pricing: {
+        fontSize: 17,
+        paddingBottom: 2,
     }
 });
 
@@ -34,29 +42,39 @@ export default function RestaurantProfile() {
 
     const style = useStyles();
     const { id } = useParams();
-    const [restaurant, setRestaurant] = useState({});
-    const [status, setStatus] = useState(0);
-    const response = () => {
-        RestaurantService.getRestaurant(id).then(response => { setRestaurant(response.data);});
+    const [response, setResponse] = useState({});
+    const [resolved, setResolved] = useState(false);
+    const history = useHistory();
+    let restaurant = {};
+    let status = 0;
+
+    const getResponse = () => {
+        // RestaurantService.getRestaurant(id).then(response => { setRestaurant(response.data);});
+        //not setting response when it's a 500 error
+        RestaurantService.getRestaurant(id).then(res => { setResponse(res); })
+            //why isn't it waiting until response has returned
+            .then(() => { setResolved(true);})
+            .catch(err => { setResolved(true); status = 500;});
     }
     useEffect(() => {
-        response();
+        getResponse();
     }, []);
 
     
 
     //wait for object to be loaded and promise fulfilled   
-    if ((Object.entries(restaurant).length === 0) ) {
-        console.log(restaurant);
+    if (!resolved) {
         return (<h1>LOADING</h1>)
-    } else if (status !== 200) {
-        console.log(status);
-        //return <Redirect to='/login'/>
+    } else {
+        restaurant = response.data;
+        status = response.status;
     }
 
-    
-    console.log(status);
-    console.log(restaurant);
+    if (status !== 200) {
+        return <Redirect to='/login' />;
+    }
+
+   
     
 
     const tags =  restaurant.tags.split(',').map(tag => {
@@ -86,7 +104,7 @@ export default function RestaurantProfile() {
         for (let i = 0; i < restaurant.priceCategory; i++) {
             icons.push(1);
         }
-        return icons.map((m, i) => <MonetizationOnIcon data-testid={"MonetizaitionIcon " + i} />);
+        return icons.map((m, i) => <MonetizationOnIcon data-testid={"MonetizaitionIcon " + i} className={style.pricing}/>);
     };
     
         return (
@@ -94,17 +112,15 @@ export default function RestaurantProfile() {
                 <h1>RestaurantBanner</h1>
                 <Grid container direction="column" justify="flex-start" alignItems="stretch">
                     <h3>{restaurant.name}</h3>
-                    <Grid container item direction="row" justify="flex-start">
-                        {pricing()}
-                    </Grid>
-                    <h6>{restaurant.averageRating}</h6>
                     <Divider orientation="horizontal" flexItem className={style.divider} />
-                    <Grid container direction="column" justify="flex-start" alignItems="stretch" className={style.addresssBlock}>
-                        <p className={style.address}>{restaurant.streetAddress}</p>
-                        <p className={style.address}>{restaurant.city}, {restaurant.state}</p>
-                        <p className={style.address}>{ restaurant.zipCode}</p>
+                    <Grid container item direction="row" justify="flex-start" alignItems="center" spacing={1}>
+                        <Grid item>{pricing()} </Grid>
+                        <Grid item>
+                            <h6 className={style.address}>{restaurant.streetAddress}, {restaurant.city}, {restaurant.state} {restaurant.zipCode}</h6>
+                        </Grid>
+
                     </Grid>
-                    <Grid container direction="row" justify="flex-start" alignItems="center" className={style.tags}>
+                    <Grid container item direction="row" justify="flex-start" alignItems="center" className={style.tags}>
                         {tags}
                     </Grid>
                     <Divider orientation="horizontal" flexItem className={style.divider}/>

@@ -1,9 +1,12 @@
 {
   "ExpandedNodes": [
     "",
-    "\\user_service_react",
-    "\\user_service_react\\public",
-    "\\user_service_react\\src"
+    "\\src",
+    "\\src\\components",
+    "\\src\\services",
+    "\\src\\tests",
+    "\\src\\tests\\Restaurants"
   ],
+  "SelectedNode": "\\src\\tests\\Restaurants\\RestaurantProfile.test.js",
   "PreviewInSolutionExplorer": false
 }
