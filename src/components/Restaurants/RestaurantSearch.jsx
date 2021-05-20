@@ -135,7 +135,7 @@ export default function RestaurantSearch(props) {
                         </Grid>
                         <Grid item xs={9}>
                             <Grid container direction="column" alignItems="stretch" justify="flex-start">
-                                <RestaurantTable />
+                                <RestaurantTable rows={rows} page={page} rowsPerPage={rowsPerPage}/>
                             </Grid>
                         </Grid>
                     </Grid>
