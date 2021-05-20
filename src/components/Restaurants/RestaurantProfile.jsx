@@ -8,8 +8,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom"
 import RestaurantService from './../../services/RestaurantService';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
-import { Redirect } from 'react-router-dom'
-import { useHistory } from "react-router-dom";
+import { Redirect } from 'react-router-dom';
 
 const useStyles = makeStyles({
     tags: {
@@ -35,6 +34,10 @@ const useStyles = makeStyles({
     pricing: {
         fontSize: 17,
         paddingBottom: 2,
+    },
+    loading: {
+        width: "3rem",
+        height: "3rem"
     }
 });
 
@@ -44,7 +47,6 @@ export default function RestaurantProfile() {
     const { id } = useParams();
     const [response, setResponse] = useState({});
     const [resolved, setResolved] = useState(false);
-    const history = useHistory();
     let restaurant = {};
     let status = 0;
 
@@ -64,7 +66,13 @@ export default function RestaurantProfile() {
 
     //wait for object to be loaded and promise fulfilled   
     if (!resolved) {
-        return (<h1>LOADING</h1>)
+        return (
+            <div class="d-flex justify-content-center">
+                <div class="spinner-border" className={style.loading} role="status">
+                    <span class="sr-only"></span>
+                </div>
+            </div>
+        );
     } else {
         restaurant = response.data;
         status = response.status;
@@ -72,6 +80,7 @@ export default function RestaurantProfile() {
 
     if (status !== 200) {
         return <Redirect to='/login' />;
+ 
     }
 
    
