@@ -93,13 +93,15 @@ export default function RestaurantProfile() {
     const getCategories = () => {
         let menu = restaurant.menu.sort((a, b) => a.category - b.category);
         let result = [];
+        
         for (let i = 0; i < menu.length; i++) {
-                if (i === 0 || result[result.length - 1][0].category !== menu[i].category) {
+            if ((menu[i].isActive !== 1)) { 
+            } else if (result.length === 0 || result[result.length - 1][0].category !== menu[i].category) {
                     result.push([menu[i]]);
                    
-                } else {
+            } else {
                     result[result.length - 1].push(menu[i]);
-                }
+            }
         }
         return result;
     }
