@@ -50,9 +50,8 @@ export default function RestaurantSearch(props) {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     let response = {};
-    const [resolved, setResolved] = useState(false);
     let [rows, setRows] = useState([]);
-    let status = 0;
+    let [status, setStatus] = useState(0);
   
 
     const handleSort = (event) => {
@@ -69,11 +68,11 @@ export default function RestaurantSearch(props) {
 
     useEffect(() => {
         RestaurantService.getAllRestaurants(0).then(res => response = res)
-            .then(() => { setRows(response.data); status = response.status; setResolved(true); })
-            .catch(err => { setResolved(true); status = 500; });
+            .then(() => { setRows(response.data); setStatus(response.status);})
+            .catch(err => { setStatus(500); });
     }, []);
 
-    if (!resolved) {
+    if (status === 0) {
         return (
             <div class="d-flex justify-content-center">
                 <div class="spinner-border" className={style.loading} role="status">
