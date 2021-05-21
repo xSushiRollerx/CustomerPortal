@@ -49,9 +49,9 @@ export default function RestaurantSearch(props) {
     const [sort, setSort] = useState('relevance');
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
-    const [response, setResponse] = useState({});
+    let response = {};
     const [resolved, setResolved] = useState(false);
-    let rows = [];
+    let [rows, setRows] = useState([]);
     let status = 0;
   
 
@@ -68,8 +68,8 @@ export default function RestaurantSearch(props) {
     };
 
     useEffect(() => {
-        RestaurantService.getAllRestaurants(0).then(res => { setResponse(res); })
-            .then(() => setResolved(true))
+        RestaurantService.getAllRestaurants(0).then(res => response = res)
+            .then(() => { setRows(response.data); status = response.status; setResolved(true); })
             .catch(err => { setResolved(true); status = 500; });
     }, []);
 
@@ -81,9 +81,6 @@ export default function RestaurantSearch(props) {
                 </div>
             </div>
         );
-    } else {
-        rows = response.data;
-        status = response.status;
     }
     console.log(response);
     console.log(rows);
