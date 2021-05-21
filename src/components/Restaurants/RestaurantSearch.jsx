@@ -76,7 +76,7 @@ export default function RestaurantSearch(props) {
         }
 
         if (!cheapHolder && !midHolder && !fineHolder) {
-            return;
+            return setRows(response.data);
         }
 
         if (cheapHolder) {
