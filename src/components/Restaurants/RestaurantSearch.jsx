@@ -42,6 +42,8 @@ const useStyles = makeStyles((theme) => ({
     }
 
 }));
+let response = {};
+console.log("rerun");
 
 export default function RestaurantSearch(props) {
     const style = useStyles();
@@ -49,10 +51,58 @@ export default function RestaurantSearch(props) {
     const [sort, setSort] = useState('relevance');
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
-    let response = {};
     let [rows, setRows] = useState([]);
     let [status, setStatus] = useState(0);
-  
+    const [state, setState] = React.useState({
+        cheap: false,
+        mid: false,
+        fine: false,
+    });
+
+    const { cheap, mid, fine } = state;
+
+    const filter = (checkbox) => {
+        let restaurants = [];
+        let cheapHolder = cheap;
+        let midHolder = mid;
+
+        let fineHolder = fine;
+        if (checkbox === "cheap") {
+            cheapHolder = !cheapHolder;
+        } else if (checkbox === "mid") {
+            midHolder = !midHolder;
+        } else {
+            fineHolder = !fineHolder;
+        }
+
+        if (!cheapHolder && !midHolder && !fineHolder) {
+            return;
+        }
+
+        if (cheapHolder) {
+            console.log(response);
+            restaurants = restaurants.concat(response.data.filter(r => r.priceCategory === 1));
+        }
+
+        if (midHolder) {
+            console.log(response);
+            restaurants =  restaurants.concat(response.data.filter(r => r.priceCategory === 2));
+        }
+
+        if (fineHolder) {
+            restaurants = restaurants.concat(response.data.filter(r => r.priceCategory === 3));
+        }
+
+        setRows(restaurants);
+    }
+
+    const handlePrices = (event) => {
+        setState({ ...state, [event.target.name]: event.target.checked });
+        console.log(event.target.name);
+        console.log("cheap " + cheap + " mid " + mid + " fine " + fine);
+        filter(event.target.name);
+    };
+
 
     const handleSort = (event) => {
         setSort(event.target.value);
@@ -81,8 +131,6 @@ export default function RestaurantSearch(props) {
             </div>
         );
     }
-    console.log(response);
-    console.log(rows);
 
     return (
         <Grid container direction="column">
@@ -124,7 +172,7 @@ export default function RestaurantSearch(props) {
                 <Grid item xs={12} >
                     <Grid direction="row" container xs={12} spacing={0}>
                         <Grid className={style.filter} item xs={3}>
-                            <SearchFilter />
+                            <SearchFilter mid={mid} cheap={cheap} fine={fine} handleChange={handlePrices}/>
                         </Grid>
                         <Grid item xs={9}>
                             <Grid container direction="column" alignItems="stretch" justify="flex-start">

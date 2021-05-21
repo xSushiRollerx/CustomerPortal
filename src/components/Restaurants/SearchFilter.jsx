@@ -58,17 +58,6 @@ const useStyles = makeStyles({
 export default function SearchFilter(props) {
 
     const style = useStyles();
-    const [state, setState] = React.useState({
-        cheap: false,
-        mid: false,
-        fine: false,
-    });
-
-    const handleChange = (event) => {
-        setState({ ...state, [event.target.name]: event.target.checked });
-    };
-
-    const { cheap, mid, fine } = state;
 
     const fiveStars = () => {
         return (
@@ -173,18 +162,18 @@ export default function SearchFilter(props) {
                     <h5>Price Category</h5>
                     <FormControl>
                         <FormControlLabel
-                            control={<Checkbox checked={cheap} color="black" icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
-                                checkedIcon={<CheckBoxIcon fontSize="small" />} onChange={handleChange} name="cheap" />}
+                            control={<Checkbox checked={props.cheap} color="black" icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
+                                checkedIcon={<CheckBoxIcon fontSize="small" />} onChange={props.handleChange} name="cheap" />}
                             label="Cheap Eats"
                         />
                         <FormControlLabel
-                            control={<Checkbox checked={mid} color="black"  icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
-                                checkedIcon={<CheckBoxIcon fontSize="small" />} onChange={handleChange} name="mid" />}
+                            control={<Checkbox checked={props.mid} color="black"  icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
+                                checkedIcon={<CheckBoxIcon fontSize="small" />} onChange={props.handleChange} name="mid" />}
                             label="Mid Range"
                         />
                         <FormControlLabel
-                            control={<Checkbox checked={fine} color="black"  icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
-                                checkedIcon={<CheckBoxIcon fontSize="small" />} onChange={handleChange} name="fine" />}
+                            control={<Checkbox checked={props.fine} color="black"  icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
+                                checkedIcon={<CheckBoxIcon fontSize="small" />} onChange={props.handleChange} name="fine" />}
                             label="Fine Dining"
                         />
                     </FormControl>
