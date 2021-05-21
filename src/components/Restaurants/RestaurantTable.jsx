@@ -21,7 +21,7 @@ export default function RestaurantTable(props) {
                         : props.rows
                     ).map((row) => (
                         <TableRow key={row.name}>
-                            <RestaurantResult />
+                            <RestaurantResult restaurant={row}/>
                         </TableRow>
                     ))}
 
