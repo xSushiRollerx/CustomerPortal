@@ -61,7 +61,6 @@ export default function RestaurantSearch(props) {
     const { cheap, mid, fine, high } = state;
 
     const filter = (checkbox) => {
-        let restaurants = [];
         let cheapHolder = cheap;
         let midHolder = mid;
         let fineHolder = fine;
@@ -97,6 +96,7 @@ export default function RestaurantSearch(props) {
             .then(() => { console.log(response); setRows(response.data); setStatus(response.status) })
             .catch(err => { setStatus(500); });
 
+        setPage(0);
         setPriceCategories(query.substring(2));
         console.log(checkbox + " toggled");
     }
