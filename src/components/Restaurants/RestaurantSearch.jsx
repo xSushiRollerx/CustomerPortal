@@ -93,7 +93,7 @@ export default function RestaurantSearch(props) {
         if (highHolder) {
             query += ", 4"
         }
-        RestaurantService.getAllRestaurants(page, pageSize, query.substring(2)).then(res => response = res)
+        RestaurantService.getAllRestaurants(0, pageSize, query.substring(2)).then(res => response = res)
             .then(() => { console.log(response); setRows(response.data); setStatus(response.status) })
             .catch(err => { setStatus(500); });
 
