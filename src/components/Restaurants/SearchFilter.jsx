@@ -188,6 +188,11 @@ export default function SearchFilter(props) {
                                 checkedIcon={<CheckBoxIcon fontSize="small" />} onChange={props.handleChange} name="fine" />}
                             label="Fine Dining"
                         />
+                        <FormControlLabel
+                            control={<Checkbox checked={props.high} color="black" icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
+                                checkedIcon={<CheckBoxIcon fontSize="small" />} onChange={props.handleChange} name="high" />}
+                            label="High End Luxury"
+                        />
                     </FormControl>
                 </Grid>
             </Grid>

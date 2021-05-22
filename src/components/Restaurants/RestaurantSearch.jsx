@@ -56,14 +56,49 @@ export default function RestaurantSearch(props) {
         mid: false,
         fine: false,
     });
+    const [priceCategories, setPriceCategories] = useState("1, 2, 3, 4");
 
-    const { cheap, mid, fine } = state;
+    const { cheap, mid, fine, high } = state;
 
     const filter = (checkbox) => {
         let restaurants = [];
         let cheapHolder = cheap;
         let midHolder = mid;
         let fineHolder = fine;
+        let highHolder = high;
+        let query = "";
+
+        if (checkbox === "cheap") {
+            cheapHolder = !cheap;
+        } else if (checkbox === "mid") {
+            midHolder = !mid;
+        } else if (checkbox === "fine") {
+            fineHolder = !fine;
+        } else if (checkbox === "high") {
+            highHolder = !high;
+        }
+
+        if (cheapHolder) {
+            query += ", 1"
+        }
+
+        if (midHolder) {
+            query += ", 2"
+        }
+
+        if (fineHolder) {
+            query += ", 3"
+        }
+
+        if (highHolder) {
+            query += ", 4"
+        }
+        RestaurantService.getAllRestaurants(page, pageSize, query.substring(2)).then(res => response = res)
+            .then(() => { console.log(response); setRows(response.data); setStatus(response.status) })
+            .catch(err => { setStatus(500); });
+
+        setPriceCategories(query.substring(2));
+        console.log(checkbox + " toggled");
     }
 
 
@@ -77,16 +112,15 @@ export default function RestaurantSearch(props) {
         setSort(event.target.value);
     };
     const handleChangePage = (newPage) => {
-        RestaurantService.getAllRestaurants(newPage, pageSize).then(res => response = res)
+        RestaurantService.getAllRestaurants(newPage, pageSize, priceCategories).then(res => response = res)
             .then(() => { console.log(response); setRows(response.data); setStatus(response.status) })
             .catch(err => { setStatus(500); });
         setPage(newPage);
     };
 
     const handleChangeRowsPerPage = (event) => {
-        console.log("page change");
-        RestaurantService.getAllRestaurants(0, event.target.value).then(res => response = res)
-            .then(() => { console.log(response); setRows(response.data); setStatus(response.status) })
+        RestaurantService.getAllRestaurants(0, event.target.value, priceCategories).then(res => response = res)
+            .then(() => { setRows(response.data); setStatus(response.status) })
             .catch(err => { setStatus(500); });
         setPage(0);
         setPageSize(event.target.value);
@@ -94,7 +128,7 @@ export default function RestaurantSearch(props) {
 
     useEffect(() => {
         console.log("get restaurants effect")
-        RestaurantService.getAllRestaurants(0, 10).then(res => response = res)
+        RestaurantService.getAllRestaurants(0, 10, "1, 2, 3, 4").then(res => response = res)
             .then(() => { setRows(response.data); setStatus(response.status);})
             .catch(err => { setStatus(500); });
     }, []);
@@ -130,7 +164,7 @@ export default function RestaurantSearch(props) {
                         <TablePagination
                             rowsPerPageOptions={[5, 10, 25]}
                             colSpan={3}
-                            count={rows[0].resultSize}
+                            count={rows.length > 0 ? rows[0].resultSize : 0}
                             rowsPerPage={pageSize}
                             page={page}
                             SelectProps={{
@@ -148,7 +182,7 @@ export default function RestaurantSearch(props) {
                 <Grid item xs={12} >
                     <Grid direction="row" container xs={12} spacing={0}>
                         <Grid className={style.filter} item xs={3}>
-                            <SearchFilter mid={mid} cheap={cheap} fine={fine} handleChange={handlePrices}/>
+                            <SearchFilter mid={mid} cheap={cheap} fine={fine} high={high} handleChange={handlePrices}/>
                         </Grid>
                         <Grid item xs={9}>
                             <Grid container direction="column" alignItems="stretch" justify="flex-start">
