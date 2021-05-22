@@ -51,6 +51,18 @@ const useStyles = makeStyles({
         fontSize: 12,
         margin: 0,
         paddingTop: 4
+    },
+    starSelected: {
+        fontSize: 12,
+        fontWeight: "bolder",
+        margin: 0,
+        paddingTop: 4
+    },
+    starDeselected: {
+        fontSize: 12,
+        fontWeight: "normal",
+        margin: 0,
+        paddingTop: 4
     }
 
 });
@@ -71,7 +83,7 @@ export default function SearchFilter(props) {
                 </Grid>
                 
                 <Grid item>
-                    <p className={style.andUp}> & UP</p>
+                    <p className={props.five ? style.starSelected : style.starDeselected}> & UP</p>
                 </Grid>
                 </Grid>
             );
@@ -89,7 +101,7 @@ export default function SearchFilter(props) {
                 </Grid>
 
                 <Grid item>
-                    <p className={style.andUp}> & UP</p>
+                    <p className={props.four ? style.starSelected : style.starDeselected}> & UP</p>
                 </Grid>
             </Grid>
         );
@@ -107,7 +119,7 @@ export default function SearchFilter(props) {
                 </Grid>
 
                 <Grid item>
-                    <p className={style.andUp}> & UP</p>
+                    <p className={props.three ? style.starSelected : style.starDeselected}> & UP</p>
                 </Grid>
             </Grid>
         );
@@ -125,7 +137,7 @@ export default function SearchFilter(props) {
                 </Grid>
 
                 <Grid item>
-                    <p className={style.andUp}> & UP</p>
+                    <p className={props.two ? style.starSelected : style.starDeselected}> & UP</p>
                 </Grid>
             </Grid>
         );
@@ -133,17 +145,17 @@ export default function SearchFilter(props) {
 
     const oneStar = () => {
         return (
-            <Grid container direction="row" justify="flex-start" alignItems="center" spacing={1}>
-                <Grid item>
-                    <StarIcon className={style.ratingStar} />
-                    <StarBorderIcon className={style.ratingStar} />
-                    <StarBorderIcon className={style.ratingStar} />
-                    <StarBorderIcon className={style.ratingStar} />
-                    <StarBorderIcon className={style.ratingStar} />
+            <Grid container direction="row" justify="flex-start" alignItems="center" spacing={1} name="one">
+                <Grid item name="one">
+                    <StarIcon name="one" className={style.ratingStar} />
+                    <StarBorderIcon name="one" className={style.ratingStar} />
+                    <StarBorderIcon name="one" className={style.ratingStar} />
+                    <StarBorderIcon name="one" className={style.ratingStar} />
+                    <StarBorderIcon name="one" className={style.ratingStar} />
                 </Grid>
 
-                <Grid item>
-                    <p className={style.andUp}> & UP</p>
+                <Grid name="one" item>
+                    <p name="one" className={props.one ? style.starSelected : style.starDeselected}> & UP</p>
                 </Grid>
             </Grid>
         );
@@ -182,35 +194,39 @@ export default function SearchFilter(props) {
             <Divider orientation="horizontal" flexItem className={style.divider} />
             <h5>Rating</h5>
             <Button
+                name="five"
                 color="black"
                 size="small"
+                onClick={props.handleRatings}
             > 
                 {fiveStars()}
             </Button>
             <Button
+                name="four"
                 color="black"
                 size="small"
+                onClick={props.handleRatings}
             >
                 {fourStars()}
             </Button>
             <Button
+                name="three"
                 color="black"
                 size="small"
+                onClick={props.handleRatings}
             >
                 {threeStars()}
             </Button>
             <Button
+                name="two"
                 color="black"
                 size="small"
+                onClick={props.handleRatings}
             >
                 {twoStars()}
             </Button>
-            <Button
-                color="black"
-                size="small"
-            >
-                {oneStar()}
-            </Button>
+              <Button color="black" size="small" name="one" onClick={props.handleRatings}> {oneStar()} </Button>
+                   
         </Grid>
     );
 }

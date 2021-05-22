@@ -39,20 +39,18 @@ const useStyles = makeStyles((theme) => ({
     pagination: {
         border: 0,
         padding: 0
-    }
+    },
 
 }));
 let response = {};
-console.log("rerun");
 
 export default function RestaurantSearch(props) {
     const style = useStyles();
-
     const [sort, setSort] = useState('relevance');
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(5);
-    let [rows, setRows] = useState([]);
-    let [status, setStatus] = useState(0);
+    const [pageSize, setPageSize] = useState(10);
+    const [rows, setRows] = useState([]);
+    const [status, setStatus] = useState(0);
     const [state, setState] = React.useState({
         cheap: false,
         mid: false,
@@ -65,58 +63,33 @@ export default function RestaurantSearch(props) {
         let restaurants = [];
         let cheapHolder = cheap;
         let midHolder = mid;
-
         let fineHolder = fine;
-        if (checkbox === "cheap") {
-            cheapHolder = !cheapHolder;
-        } else if (checkbox === "mid") {
-            midHolder = !midHolder;
-        } else {
-            fineHolder = !fineHolder;
-        }
-
-        if (!cheapHolder && !midHolder && !fineHolder) {
-            return setRows(response.data);
-        }
-
-        if (cheapHolder) {
-            console.log(response);
-            restaurants = restaurants.concat(response.data.filter(r => r.priceCategory === 1));
-        }
-
-        if (midHolder) {
-            console.log(response);
-            restaurants =  restaurants.concat(response.data.filter(r => r.priceCategory === 2));
-        }
-
-        if (fineHolder) {
-            restaurants = restaurants.concat(response.data.filter(r => r.priceCategory === 3));
-        }
-
-        setRows(restaurants);
     }
 
-    const handlePrices = (event) => {
-        setState({ ...state, [event.target.name]: event.target.checked });
-        console.log(event.target.name);
-        console.log("cheap " + cheap + " mid " + mid + " fine " + fine);
-        filter(event.target.name);
-    };
 
+    const handlePrices = (event) => {
+        filter(event.target.name);
+        setState({ ...state, [event.target.name]: event.target.checked });
+    
+    };
 
     const handleSort = (event) => {
         setSort(event.target.value);
     };
-
-    const handleChangePage = (event, newPage) => {
+    const handleChangePage = (newPage) => {
+        console.log("change page to " + newPage);
+        RestaurantService.getAllRestaurants(newPage).then(res => response = res)
+            .then(() => { console.log(response); setRows(response.data); setStatus(response.status) })
+            .catch(err => { setStatus(500); });
         setPage(newPage);
     };
+
     const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
+        console.log("rows per page row")
     };
 
     useEffect(() => {
+        console.log("get restaurants effect")
         RestaurantService.getAllRestaurants(0).then(res => response = res)
             .then(() => { setRows(response.data); setStatus(response.status);})
             .catch(err => { setStatus(500); });
@@ -131,7 +104,6 @@ export default function RestaurantSearch(props) {
             </div>
         );
     }
-
     return (
         <Grid container direction="column">
             <Grid item xs={12}>
@@ -152,10 +124,10 @@ export default function RestaurantSearch(props) {
                 <Grid item xs={12} >
                     <Grid direction="row" container xs={12} spacing={0} justify="center">
                         <TablePagination
-                            rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                            rowsPerPageOptions={[5, 10, 25]}
                             colSpan={3}
-                            count={rows.length}
-                            rowsPerPage={rowsPerPage}
+                            count={rows[0].resultSize}
+                            rowsPerPage={pageSize}
                             page={page}
                             SelectProps={{
                                 inputProps: { 'aria-label': 'rows per page' },
@@ -176,7 +148,7 @@ export default function RestaurantSearch(props) {
                         </Grid>
                         <Grid item xs={9}>
                             <Grid container direction="column" alignItems="stretch" justify="flex-start">
-                                <RestaurantTable rows={rows} page={page} rowsPerPage={rowsPerPage}/>
+                                <RestaurantTable rows={rows} page={page} rowsPerPage={rows.length}/>
                             </Grid>
                         </Grid>
                     </Grid>
