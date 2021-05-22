@@ -77,20 +77,24 @@ export default function RestaurantSearch(props) {
         setSort(event.target.value);
     };
     const handleChangePage = (newPage) => {
-        console.log("change page to " + newPage);
-        RestaurantService.getAllRestaurants(newPage).then(res => response = res)
+        RestaurantService.getAllRestaurants(newPage, pageSize).then(res => response = res)
             .then(() => { console.log(response); setRows(response.data); setStatus(response.status) })
             .catch(err => { setStatus(500); });
         setPage(newPage);
     };
 
     const handleChangeRowsPerPage = (event) => {
-        console.log("rows per page row")
+        console.log("page change");
+        RestaurantService.getAllRestaurants(0, event.target.value).then(res => response = res)
+            .then(() => { console.log(response); setRows(response.data); setStatus(response.status) })
+            .catch(err => { setStatus(500); });
+        setPage(0);
+        setPageSize(event.target.value);
     };
 
     useEffect(() => {
         console.log("get restaurants effect")
-        RestaurantService.getAllRestaurants(0).then(res => response = res)
+        RestaurantService.getAllRestaurants(0, 10).then(res => response = res)
             .then(() => { setRows(response.data); setStatus(response.status);})
             .catch(err => { setStatus(500); });
     }, []);
