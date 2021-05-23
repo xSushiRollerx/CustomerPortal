@@ -7,9 +7,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import Checkbox from '@material-ui/core/Checkbox';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
-import Button from '@material-ui/core/Button';
-import StarIcon from '@material-ui/icons/Star';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
+import Rating from '@material-ui/lab/Rating';
+import ClearIcon from '@material-ui/icons/Clear';
 
 const useStyles = makeStyles({
     tags: {
@@ -37,32 +37,8 @@ const useStyles = makeStyles({
         paddingRight: 20,
         marginBottom: 0
     },
-    rating: {
-        width: 120
-    },
-    ratingButton: {
-        border: 0,
-        padding: 0
-    },
-    ratingStar: {
-        fontSize: 16
-    },
-    andUp: {
-        fontSize: 12,
-        margin: 0,
-        paddingTop: 4
-    },
-    starSelected: {
-        fontSize: 12,
-        fontWeight: "bolder",
-        margin: 0,
-        paddingTop: 4
-    },
-    starDeselected: {
-        fontSize: 12,
-        fontWeight: "normal",
-        margin: 0,
-        paddingTop: 4
+    clearButtons: {
+        margin: 8
     }
 
 });
@@ -70,97 +46,6 @@ const useStyles = makeStyles({
 export default function SearchFilter(props) {
 
     const style = useStyles();
-
-    const fiveStars = () => {
-        return (
-            <Grid container direction="row" justify="flex-start" alignItems="center" spacing={1}>
-                <Grid item>
-                    <StarIcon className={style.ratingStar} />
-                    <StarIcon className={style.ratingStar} />
-                    <StarIcon className={style.ratingStar} />
-                    <StarIcon className={style.ratingStar} />
-                    <StarIcon className={style.ratingStar} />
-                </Grid>
-                
-                <Grid item>
-                    <p className={props.five ? style.starSelected : style.starDeselected}> & UP</p>
-                </Grid>
-                </Grid>
-            );
-    }
-
-    const fourStars = () => {
-        return (
-            <Grid container direction="row" justify="flex-start" alignItems="center" spacing={1}>
-                <Grid item>
-                    <StarIcon className={style.ratingStar} />
-                    <StarIcon className={style.ratingStar} />
-                    <StarIcon className={style.ratingStar} />
-                    <StarIcon className={style.ratingStar} />
-                    <StarBorderIcon className={style.ratingStar} />
-                </Grid>
-
-                <Grid item>
-                    <p className={props.four ? style.starSelected : style.starDeselected}> & UP</p>
-                </Grid>
-            </Grid>
-        );
-    }
-
-    const threeStars = () => {
-        return (
-            <Grid container direction="row" justify="flex-start" alignItems="center" spacing={1}>
-                <Grid item>
-                    <StarIcon className={style.ratingStar} />
-                    <StarIcon className={style.ratingStar} />
-                    <StarIcon className={style.ratingStar} />
-                    <StarBorderIcon className={style.ratingStar} />
-                    <StarBorderIcon className={style.ratingStar} />
-                </Grid>
-
-                <Grid item>
-                    <p className={props.three ? style.starSelected : style.starDeselected}> & UP</p>
-                </Grid>
-            </Grid>
-        );
-    }
-
-    const twoStars = () => {
-        return (
-            <Grid container direction="row" justify="flex-start" alignItems="center" spacing={1}>
-                <Grid item>
-                    <StarIcon className={style.ratingStar} />
-                    <StarIcon className={style.ratingStar} />
-                    <StarBorderIcon className={style.ratingStar} />
-                    <StarBorderIcon className={style.ratingStar} />
-                    <StarBorderIcon className={style.ratingStar} />
-                </Grid>
-
-                <Grid item>
-                    <p className={props.two ? style.starSelected : style.starDeselected}> & UP</p>
-                </Grid>
-            </Grid>
-        );
-    }
-
-    const oneStar = () => {
-        return (
-            <Grid container direction="row" justify="flex-start" alignItems="center" spacing={1} name="one">
-                <Grid item name="one">
-                    <StarIcon name="one" className={style.ratingStar} />
-                    <StarBorderIcon name="one" className={style.ratingStar} />
-                    <StarBorderIcon name="one" className={style.ratingStar} />
-                    <StarBorderIcon name="one" className={style.ratingStar} />
-                    <StarBorderIcon name="one" className={style.ratingStar} />
-                </Grid>
-
-                <Grid name="one" item>
-                    <p name="one" className={props.one ? style.starSelected : style.starDeselected}> & UP</p>
-                </Grid>
-            </Grid>
-        );
-    }
-
 
     return (
         <Grid container direction="column" justify="flex-start" alignItems="stretch" className={style.card}>
@@ -171,7 +56,14 @@ export default function SearchFilter(props) {
             <Divider orientation="horizontal" flexItem className={style.divider} />
             <Grid item xs={12}>
                 <Grid direction="column" justify="flex-start" alignItems="stretch" container>
-                    <h5>Price Category</h5>
+                    <Grid item>
+                        <Grid container direction="row" justify="space-between" alignItems="center">
+                            <h5>Price Category</h5>
+                            <Checkbox color="black" icon={<ClearIcon fontSize="small" style={{ margin: "0px" }} />}
+                                checkedIcon={<ClearIcon fontSize="small" style={{ margin: "0px" }}/>} onChange={props.handleChange} name="clear-ratings-filter" />
+                        </Grid>
+                    </Grid>
+                    
                     <FormControl>
                         <FormControlLabel
                             control={<Checkbox checked={props.cheap} color="black" icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
@@ -197,40 +89,19 @@ export default function SearchFilter(props) {
                 </Grid>
             </Grid>
             <Divider orientation="horizontal" flexItem className={style.divider} />
-            <h5>Rating</h5>
-            <Button
-                name="five"
-                color="black"
-                size="small"
-                onClick={props.handleRatings}
-            > 
-                {fiveStars()}
-            </Button>
-            <Button
-                name="four"
-                color="black"
-                size="small"
-                onClick={props.handleRatings}
-            >
-                {fourStars()}
-            </Button>
-            <Button
-                name="three"
-                color="black"
-                size="small"
-                onClick={props.handleRatings}
-            >
-                {threeStars()}
-            </Button>
-            <Button
-                name="two"
-                color="black"
-                size="small"
-                onClick={props.handleRatings}
-            >
-                {twoStars()}
-            </Button>
-              <Button color="black" size="small" name="one" onClick={props.handleRatings}> {oneStar()} </Button>
+            <Grid item>
+                <Grid container direction="row" justify="space-between" alignItems="center">
+                    <h5>Rating</h5>
+                    <Checkbox color="black" icon={<ClearIcon fontSize="small" style={{margin:"0px"}}/>}
+                        checkedIcon={<ClearIcon fontSize="small" style={{ margin: "0px" }}/>} onChange={props.clearRatings} name="clear-ratings-filter" />
+                </Grid>
+            </Grid>
+            <Grid item>
+                <Grid container direction="row" alignItems="center">
+                    <Rating name="selectRating" defaultValue={props.ratings} emptyIcon={<StarBorderIcon fontSize="inherit" />}
+                        onChange={props.handleRatings} color="black" />
+                </Grid>
+            </Grid>
                    
         </Grid>
     );
