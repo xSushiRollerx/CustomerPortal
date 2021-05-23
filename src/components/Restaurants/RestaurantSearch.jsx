@@ -64,6 +64,7 @@ export default function RestaurantSearch(props) {
         fine: false,
     });
     const [ratings, setRatings] = useState(0);
+    //for other parts of app to use so they don't have to convert booleans string. prob should have been function;
     const [priceCategories, setPriceCategories] = useState("1, 2, 3, 4");
 
     const { cheap, mid, fine, high } = state;
@@ -117,7 +118,19 @@ export default function RestaurantSearch(props) {
         setState({ ...state, [event.target.name]: event.target.checked });
     
     };
+    const clearPrices = () => {
+        RestaurantService.getAllRestaurants(0, pageSize, "1, 2, 3, 4", ratings).then(res => response = res)
+            .then(() => { setRows(response.data); setStatus(response.status) })
+            .catch(err => { setStatus(500); });
 
+        setPage(0);
+        setPriceCategories("1, 2, 3, 4");
+        setState({
+            cheap: false,
+            mid: false,
+            fine: false,
+        });
+    }
     const handleRatingsChange = (event) => {
         console.log(event.target.value);
         RestaurantService.getAllRestaurants(0, pageSize, priceCategories, event.target.value).then(res => response = res)
@@ -217,7 +230,7 @@ export default function RestaurantSearch(props) {
                     <Grid direction="row" container xs={12} spacing={0}>
                         <Grid className={style.filter} item xs={3}>
                             <SearchFilter mid={mid} cheap={cheap} fine={fine} high={high} ratings={ratings} handleChange={handlePrices}
-                                handleRatings={handleRatingsChange} />
+                                handleRatings={handleRatingsChange} clearPrices={clearPrices} />
                         </Grid>
                         <Grid item xs={9}>
                             <Grid container direction="column" alignItems="stretch" justify="flex-start">
