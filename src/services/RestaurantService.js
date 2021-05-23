@@ -17,10 +17,11 @@ class RestaurantService {
         return axios.get((RESTAURANT_SERVICE_BASE_URL) + "/" + id, config);
     }
 
-    getAllRestaurants(page, pageSize, priceCategories, ratings) {
+    getAllRestaurants(page, pageSize, priceCategories, ratings, sort) {
+        console.log(sort);
         // example url http://localhost:8040/restaurants/all/2?active=1&pageSize=10&priceCategories=1%2C2%2C3%2C4&rating=0&sort=default
         return axios.get(RESTAURANT_SERVICE_BASE_URL + "/restaurants/all/" + page + "?pageSize=" + pageSize + "&priceCategories=" + encodeURI(priceCategories)
-           + "&rating=" + ratings);
+           + "&rating=" + ratings + "&sort=" + sort);
     }
 }
 

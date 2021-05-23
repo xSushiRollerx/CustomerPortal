@@ -4,8 +4,9 @@
     "\\src",
     "\\src\\components",
     "\\src\\components\\Restaurants",
+    "\\src\\services",
     "\\src\\tests"
   ],
-  "SelectedNode": "\\src\\tests\\Restaurants",
+  "SelectedNode": "\\src\\services\\RestaurantService.js",
   "PreviewInSolutionExplorer": false
 }
