@@ -119,18 +119,13 @@ export default function RestaurantSearch(props) {
     };
 
     const handleRatingsChange = (event) => {
+        console.log(event.target.value);
         RestaurantService.getAllRestaurants(0, pageSize, priceCategories, event.target.value).then(res => response = res)
             .then(() => { setRows(response.data); setStatus(response.status) })
             .catch(err => { setStatus(500); });
         setRatings(event.target.value);
     }
-    const clearRatings = () => {
-        console.log("clear ratings runnings")
-        RestaurantService.getAllRestaurants(0, pageSize, priceCategories, 0).then(res => response = res)
-            .then(() => { setRows(response.data); setStatus(response.status) })
-            .catch(err => { setStatus(500); });
-        setRatings(0);
-    }
+
     const handleSort = (event) => {
         setSort(event.target.value);
     };
@@ -221,7 +216,7 @@ export default function RestaurantSearch(props) {
                 <Grid item xs={12} >
                     <Grid direction="row" container xs={12} spacing={0}>
                         <Grid className={style.filter} item xs={3}>
-                            <SearchFilter mid={mid} cheap={cheap} fine={fine} high={high} ratings={ratings} handleChange={handlePrices} clearRatings={clearRatings}
+                            <SearchFilter mid={mid} cheap={cheap} fine={fine} high={high} ratings={ratings} handleChange={handlePrices}
                                 handleRatings={handleRatingsChange} />
                         </Grid>
                         <Grid item xs={9}>
