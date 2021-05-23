@@ -17,11 +17,16 @@ class RestaurantService {
         return axios.get((RESTAURANT_SERVICE_BASE_URL) + "/" + id, config);
     }
 
-    getAllRestaurants(page, pageSize, priceCategories, ratings, sort) {
-        console.log(sort);
-        // example url http://localhost:8040/restaurants/all/2?active=1&pageSize=10&priceCategories=1%2C2%2C3%2C4&rating=0&sort=default
-        return axios.get(RESTAURANT_SERVICE_BASE_URL + "/restaurants/all/" + page + "?pageSize=" + pageSize + "&priceCategories=" + encodeURI(priceCategories)
-           + "&rating=" + ratings + "&sort=" + sort);
+    getAllRestaurants(page, pageSize, priceCategories, ratings, sort, keywords) {
+        console.log(encodeURI(keywords.trim().replace(" ", ", ")));
+        if (keywords.trim() === "") {
+            return axios.get(RESTAURANT_SERVICE_BASE_URL + "/restaurants/all/" + page + "?pageSize=" + pageSize + "&priceCategories=" + encodeURI(priceCategories)
+                + "&rating=" + ratings + "&sort=" + sort);
+        } else {
+            console.log("in relevance instead");
+            return axios.get(RESTAURANT_SERVICE_BASE_URL + "/restaurants/" + page + "?pageSize=" + pageSize + "&priceCategories=" + encodeURI(priceCategories)
+                + "&rating=" + ratings + "&sort=" + sort + "&keywords=" + encodeURI(keywords.trim().replace(" ", ", ")));
+        }
     }
 }
 
