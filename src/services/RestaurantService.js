@@ -6,7 +6,7 @@ const RESTAURANT_SERVICE_BASE_URL = 'http://localhost:8040';
 class RestaurantService {
 
     getRestaurant(id) {
-        return axios.get((RESTAURANT_SERVICE_BASE_URL) + "/" + id);
+        return axios.get(RESTAURANT_SERVICE_BASE_URL + "/restaurant/" + id);
     }
 
     getAllRestaurants(page, pageSize, priceCategories, ratings, sort, keywords) {

@@ -40,23 +40,22 @@ const useStyles = makeStyles({
         height: "3rem"
     }
 });
-
+let response = {};
 export default function RestaurantProfile() {
 
     const style = useStyles();
     const { id } = useParams();
-    const [response, setResponse] = useState({});
     const [resolved, setResolved] = useState(false);
-    let restaurant = {};
-    let status = 0;
+    let [restaurant, setRestaurant] = useState({});
+    const [status, setStatus] = useState(0);
 
     const getResponse = () => {
         // RestaurantService.getRestaurant(id).then(response => { setRestaurant(response.data);});
         //not setting response when it's a 500 error
-        RestaurantService.getRestaurant(id).then(res => { setResponse(res); })
+        RestaurantService.getRestaurant(id).then(res => { response = res })
             //why isn't it waiting until response has returned
-            .then(() => { setResolved(true);})
-            .catch(err => { setResolved(true); status = 500;});
+            .then(() => { setRestaurant(response.data); setStatus(response.status); })
+            .catch(err => { console.log("error"); setStatus(500); });
     }
     useEffect(() => {
         getResponse();
@@ -65,7 +64,7 @@ export default function RestaurantProfile() {
     
 
     //wait for object to be loaded and promise fulfilled   
-    if (!resolved) {
+    if (status === 0) {
         return (
             <div class="d-flex justify-content-center">
                 <div class="spinner-border" className={style.loading} role="status">
@@ -73,13 +72,12 @@ export default function RestaurantProfile() {
                 </div>
             </div>
         );
-    } else {
-        restaurant = response.data;
-        status = response.status;
-    }
+    } 
 
+    console.log(response);
     if (status !== 200) {
-        return <Redirect to='/login' />;
+        return <h1>{"Something Went Wrong. " + status + " Error"}</h1>
+        //return <Redirect to='/login' />;
  
     }
 
