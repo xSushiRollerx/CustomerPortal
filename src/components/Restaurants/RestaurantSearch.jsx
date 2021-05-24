@@ -13,7 +13,9 @@ import RestaurantTablePagination from './RestaurantTablePagination';
 import RestaurantService from './../../services/RestaurantService';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { useParams, useHistory } from "react-router-dom"
 import { useState, useEffect } from 'react';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -52,6 +54,8 @@ let response = {};
 
 export default function RestaurantSearch(props) {
     const style = useStyles();
+    const history = useHistory();
+    const { search } = useParams();
     const [sort, setSort] = useState('default');
     const [page, setPage] = useState(0);
     const [pageSize, setPageSize] = useState(10);
@@ -161,25 +165,13 @@ export default function RestaurantSearch(props) {
     };
 
     useEffect(() => {
-        RestaurantService.getAllRestaurants(0, 10, "1, 2, 3, 4", 0, "default", keywords).then(res => response = res)
+        RestaurantService.getAllRestaurants(0, 10, "1, 2, 3, 4", 0, "default", decodeURI(search)).then(res => response = res)
             .then(() => { setRows(response.data); setStatus(response.status);})
             .catch(err => { setStatus(500); });
         window.addEventListener('keyup', (event) => {
             if (event.keyCode === 13) {
                 event.preventDefault();
-                console.log(document.getElementById("searchBar").value);
-                RestaurantService.getAllRestaurants(0, pageSize, "1, 2, 3, 4", 0, sort, document.getElementById("searchBar").value).then(res => response = res)
-                    .then(() => { setRows(response.data); setStatus(response.status); })
-                    .catch(err => { setStatus(500); });
-                setKeywords(document.getElementById("searchBar").value);
-                setPage(0);
-                setRatings(0);
-                setState({
-                    cheap: false,
-                    mid: false,
-                    fine: false,
-                });
-                setPriceCategories("1, 2, 3, 4");
+                history.push('/restaurants/' + encodeURI(document.getElementById("searchBar").value));
             }
         })
     }, [])
@@ -201,14 +193,13 @@ export default function RestaurantSearch(props) {
          </div>
         );
     }
-    console.log(status);
     return (
         <Grid container direction="column">
             <Grid item xs={12}>
                 <Grid container alignItems="center" spacing={3}>
                     <Grid item xs={10}>
                         <TextField className={style.search} placeholder="Search Restaurants" variant="outlined" InputLabelProps={{ shrink: false, }}
-                            size="small" color="black" xs={12} id="searchBar" />
+                            size="small" color="black" xs={12} id="searchBar" defaultValue={keywords}/>
                     </Grid>
                     <Grid item xs={2} justify="flex-end">
                         <FormControl className={style.sortDisplay}>

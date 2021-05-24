@@ -100,7 +100,7 @@ export default function RestaurantResult(props) {
                 <Grid container item justify="center" alignItems="center" xs={4}>Image</Grid>
                 <Grid item>
                     <Grid container direction="column" justify="flex-start" alignItems="stretch">
-                        <h6 className={style.name}>{props.restaurant.name}</h6>
+                        <a href={"/restaurant/" + props.restaurant.id}><h6 className={style.name}>{props.restaurant.name}</h6></a>
                         {rating()}
                         <Grid item>
                             <Grid container direction="row" justify="flex-start" alignItems="center">
