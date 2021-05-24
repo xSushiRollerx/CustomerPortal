@@ -93,6 +93,7 @@ export default function RestaurantResult(props) {
             
             );
     }
+
     return (
         <Grid item xs={12} className={style.card}>
             <Grid container direction="row" justify="flex-start" xs={12}>

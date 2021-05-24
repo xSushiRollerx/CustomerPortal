@@ -201,6 +201,7 @@ export default function RestaurantSearch(props) {
          </div>
         );
     }
+    console.log(status);
     return (
         <Grid container direction="column">
             <Grid item xs={12}>
@@ -248,7 +249,9 @@ export default function RestaurantSearch(props) {
                         </Grid>
                         <Grid item xs={9}>
                             <Grid container direction="column" alignItems="stretch" justify="flex-start">
-                                <RestaurantTable rows={rows} page={page} rowsPerPage={rows.length}/>
+                                {status === 200 ? <RestaurantTable rows={rows} page={page} rowsPerPage={rows.length} /> :
+                                   <Grid container item alignItems="center" justify="center"> <h5>Something Went Wrong. Please Try Again.</h5></Grid>
+                                }
                             </Grid>
                         </Grid>
                     </Grid>

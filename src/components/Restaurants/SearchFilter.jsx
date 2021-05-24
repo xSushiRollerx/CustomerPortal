@@ -10,6 +10,9 @@ import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import Rating from '@material-ui/lab/Rating';
 import ClearIcon from '@material-ui/icons/Clear';
+import EditIcon from '@material-ui/icons/Edit';
+import DeliveryAddress from './DeliveryAddress';
+import { useState } from 'react';
 
 const useStyles = makeStyles({
     tags: {
@@ -39,17 +42,24 @@ const useStyles = makeStyles({
     },
     clearButtons: {
         margin: 8
-    }
+    },
 
 });
 
 export default function SearchFilter(props) {
 
     const style = useStyles();
+    const [openAddress, setOpenAddress] = useState(false);
 
     return (
         <Grid container direction="column" justify="flex-start" alignItems="stretch" className={style.card}>
-            <h5>Location</h5>
+            <Grid item>
+                <Grid container direction="row" justify="space-between" alignItems="center">
+                    <h5>Location</h5>
+                    <Checkbox color="black" icon={<EditIcon fontSize="small" style={{ margin: "0px" }} />}
+                        checkedIcon={<EditIcon fontSize="small" style={{ margin: "0px" }} />} onChange={() => setOpenAddress(true)} name="clear-ratings-filter" />
+                </Grid>
+            </Grid>
             <p className={style.p}>1234 Main St</p>
             <p className={style.p}>Principal, GX</p>
             <p className={style.p}>67890</p>
@@ -103,7 +113,7 @@ export default function SearchFilter(props) {
                         onChange={props.handleRatings} value={props.ratings} />
                 </Grid>
             </Grid>
-                   
+            <DeliveryAddress open={openAddress} close={setOpenAddress} />      
         </Grid>
     );
 }
