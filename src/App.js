@@ -11,7 +11,7 @@ import OrderCompletion from './components/Checkout/OrderCompletion';
 import RestaurantProfile from './components/Restaurants/RestaurantProfile';
 import RestaurantSearch from './components/Restaurants/RestaurantSearch';
 import NavBar from './components/NavBar';
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom';
 
 function App() {
   return (
@@ -31,7 +31,7 @@ function App() {
                     <Route path='/confirmation' component={Confirmation}></Route>
                     <Route path='/completion' component={OrderCompletion}></Route>
                     <Route path='/restaurant/:id' component={RestaurantProfile}></Route>
-                    <Route path='/restaurants/:search' component={RestaurantSearch}></Route>
+                    <Route path={'/restaurants/:search'} component={RestaurantSearch}></Route>
                 </Switch>
             </div>
       </Router>

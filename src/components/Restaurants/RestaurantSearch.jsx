@@ -54,7 +54,7 @@ let response = {};
 
 export default function RestaurantSearch(props) {
     const style = useStyles();
-    const history = useHistory();
+    let history = useHistory();
     const { search } = useParams();
     const [sort, setSort] = useState('default');
     const [page, setPage] = useState(0);
@@ -165,13 +165,30 @@ export default function RestaurantSearch(props) {
     };
 
     useEffect(() => {
-        RestaurantService.getAllRestaurants(0, 10, "1, 2, 3, 4", 0, "default", decodeURI(search)).then(res => response = res)
-            .then(() => { setRows(response.data); setStatus(response.status);})
-            .catch(err => { setStatus(500); });
+        //load results of search on page load
+        console.log("on load: " + search);
+        if (search === undefined) {
+            RestaurantService.getAllRestaurants(0, 10, "1, 2, 3, 4", 0, "default", "").then(res => response = res)
+                .then(() => { setRows(response.data); setStatus(response.status); })
+                .catch(err => { setStatus(500); });
+        } else {
+            console.log("not undefined ran");
+            RestaurantService.getAllRestaurants(0, 10, "1, 2, 3, 4", 0, "relevance", decodeURI(search)).then(res => response = res)
+                .then(() => { setRows(response.data); setStatus(response.status); })
+                .catch(err => { setStatus(500); });
+            setKeywords(decodeURI(search));
+        }
+        
+        //load event listener for when user hits enter
         window.addEventListener('keyup', (event) => {
             if (event.keyCode === 13) {
                 event.preventDefault();
+                console.log(document.getElementById("searchBar").value);
                 history.push('/restaurants/' + encodeURI(document.getElementById("searchBar").value));
+                RestaurantService.getAllRestaurants(0, 10, "1, 2, 3, 4", 0, "relevance", document.getElementById("searchBar").value).then(res => response = res)
+                    .then(() => { setRows(response.data); setStatus(response.status); })
+                    .catch(err => { setStatus(500); });
+                setKeywords(document.getElementById("searchBar").value);
             }
         })
     }, [])
@@ -193,6 +210,7 @@ export default function RestaurantSearch(props) {
          </div>
         );
     }
+    console.log(keywords)
     return (
         <Grid container direction="column">
             <Grid item xs={12}>
