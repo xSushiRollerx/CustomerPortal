@@ -31,7 +31,7 @@ function App() {
                     <Route path='/confirmation' component={Confirmation}></Route>
                     <Route path='/completion' component={OrderCompletion}></Route>
                     <Route path='/restaurant/:id' component={RestaurantProfile}></Route>
-                    <Route path={'/restaurants/:search'} component={RestaurantSearch}></Route>
+                    <Route path={'/restaurants/'} component={RestaurantSearch}></Route>
                 </Switch>
             </div>
       </Router>

@@ -5,8 +5,10 @@ import { unmountComponentAtNode } from "react-dom";
 import { useParams, useHistory } from "react-router-dom";
 import axios from "axios";
 
+const mockRouterDOM = require("react-router-dom");
+jest.mock("react-router-dom");
 jest.mock('axios');
-const mockRouterDOM = jest.mock("react-router-dom");
+
 const result = [
     {
         "id": 2,
@@ -95,10 +97,12 @@ afterEach(() => {
 });
 
 fit("Use Effect Runs On Load", () => {
-    console.log(useHistory);
-    const mockHistory = { push: jest.fn() };
-    const mockParams = { params: { search: "hello" } };
-    const { getByTestId, getByText, getByPlaceholderText, queryByText } = render(<RestaurantSearch history={mockHistory} match={mockParams} />, container);
+
+    mockRouterDOM.useHistory = jest.fn(); 
+    jest.spyOn(mockRouterDOM, "useParams").mockImplementation(() => {search: "hello" });
+
+    const { getByTestId, getByText, getByPlaceholderText, queryByText } = render(<RestaurantSearch />, container);
+
     mockAxios.get.mockResolvedValue({
         data: result,
         status: 200

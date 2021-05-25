@@ -13,7 +13,7 @@ import RestaurantTablePagination from './RestaurantTablePagination';
 import RestaurantService from './../../services/RestaurantService';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { useParams, useHistory } from "react-router-dom"
+import {  useParams, useHistory } from "react-router-dom"
 import { useState, useEffect } from 'react';
 
 
@@ -51,11 +51,10 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 let response = {};
-
+let query = undefined;
 export default function RestaurantSearch(props) {
     const style = useStyles();
     const history = useHistory();
-    console.log(JSON.stringify(useParams()));
     const { search } = useParams();
     const [sort, setSort] = useState('default');
     const [page, setPage] = useState(0);
@@ -69,6 +68,7 @@ export default function RestaurantSearch(props) {
         fine: false,
     });
     const [ratings, setRatings] = useState(0);
+    
     //for other parts of app to use so they don't have to convert booleans string. prob should have been function;
     const [priceCategories, setPriceCategories] = useState("1, 2, 3, 4");
 
@@ -167,28 +167,18 @@ export default function RestaurantSearch(props) {
     useEffect(() => {
         //load results of search on page load
         console.log("on load: " + search);
-        if (search === undefined ) {
-            RestaurantService.getAllRestaurants(0, 10, "1, 2, 3, 4", 0, "default", "").then(res => response = res)
+        RestaurantService.getAllRestaurants(0, 10, "1, 2, 3, 4", 0, "default", "").then(res => response = res)
                 .then(() => { setRows(response.data); setStatus(response.status); })
                 .catch(err => { setStatus(500); });
-            console.log(response)
-        } else {
-            console.log("not undefined ran");
-            RestaurantService.getAllRestaurants(0, 10, "1, 2, 3, 4", 0, "relevance", decodeURI(search)).then(res => response = res)
-                .then(() => { console.log(response); setRows(response.data); setStatus(response.status); })
-                .catch(err => { setStatus(500); });
-            setKeywords(decodeURI(search));
-            console.log(response);
-        }
+                console.log(response)
         
         //load event listener for when user hits enter
         window.addEventListener('keyup', (event) => {
             if (event.keyCode === 13) {
                 event.preventDefault();
                 console.log(document.getElementById("searchBar").value);
-                history.push('/restaurants/' + encodeURI(document.getElementById("searchBar").value));
                 RestaurantService.getAllRestaurants(0, pageSize, "1, 2, 3, 4", 0, "relevance", (document.getElementById("searchBar") !== null ? document.getElementById("searchBar").value : ""))
-                    .then(res => response = res)
+                .then(res => response = res)
                     .then(() => { setRows(response.data); setStatus(response.status); })
                     .catch(err => { setStatus(500); });
                 setKeywords(document.getElementById("searchBar").value);
@@ -199,6 +189,7 @@ export default function RestaurantSearch(props) {
                     mid: false,
                     fine: false,
                 });
+                document.getElementById("clearRatings").click();
                 //clear ratings too.
             }
         })
@@ -223,7 +214,6 @@ export default function RestaurantSearch(props) {
          </div>
         );
     }
-  
     return (
         <Grid container direction="column">
             <Grid item xs={12}>

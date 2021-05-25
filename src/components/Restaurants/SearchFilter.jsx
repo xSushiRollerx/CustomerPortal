@@ -102,7 +102,7 @@ export default function SearchFilter(props) {
             <Grid item>
                 <Grid container direction="row" justify="space-between" alignItems="center">
                     <h5>Rating</h5>
-                    <Checkbox color="black" icon={<ClearIcon fontSize="small" style={{ margin: "0px" }} />}
+                    <Checkbox id="clearRatings" color="black" icon={<ClearIcon fontSize="small" style={{ margin: "0px" }} />}
                         checkedIcon={<ClearIcon fontSize="small" style={{ margin: "0px" }} />} onChange={props.handleRatings} value={0}
                         name="clear-ratings-filter" />
                 </Grid>
