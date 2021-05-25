@@ -1,6 +1,6 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
-import Confirmation from '../components/Confirmation';
+import Confirmation from '../../components/Checkout/Confirmation';
 import { unmountComponentAtNode } from "react-dom";
 
 let container = null;

@@ -54,7 +54,8 @@ let response = {};
 
 export default function RestaurantSearch(props) {
     const style = useStyles();
-    let history = useHistory();
+    const history = useHistory();
+    console.log(JSON.stringify(useParams()));
     const { search } = useParams();
     const [sort, setSort] = useState('default');
     const [page, setPage] = useState(0);
@@ -72,7 +73,6 @@ export default function RestaurantSearch(props) {
     const [priceCategories, setPriceCategories] = useState("1, 2, 3, 4");
 
     const { cheap, mid, fine, high } = state;
-
     const filter = (checkbox) => {
         console.log(checkbox)
         let cheapHolder = cheap;
@@ -167,16 +167,18 @@ export default function RestaurantSearch(props) {
     useEffect(() => {
         //load results of search on page load
         console.log("on load: " + search);
-        if (search === undefined) {
+        if (search === undefined ) {
             RestaurantService.getAllRestaurants(0, 10, "1, 2, 3, 4", 0, "default", "").then(res => response = res)
                 .then(() => { setRows(response.data); setStatus(response.status); })
                 .catch(err => { setStatus(500); });
+            console.log(response)
         } else {
             console.log("not undefined ran");
             RestaurantService.getAllRestaurants(0, 10, "1, 2, 3, 4", 0, "relevance", decodeURI(search)).then(res => response = res)
-                .then(() => { setRows(response.data); setStatus(response.status); })
+                .then(() => { console.log(response); setRows(response.data); setStatus(response.status); })
                 .catch(err => { setStatus(500); });
             setKeywords(decodeURI(search));
+            console.log(response);
         }
         
         //load event listener for when user hits enter
@@ -185,15 +187,26 @@ export default function RestaurantSearch(props) {
                 event.preventDefault();
                 console.log(document.getElementById("searchBar").value);
                 history.push('/restaurants/' + encodeURI(document.getElementById("searchBar").value));
-                RestaurantService.getAllRestaurants(0, 10, "1, 2, 3, 4", 0, "relevance", document.getElementById("searchBar").value).then(res => response = res)
+                RestaurantService.getAllRestaurants(0, pageSize, "1, 2, 3, 4", 0, "relevance", (document.getElementById("searchBar") !== null ? document.getElementById("searchBar").value : ""))
+                    .then(res => response = res)
                     .then(() => { setRows(response.data); setStatus(response.status); })
                     .catch(err => { setStatus(500); });
                 setKeywords(document.getElementById("searchBar").value);
+                setPage(0);
+                setSort("relevance");
+                setState({
+                    cheap: false,
+                    mid: false,
+                    fine: false,
+                });
+                //clear ratings too.
             }
         })
     }, [])
 
     if (status === 0) {
+        console.log(status);
+        console.log(keywords);
         return (
             /**
             <div class="d-flex justify-content-center">
@@ -210,7 +223,7 @@ export default function RestaurantSearch(props) {
          </div>
         );
     }
-    console.log(keywords)
+  
     return (
         <Grid container direction="column">
             <Grid item xs={12}>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
-import OrderCart from '../components/OrderCart';
+import OrderCart from '../../components/Checkout/OrderCart';
 import { unmountComponentAtNode } from "react-dom";
 
 let container = null;

@@ -8,7 +8,6 @@ import { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom"
 import RestaurantService from './../../services/RestaurantService';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
-import { Redirect } from 'react-router-dom';
 
 const useStyles = makeStyles({
     tags: {

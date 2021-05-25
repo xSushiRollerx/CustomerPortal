@@ -1,6 +1,6 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
-import OrderCompletion from '../components/OrderCompletion';
+import OrderCompletion from '../../components/Checkout/OrderCompletion';
 import { unmountComponentAtNode } from "react-dom";
 
 let container = null;
