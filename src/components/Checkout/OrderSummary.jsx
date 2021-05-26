@@ -12,7 +12,7 @@ class OrderSummary extends Component {
     render() {
 
         return (
-            <div data-testid="OrderSummary">
+            <div data-testid="ConfirmationOrderSummary">
             <table className='table table-bordered'>
                 <thead>
                     <th><h3>Order Summary</h3></th>
@@ -49,7 +49,7 @@ class OrderSummary extends Component {
                                         </svg>
                                  </button>
                             </Grid>
-                            <p className='m-0' data-testid="OrderSummaryStreet">{this.props.address.street}</p>
+                            <p className='m-0' data-testid="OrderSummaryStreet">{this.props.address.streetAddress}</p>
                             <p className='m-0' data-testid="OrderSummaryCityState">{this.props.address.city}, {this.props.address.state}</p>
                             <p className='m-0' data-testid="OrderSummaryZipCode">{this.props.address.zipCode}</p>
                     </tr>

@@ -107,65 +107,19 @@ it("drop off form renders", () => {
 
 it("order summary renders", () => {
     const { getByTestId } = render(<Confirmation />, container);
-    expect(getByTestId('OrderSummary')).toBeInTheDocument();
+    expect(getByTestId('Confirmation')).toBeInTheDocument();
 });
 
-it("drop off form visibility tests", () => {
-    const { getByTestId } = render(<Confirmation />, container);
-
-    let dropOffForm = getByTestId('DropOffForm');
-    expect(dropOffForm.style.display).toBe('none');
-
-    fireEvent.click(getByTestId('EditAddress'));
-    expect(dropOffForm.style.display).toBe('block');
-
-    fireEvent.click(getByTestId('DropOffFormCancel'));
-    expect(dropOffForm.style.display).toBe('none');
-
-    fireEvent.click(getByTestId('EditAddress'));
-    expect(dropOffForm.style.display).toBe('block');
-
-    fireEvent.click(getByTestId('DropOffFormSubmit'));
-    expect(dropOffForm.style.display).toBe('none');
-    
-});
-
-it("drop off form fillout", () => {
-    const { getByTestId } = render(<Confirmation />, container);
-    fireEvent.click(getByTestId('EditAddress'));
-
-    fireEvent.change(getByTestId("DropOffFormStreet"), { target: { value: "1946 Yellow Brick Road" } });
-    fireEvent.change(getByTestId("DropOffFormCity"), { target: { value: "MunchkinVille" } });
-    fireEvent.change(getByTestId("DropOffFormState"), { target: { value: "Oz" } });
-    fireEvent.change(getByTestId("DropOffFormZipCode"), { target: { value: 30449 } });
-
-    fireEvent.click(getByTestId('DropOffFormSubmit'));
-
-    //renders in order summary
-    expect(getByTestId("OrderSummaryStreet").textContent).toBe("1946 Yellow Brick Road");
-    expect(getByTestId("OrderSummaryCityState").textContent).toBe("MunchkinVille, Oz");
-    expect(getByTestId("OrderSummaryZipCode").textContent).toBe("30449");
-
-    //saves to local storage properly
-    expect(JSON.parse(localStorage.getItem('orders'))[0].address.street).toBe("1946 Yellow Brick Road");
-    expect(JSON.parse(localStorage.getItem('orders'))[0].address.city).toBe("MunchkinVille");
-    expect(JSON.parse(localStorage.getItem('orders'))[0].address.state).toBe("Oz");
-    expect(JSON.parse(localStorage.getItem('orders'))[0].address.zipCode).toBe(30449);
-});
 
 it("place order button functionality", () => {
     const historyMock = { push: jest.fn() };
     const { getByTestId } = render(<Confirmation history={historyMock} />, container);
 
-    fireEvent.click(getByTestId('EditAddress'));
-
-    fireEvent.click(getByTestId('DropOffFormSubmit'));
-
-    fireEvent.click(getByTestId('OrderSummaryCheckOut'));
+    fireEvent.click(getByTestId('PlaceOrder'));
 
     
     //expect(historyMock.push.mock.calls[0]).toEqual(['/completion'], getByTestId("Confirmation"));
-    expect(JSON.parse(localStorage.getItem('orders')).length).toBe(0);
+    expect(JSON.parse(localStorage.getItem('orders')).length).toBe(2);
 });
 
 

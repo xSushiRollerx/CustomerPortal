@@ -57,7 +57,6 @@ class Confirmation extends Component {
             return sum;
         }
         let orderTotals = this.state.orders.map(o => <p className='m-0'>${getTotal(o).toFixed(2)}</p>);
-        console.log(this.state.orders);
         return (
 
             <div className='row' data-testid="Confirmation">
@@ -115,7 +114,7 @@ class Confirmation extends Component {
                                 <p className='col-6 m-0'>Total</p>
                                 <p className='col-6 m-0'>${(subTotal + deliveryfee + taxes).toFixed(2)}</p>
                             </tr>
-                            <button className='w-100 btn btn-secondary rounded-0' onClick={this.placeOrder}>Place Order</button>
+                            <button data-testId="PlaceOrder" className='w-100 btn btn-secondary rounded-0' onClick={this.placeOrder}>Place Order</button>
                        </tbody>
                     </table>
                 </div>

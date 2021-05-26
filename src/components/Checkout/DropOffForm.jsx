@@ -7,16 +7,12 @@ class DropOffForm extends Component {
 
     submitDeliveryAddress = (event) => {
         event.preventDefault();
-        console.log('drop off submit has run');
-       
-        console.log('delivery in dropoff form ' + JSON.stringify(this.props.address));
         this.props.showDropOffFormHandler();
         this.props.addressHandler(this.props.address);
     }
 
     streetHandler = (event) => {
-        this.props.address.street = event.target.value;
-        console.log(this.props.address.street)
+        this.props.address.streetAddress = event.target.value;
     }
 
     cityHandler = (event) => {

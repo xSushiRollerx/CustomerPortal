@@ -215,7 +215,7 @@ it("drop off form fillout", () => {
     expect(getByTestId("OrderSummaryZipCode").textContent).toBe("30449");
 
     //saves to local storage properly
-    expect(JSON.parse(localStorage.getItem('orders'))[0].address.street).toBe("1946 Yellow Brick Road");
+    expect(JSON.parse(localStorage.getItem('orders'))[0].address.streetAddress).toBe("1946 Yellow Brick Road");
     expect(JSON.parse(localStorage.getItem('orders'))[0].address.city).toBe("MunchkinVille");
     expect(JSON.parse(localStorage.getItem('orders'))[0].address.state).toBe("Oz");
     expect(JSON.parse(localStorage.getItem('orders'))[0].address.zipCode).toBe(30449);
