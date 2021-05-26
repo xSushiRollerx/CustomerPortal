@@ -1,6 +1,6 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
-import RestaurantSearch from '../../components/Restaurants/RestaurantSearch';
+import RestaurantSearch from './../../components/Restaurants/RestaurantSearch';
 import { unmountComponentAtNode } from "react-dom";
 import { useParams, useHistory } from "react-router-dom";
 import axios from "axios";
@@ -8,6 +8,8 @@ import axios from "axios";
 const mockRouterDOM = require("react-router-dom");
 jest.mock("react-router-dom");
 jest.mock('axios');
+const mockRestaurantService = require('./../../services/RestaurantService');
+jest.mock('./../../services/RestaurantService');
 
 const result = [
     {
@@ -99,7 +101,11 @@ afterEach(() => {
 fit("Use Effect Runs On Load", () => {
 
     mockRouterDOM.useHistory = jest.fn(); 
-    jest.spyOn(mockRouterDOM, "useParams").mockImplementation(() => {search: "hello" });
+    const mockGetAllRestaurants = jest.spyOn(mockRestaurantService, "getAllRestaurants");
+    mockGetAllRestaurants.mockResolvedValue({
+        data: result,
+        status: 200
+    });
 
     const { getByTestId, getByText, getByPlaceholderText, queryByText } = render(<RestaurantSearch />, container);
 

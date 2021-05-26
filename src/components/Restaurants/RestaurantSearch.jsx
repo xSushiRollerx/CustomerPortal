@@ -55,7 +55,6 @@ let query = undefined;
 export default function RestaurantSearch(props) {
     const style = useStyles();
     const history = useHistory();
-    const { search } = useParams();
     const [sort, setSort] = useState('default');
     const [page, setPage] = useState(0);
     const [pageSize, setPageSize] = useState(10);
@@ -175,7 +174,6 @@ export default function RestaurantSearch(props) {
     }
     useEffect(() => {
         //load results of search on page load
-        console.log("on load: " + search);
         RestaurantService.getAllRestaurants(0, 10, "1, 2, 3, 4", 0, "default", "").then(res => response = res)
             .then(() => { setRows(response.data); setStatus(response.status); })
             .catch(err => { setStatus(500); });
