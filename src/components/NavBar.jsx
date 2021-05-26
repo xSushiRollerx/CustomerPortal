@@ -24,6 +24,7 @@ export default function NavBar() {
             <Link color="inherit" href="/login">Login</Link>
             <Link color="inherit" href="/register">Register</Link>
             <Link color="inherit" href="/cart">Cart</Link>
+            <Link color="inherit" href="/restaurants">Search</Link>
         </Breadcrumbs>
         
         );

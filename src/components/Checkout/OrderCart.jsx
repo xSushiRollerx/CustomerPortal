@@ -50,13 +50,15 @@ class OrderCart extends Component {
     }
 
     changeDeliveryAddress = (delivery) => {
+        let temp = this.state.orders;
         for (let i = 0; i < this.state.orders.length; i++) {
-            this.state.orders[i].address = delivery;
+            temp[i].address = delivery;
         }
-        this.setState({ order: this.state.orders });
+        this.setState({ orders: temp});
         this.setState({ address: delivery });
 
         localStorage.setItem('orders', JSON.stringify(this.state.orders));
+        localStorage.setItem('dropOffAddress', JSON.stringify(this.state.address));
     }
 
     changeShowDropOffForm = () => {
@@ -64,7 +66,7 @@ class OrderCart extends Component {
     }
 
     componentDidMount() {
-        
+        console.log(JSON.parse(localStorage.getItem('orders')));
         this.setState({ orders: JSON.parse(localStorage.getItem('orders')) });
         this.setState({ address: JSON.parse(localStorage.getItem('dropOffAddress')) });
 
@@ -91,7 +93,6 @@ class OrderCart extends Component {
       
         let subTotal = 0;
         this.state.orders.map(order => order.orderItems.map(item => subTotal += (item.quantity * item.price)));
-        
         
         return (
             <div className="" data-testid="Order">

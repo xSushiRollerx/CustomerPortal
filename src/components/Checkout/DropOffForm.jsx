@@ -1,4 +1,7 @@
 import React, { Component } from 'react'
+import { makeStyles } from '@material-ui/core/styles';
+import Modal from '@material-ui/core/Modal';
+
 
 class DropOffForm extends Component {
 
@@ -31,11 +34,12 @@ class DropOffForm extends Component {
 
     render() {
         return (
-            <div className='container-fluid' data-testid="DropOffForm" style={{ display: (this.props.showDropOffForm ? 'block' : 'none') }}>
-                <div>
+            <div className={'container-fluid '} data-testid="DropOffForm" style={{ display: (this.props.showDropOffForm ? 'block' : 'none')}}>
+                <Modal open={this.props.showDropOffForm} onClose={this.props.showDropOffFormHandler} style={{marginTop: "8%", marginLeft: "15%"} }> 
+                    <div>
                     <div className='row'>
                         <div className='card col-md-4 offset-md-3 offset-md-3'>
-                                <h3 className='text-center'>Order Drop Off</h3>
+                                <h3 className='text-center' style={{ marginTop: "20px"}}>Order Drop Off</h3>
                             <form>
                                 <div className='form-group'>
                                     <label>Street Address:</label>
@@ -50,14 +54,14 @@ class DropOffForm extends Component {
                                 <div className='form-group'>
                                     <label>State:</label>
                                     <input placeholder='State' name='state' className='form-control'
-                                        data-testid="DropOffFormState" onChange={this.stateHandler} style={{ marginBottom: '10px' }}></input>
+                                        data-testid="DropOffFormState" onChange={this.stateHandler} style={{ marginBottom: '20px' }}></input>
                                 </div>
                                 <div className='form-group'>
                                     <label>Zip Code: </label>
                                     <input placeholder='Zip Code' name='zipCode' className='form-control'
                                         data-testid="DropOffFormZipCode" onChange={this.zipCodeHandler} style={{ marginBottom: '10px' }}></input>
                                 </div>
-                                <div className='d-flex justify-content-center'>
+                                    <div className='d-flex justify-content-center' style={{marginBottom: '10px'}}>
                                     <button className='btn btn-secondary rounded-0' data-testid="DropOffFormSubmit" onClick={this.submitDeliveryAddress}
                                         >Submit</button>
                                     <button className='btn btn-secondary rounded-0' onClick={this.props.showDropOffFormHandler}
@@ -66,7 +70,8 @@ class DropOffForm extends Component {
                             </form>
                         </div>
                     </div>
-                </div>
+                    </div>
+                </Modal>
             </div>
          
         )

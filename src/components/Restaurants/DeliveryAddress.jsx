@@ -115,7 +115,7 @@ export default function DeliveryAddress(props) {
     const close = () => {
         props.close(false);
     }
-
+    
 
     return (
         <Modal open={props.open} onClose={close} aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description">
