@@ -8,6 +8,9 @@ import { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom"
 import RestaurantService from './../../services/RestaurantService';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+
 
 const useStyles = makeStyles({
     tags: {
@@ -37,6 +40,9 @@ const useStyles = makeStyles({
     loading: {
         width: "3rem",
         height: "3rem"
+    },
+    fab: {
+        marginLeft: "90%"
     }
 });
 let response = {};
@@ -44,7 +50,6 @@ export default function RestaurantProfile() {
 
     const style = useStyles();
     const { id } = useParams();
-    const [resolved, setResolved] = useState(false);
     let [restaurant, setRestaurant] = useState({});
     const [status, setStatus] = useState(0);
 

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid';
+import FormHelperText from '@material-ui/core/FormHelperText';
 
 class OrderSummary extends Component {
 
@@ -54,7 +55,8 @@ class OrderSummary extends Component {
                     </tr>
                 </tbody>
             </table>
-            <button className='w-100 btn btn-secondary rounded-0' data-testid="OrderSummaryCheckOut" onClick={this.checkOutHandler}>Check Out</button>
+                <button className='w-100 btn btn-secondary rounded-0' data-testid="OrderSummaryCheckOut" onClick={this.checkOutHandler}>Check Out</button>
+                <FormHelperText error style={{ fontSize: "14px"}}>{this.props.errorText}</FormHelperText>
             </div>
         )
     }

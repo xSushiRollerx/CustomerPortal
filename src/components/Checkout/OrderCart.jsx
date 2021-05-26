@@ -11,7 +11,8 @@ class OrderCart extends Component {
 
             orders: [],
             address: {},
-            showDropOffForm: false
+            showDropOffForm: false,
+            errorText: ""
         }
         this.changeItemQuantity = this.changeItemQuantity.bind(this);
         this.changeDeliveryAddress = this.changeDeliveryAddress.bind(this);
@@ -20,12 +21,13 @@ class OrderCart extends Component {
     }
 
     checkOut = () => {
-        if (this.state.orders.length === 0 && (this.state.orders[0].address.street === null)) {
-            alert("There are No Order Items In Your Basket And You Haven't Filled Out The Delivery Form Completely");
+        if (this.state.orders.length === 0 && (this.state.address.street === null)) {
+            this.setState({ errorText: "Cannot checkout! There are no order items in your basket and you haven't filled out where you want your order(s) dropped off!" });
         } else if (this.state.orders.length === 0) {
-            alert("There are No Order Items In Your Basket");
+            this.setState({ errorText: "Cannot checkout! There are no order items in your basket!" });
+            //alert("There are No Order Items In Your Basket");
         } else if (this.state.orders[0].address.street === null) {
-            alert("You Haven't Filled Out The Delivery Form Completely");
+            this.setState({ errorText: "Cannot checkout. You haven't filled out where you want your order(s) dropped off!" });
         } else {
             this.props.history.push('/confirmation');
         }
@@ -110,7 +112,7 @@ class OrderCart extends Component {
                 <div className='col-4'>
                         <OrderSummary address={this.state.address} subtotal={subTotal}
                             deliveryfee={0.00} taxes={0.00} showDropOffFormHandler={this.changeShowDropOffForm}
-                            showDropOffForm={this.showDropOffForm} checkOut={ this.checkOut } />
+                            showDropOffForm={this.showDropOffForm} checkOut={this.checkOut} errorText={this.state.errorText}/>
                     </div>
                     <div className='position-fixed'>
                         <DropOffForm address={this.state.address} addressHandler={this.changeDeliveryAddress} 
