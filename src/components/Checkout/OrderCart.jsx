@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Order from './Order';
 import OrderSummary from './OrderSummary';
-import DropOffForm from './DropOffForm';
+import DeliveryAddress from '../Restaurants/DeliveryAddress';
 
 
 class OrderCart extends Component {
@@ -50,16 +50,22 @@ class OrderCart extends Component {
         localStorage.setItem('orders', JSON.stringify(this.state.orders));
     }
 
-    changeDeliveryAddress = (delivery) => {
-        let temp = this.state.orders;
-        for (let i = 0; i < this.state.orders.length; i++) {
-            temp[i].address = delivery;
-        }
-        this.setState({ orders: temp});
-        this.setState({ address: delivery });
+    changeDeliveryAddress = () => {
+        console.log("handle address change run");
+        console.log(document.getElementById('dropOffSelect').value);
+        if (document.getElementById('dropOffSelect').value.trim() !== "") {
+            let temp = document.getElementById('dropOffSelect').value.trim().split(",");
+            let tempOrders = this.state.orders;
+            for (let i = 0; i < this.state.orders.length; i++) {
+                tempOrders[i].address = { streetAddress: temp[0], city: temp[1], state: temp[2], zipCode: null };
+            }
+            this.setState({ orders: tempOrders });
+            this.setState({ address: { streetAddress: temp[0], city: temp[1], state: temp[2], zipCode: null } });
 
-        localStorage.setItem('orders', JSON.stringify(this.state.orders));
-        localStorage.setItem('dropOffAddress', JSON.stringify(this.state.address));
+            localStorage.setItem('dropOffAddress', JSON.stringify({ streetAddress: temp[0], city: temp[1], state: temp[2], zipCode: null }));
+            localStorage.setItem('orders', JSON.stringify(this.state.orders));
+        }
+
     }
 
     changeShowDropOffForm = () => {
@@ -114,8 +120,7 @@ class OrderCart extends Component {
                             showDropOffForm={this.showDropOffForm} checkOut={this.checkOut} errorText={this.state.errorText}/>
                     </div>
                     <div className='position-fixed'>
-                        <DropOffForm address={this.state.address} addressHandler={this.changeDeliveryAddress} 
-                            showDropOffFormHandler={this.changeShowDropOffForm} showDropOffForm={this.state.showDropOffForm} />
+                        <DeliveryAddress open={this.state.showDropOffForm} close={this.changeShowDropOffForm} addressChange={this.changeDeliveryAddress}/>
                     </div>
                 </div>  
             </div>   

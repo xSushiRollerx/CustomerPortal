@@ -134,7 +134,8 @@ export default function DeliveryAddress(props) {
                     <Grid container justify="center" alignItems="center" direction="column" spacing={0}>
                         <h6 className={style.header}>Enter New Drop Off Location</h6>
                     <Autocomplete
-                        id="dropOffSelect"
+                            id="dropOffSelect"
+                            data-testid="googleLocation"
                         style={{ width: 300 }}
                         getOptionLabel={(option) => (typeof option === 'string' ? option : option.description)}
                         filterOptions={(x) => x}
@@ -181,7 +182,7 @@ export default function DeliveryAddress(props) {
                             );
                         }}
                         />
-                        <Button className={style.submit} variant="outlined" onClick= { addressChange }>Update Address</Button>
+                        <Button data-testid="DropOffFormSubmit" className={style.submit} variant="outlined" onClick= { addressChange }>Update Address</Button>
                     </Grid>
                 </CardContent>
             </Card>

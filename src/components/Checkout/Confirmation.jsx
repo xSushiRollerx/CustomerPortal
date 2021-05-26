@@ -34,7 +34,6 @@ class Confirmation extends Component {
     }
 
     componentDidMount() {
-        console.log(JSON.parse(localStorage.getItem('orders'))[0]);
         this.setState({ orders: JSON.parse(localStorage.getItem('orders')) });
         this.setState({ address: JSON.parse(localStorage.getItem('dropOffAddress'))});
     }
