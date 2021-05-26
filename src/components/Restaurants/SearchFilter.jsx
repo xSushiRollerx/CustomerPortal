@@ -50,7 +50,9 @@ export default function SearchFilter(props) {
 
     const style = useStyles();
     const [openAddress, setOpenAddress] = useState(false);
-
+    let close = () => {
+        setOpenAddress(false);
+    }
     return (
         <Grid container direction="column" justify="flex-start" alignItems="stretch" className={style.card}>
             <Grid item>
@@ -60,9 +62,9 @@ export default function SearchFilter(props) {
                         checkedIcon={<EditIcon fontSize="small" style={{ margin: "0px" }} />} onChange={() => setOpenAddress(true)} name="clear-ratings-filter" />
                 </Grid>
             </Grid>
-            <p className={style.p}>1234 Main St</p>
-            <p className={style.p}>Principal, GX</p>
-            <p className={style.p}>67890</p>
+            <p className={style.p}>{props.address.streetAddress}</p>
+            <p className={style.p}>{props.address.city}, {props.address.state}</p>
+            <p className={style.p}>{props.address.zipCode}</p>
             <Divider orientation="horizontal" flexItem className={style.divider} />
             <Grid item xs={12}>
                 <Grid direction="column" justify="flex-start" alignItems="stretch" container>
@@ -92,7 +94,7 @@ export default function SearchFilter(props) {
                         />
                         <FormControlLabel
                             control={<Checkbox checked={props.high} color="black" icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
-                                checkedIcon={<CheckBoxIcon fontSize="small" />} onChange={props.handleChange} name="high" />}
+                                checkedIcon={<CheckBoxIcon fontSize="small" />} closeAddress={close} onChange={props.handleChange} name="high" />}
                             label="High End Luxury"
                         />
                     </FormControl>
@@ -113,7 +115,7 @@ export default function SearchFilter(props) {
                         onChange={props.handleRatings} value={props.ratings} />
                 </Grid>
             </Grid>
-            <DeliveryAddress open={openAddress} close={setOpenAddress} />      
+            <DeliveryAddress open={openAddress} close={setOpenAddress} addressChange={props.addressChange} />      
         </Grid>
     );
 }

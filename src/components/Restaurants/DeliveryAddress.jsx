@@ -10,6 +10,7 @@ import LocationOnIcon from '@material-ui/icons/LocationOn';
 import Typography from '@material-ui/core/Typography';
 import parse from 'autosuggest-highlight/parse';
 import throttle from 'lodash/throttle';
+import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles((theme) => ({
     tags: {
@@ -30,6 +31,12 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.text.secondary,
         marginRight: theme.spacing(2),
     },
+    submit: {
+        marginTop: 20
+    },
+    header: {
+        marginBottom: 20
+    }
 }));
 
 function loadScript(src, position, id) {
@@ -48,7 +55,7 @@ const autocompleteService = { current: null };
 
 export default function DeliveryAddress(props) {
     const classes = useStyles();
-    const styles = useStyles();
+    const style = useStyles();
     const [value, setValue] = React.useState(null);
     const [inputValue, setInputValue] = React.useState('');
     const [options, setOptions] = React.useState([]);
@@ -110,10 +117,13 @@ export default function DeliveryAddress(props) {
         };
     }, [value, inputValue, fetch]);
 
-    const style = useStyles();
-
     const close = () => {
         props.close(false);
+    }
+
+    const addressChange = () => {
+        close();
+        props.addressChange();
     }
     
 
@@ -122,9 +132,9 @@ export default function DeliveryAddress(props) {
             <Card variant="outlined">
                 <CardContent className={style.paper}>
                     <Grid container justify="center" alignItems="center" direction="column" spacing={0}>
-                        <h6>Enter New Drop Off Location</h6>
+                        <h6 className={style.header}>Enter New Drop Off Location</h6>
                     <Autocomplete
-                        id="google-map-demo"
+                        id="dropOffSelect"
                         style={{ width: 300 }}
                         getOptionLabel={(option) => (typeof option === 'string' ? option : option.description)}
                         filterOptions={(x) => x}
@@ -171,6 +181,7 @@ export default function DeliveryAddress(props) {
                             );
                         }}
                         />
+                        <Button className={style.submit} variant="outlined" onClick= { addressChange }>Update Address</Button>
                     </Grid>
                 </CardContent>
             </Card>

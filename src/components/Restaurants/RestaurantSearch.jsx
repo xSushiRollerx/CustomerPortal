@@ -62,6 +62,7 @@ export default function RestaurantSearch(props) {
     const [rows, setRows] = useState([]);
     const [status, setStatus] = useState(0);
     const [keywords, setKeywords] = useState("");
+    const [address, updateAddress] = useState({});
     const [state, setState] = useState({
         cheap: false,
         mid: false,
@@ -163,14 +164,23 @@ export default function RestaurantSearch(props) {
         setPage(0);
         setPageSize(event.target.value);
     };
-
+    const handleAddressChange = () => {
+        console.log("handle address change run");
+        console.log(document.getElementById('dropOffSelect').value);
+        if (document.getElementById('dropOffSelect').value.trim() !== "") {
+            let temp = document.getElementById('dropOffSelect').value.trim().split(",");
+            updateAddress({ streetAddress: temp[0], city: temp[1], state: temp[2], zipCode: null })
+            localStorage.setItem('dropOffAddress', JSON.stringify({ streetAddress: temp[0], city: temp[1], state: temp[2], zipCode: null}));
+        }
+    }
     useEffect(() => {
         //load results of search on page load
         console.log("on load: " + search);
         RestaurantService.getAllRestaurants(0, 10, "1, 2, 3, 4", 0, "default", "").then(res => response = res)
-                .then(() => { setRows(response.data); setStatus(response.status); })
-                .catch(err => { setStatus(500); });
-                console.log(response)
+            .then(() => { setRows(response.data); setStatus(response.status); })
+            .catch(err => { setStatus(500); });
+        console.log(response)
+        updateAddress(JSON.parse(localStorage.getItem('dropOffAddress')));
         
         //load event listener for when user hits enter
         window.addEventListener('keyup', (event) => {
@@ -257,7 +267,7 @@ export default function RestaurantSearch(props) {
                     <Grid direction="row" container xs={12} spacing={0}>
                         <Grid className={style.filter} item xs={3}>
                             <SearchFilter mid={mid} cheap={cheap} fine={fine} high={high} ratings={ratings} handleChange={handlePrices}
-                                handleRatings={handleRatingsChange} clearPrices={clearPrices} />
+                                handleRatings={handleRatingsChange} clearPrices={clearPrices} address={address} addressChange={handleAddressChange}/>
                         </Grid>
                         <Grid item xs={9}>
                             <Grid container direction="column" alignItems="stretch" justify="flex-start">
