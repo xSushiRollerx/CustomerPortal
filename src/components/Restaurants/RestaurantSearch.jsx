@@ -198,7 +198,6 @@ export default function RestaurantSearch(props) {
                     fine: false,
                 });
                 document.getElementById("clearRatings").click();
-                //clear ratings too.
             }
         })
     }, [])
