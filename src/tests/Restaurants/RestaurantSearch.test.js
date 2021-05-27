@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, render } from '@testing-library/react';
+import { fireEvent, render, wait, act } from '@testing-library/react';
 import RestaurantSearch from './../../components/Restaurants/RestaurantSearch';
 import { unmountComponentAtNode } from "react-dom";
 import { useParams, useHistory } from "react-router-dom";
@@ -95,7 +95,7 @@ afterEach(() => {
     container = null;
 });
 
-fit("Use Effect Runs On Load", () => {
+it("Use Effect Runs On Load", () => {
 
     mockRouterDOM.useHistory = jest.fn(); 
     let calls = mockAxios.get.mockResolvedValue({
@@ -103,9 +103,39 @@ fit("Use Effect Runs On Load", () => {
         status: 200
     });
 
-    const { getByTestId, getByText, getByPlaceholderText, queryByText } = render(<RestaurantSearch />, container);
+    const { getByTestId } = render(<RestaurantSearch />, container);
 
 
     expect(calls.mock.calls.length).toBe(1);
+});
+
+it("Search Sends API Call", () => {
+    mockRouterDOM.useHistory = jest.fn();
+    let calls = mockAxios.get.mockResolvedValue({
+        data: result,
+        status: 200
+    });
+    async () => {
+        
+        act(() => {
+            render(<RestaurantSearch />, container);
+        });
+
+        await wait(() => {
+            expect(calls.mock.calls.length).toBe(1);
+        });
+    }
+
+    async () => {
+        act(() => {
+            const searchBar = getByTestId('searchBar');
+            fireEvent.change(searchBar, { target: { value: "hello" } });
+            fireEvent.keyUp(container, { key: 'Enter', code: 'Enter' })
+        });
+
+        await wait(() => {
+            expect(calls.mock.calls.length).toBe(2);
+        });
+    }
 });
 

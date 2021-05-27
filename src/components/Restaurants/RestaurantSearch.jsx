@@ -226,8 +226,8 @@ export default function RestaurantSearch(props) {
             <Grid item xs={12}>
                 <Grid container alignItems="center" spacing={3}>
                     <Grid item xs={10}>
-                        <TextField className={style.search} placeholder="Search Restaurants" variant="outlined" InputLabelProps={{ shrink: false, }}
-                            size="small" color="black" xs={12} id="searchBar" defaultValue={keywords}/>
+                        < TextField className={style.search} placeholder="Search Restaurants" variant="outlined" inputProps={{ 'data-testid': 'searchBar' }}
+                            InputLabelProps={{ shrink: false, }} size="small" color="black" xs={12} id="searchBar" defaultValue={keywords}/>
                     </Grid>
                     <Grid item xs={2} justify="flex-end">
                         <FormControl className={style.sortDisplay}>
