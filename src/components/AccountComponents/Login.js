@@ -11,6 +11,8 @@ export default class Login extends Component {
         }
         this.cancel = this.cancel.bind(this);
         this.login = this.login.bind(this);
+        this.handleChangePassword = this.handleChangePassword.bind(this);
+        this.handleChangeUsername = this.handleChangeUsername.bind(this);
     }
     cancel = (e)=> {
         e.preventDefault();
@@ -75,6 +77,7 @@ export default class Login extends Component {
                     className='form-control'
                     type='text' 
                     id='username'
+                    onChange={this.handleChangeUsername}
                     />
                     <p id='uValid'></p>
                     <br/>
@@ -85,6 +88,7 @@ export default class Login extends Component {
                     className='form-control'
                     type='password' 
                     id='password'
+                    onChange={this.handleChangePassword}
                     />
                     <p id='pwValid'></p>
                     <button className="btn btn-success" 

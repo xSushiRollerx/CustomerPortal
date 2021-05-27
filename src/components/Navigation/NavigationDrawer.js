@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { Drawer, List, ListItem, ListItemIcon, ListItemText, IconButton, Typography } from '@material-ui/core';
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 import RestaurantIcon from '@material-ui/icons/Restaurant';
@@ -195,7 +195,8 @@ export default function NavigationDrawer () {
                         <ListItem button onClick={()=>{
                         localStorage.removeItem('jwt');
                         localStorage.removeItem('userId');
-                        this.props.history.push('login');
+                        //this.history.push('login');
+                        <Redirect to="/login" />
                         }}>
                           <ListItemText>
                             Logout
