@@ -1,8 +1,7 @@
 import React from 'react';
-import { fireEvent, render, wait, act } from '@testing-library/react';
+import { fireEvent, render, wait, waitFor, act } from '@testing-library/react';
 import RestaurantSearch from './../../components/Restaurants/RestaurantSearch';
 import { unmountComponentAtNode } from "react-dom";
-import { useParams, useHistory } from "react-router-dom";
 import mockAxios from 'axios';
 
 const mockRouterDOM = require("react-router-dom");
@@ -95,7 +94,7 @@ afterEach(() => {
     container = null;
 });
 
-it("Use Effect Runs On Load", () => {
+it("Use Effect Runs On Load", async () => {
 
     mockRouterDOM.useHistory = jest.fn(); 
     let calls = mockAxios.get.mockResolvedValue({
@@ -103,39 +102,37 @@ it("Use Effect Runs On Load", () => {
         status: 200
     });
 
-    const { getByTestId } = render(<RestaurantSearch />, container);
+    render(<RestaurantSearch />, container);
 
-
-    expect(calls.mock.calls.length).toBe(1);
+    await waitFor(() => {
+        expect(calls.mock.calls.length).toBe(1);
+    })
+    
 });
 
-it("Search Sends API Call", () => {
+it("Search Creates API Call", async () => {
+
     mockRouterDOM.useHistory = jest.fn();
     let calls = mockAxios.get.mockResolvedValue({
         data: result,
         status: 200
     });
-    async () => {
-        
-        act(() => {
-            render(<RestaurantSearch />, container);
-        });
 
-        await wait(() => {
-            expect(calls.mock.calls.length).toBe(1);
-        });
-    }
+    const { getByTestId, findByTestId } = render(<RestaurantSearch />, container);
 
-    async () => {
-        act(() => {
-            const searchBar = getByTestId('searchBar');
-            fireEvent.change(searchBar, { target: { value: "hello" } });
-            fireEvent.keyUp(container, { key: 'Enter', code: 'Enter' })
-        });
+    expect(getByTestId("Waiting")).toBeInTheDocument();
 
-        await wait(() => {
-            expect(calls.mock.calls.length).toBe(2);
-        });
-    }
+    const searchBar = await findByTestId('searchBar');
+    
+    act(() => {
+        fireEvent.change(searchBar, { target: { value: "hello" } });
+        fireEvent.keyUp(container, { key: 'Enter', code: 'Enter' });
+    });
+
+    await waitFor(() => {
+        expect(calls.mock.calls.length).toBe(2);
+    }); 
+
 });
+
 

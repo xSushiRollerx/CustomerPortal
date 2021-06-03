@@ -3,10 +3,12 @@
     "",
     "\\src",
     "\\src\\components",
+    "\\src\\components\\Checkout",
     "\\src\\components\\Restaurants",
-    "\\src\\services",
-    "\\src\\tests"
+    "\\src\\tests",
+    "\\src\\tests\\Restaurants",
+    "\\src\\__mocks__"
   ],
-  "SelectedNode": "\\src\\services\\RestaurantService.js",
+  "SelectedNode": "\\src\\components\\Restaurants\\RestaurantSearch.jsx",
   "PreviewInSolutionExplorer": false
 }
