@@ -123,12 +123,13 @@ export default function StripeCheckout() {
         event.preventDefault();
 
         if (!stripe || !elements) {
+            console.log("stripe not loaded");
             // Stripe.js has not yet loaded.
             // Make sure to disable form submission until Stripe.js has loaded.
             return;
         }
-
-        const result = await stripe.confirmCardPayment('{CLIENT_SECRET}', {
+        console.log("stripe loaded");
+        const result = await stripe.confirmCardPayment(secret, {
             payment_method: {
                 card: elements.getElement(CardElement),
                     
@@ -136,7 +137,7 @@ export default function StripeCheckout() {
                     name: document.getElementById("billingFirstName").value + " " + document.getElementById("billingLastName").value,
                     address: {
                         city: document.getElementById("billingCity").value,
-                        country: "USA",
+                        country: "US",
                         line1: document.getElementById("billingAddress").value,
                         line2: null,
                         postal_code: document.getElementById("billingZipCode").value,
@@ -153,6 +154,7 @@ export default function StripeCheckout() {
         } else {
             // The payment has been processed!
             if (result.paymentIntent.status === 'succeeded') {
+                console.log("success")
                 // Show a success message to your customer
                 // There's a risk of the customer closing the window before callback
                 // execution. Set up a webhook or plugin to listen for the
