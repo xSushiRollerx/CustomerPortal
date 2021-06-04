@@ -143,11 +143,10 @@ export default function StripeCheckout() {
             if (input.value === null | input.value.trim() === "") {
                 fieldsHolder = fieldsHolder.concat("\"" + input.name + "\": {\"error\": true, \"text\":  \"This field is not filled out\" },");
                 errors = true;
+            } else if (input.name === "zipCode" && input.value.length < 5) {
+                fieldsHolder = fieldsHolder.concat("\"" + input.name + "\": {\"error\": true, \"text\":  \"This field must contain a numeric five digit postal code\" },");
             } else {
                 fieldsHolder = fieldsHolder.concat("\"" + input.name + "\": {\"error\": false, \"text\":  null },");
-            }
-            if (input.name === "zipCode") {
-
             }
         }
         fieldsHolder = fieldsHolder.substring(0, (fieldsHolder.length - 1));
@@ -257,7 +256,7 @@ export default function StripeCheckout() {
                                 <TextField className={classes.cardName} id="standard-basic" label="Last Name" size="small" name="lastName" error={lastName.error} inputProps={{ id: "billingLastName" }} />
                             </Grid>
                         </Grid>
-                        <Grid container direction="row" justify="space-between" alignItems="center">
+                        <Grid container direction="row" justify="space-between" alignItems="flex-start">
                             <Grid item xs={6}>
                                 <FormHelperText error={true}>{firstName.text}</FormHelperText>
                             </Grid>
@@ -294,7 +293,7 @@ export default function StripeCheckout() {
 
 
                         </Grid>
-                        <Grid container direction="row" justify="space-between" alignItems="flex-end">
+                        <Grid container direction="row" justify="space-between" alignItems="flex-start">
                             <Grid item xs={6}>
                                 <FormHelperText error={true}>{city.text}</FormHelperText>
                             </Grid>
