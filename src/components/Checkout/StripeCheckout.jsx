@@ -109,18 +109,58 @@ export default function StripeCheckout() {
     const elements = useElements();
     const [secret, setSecret] = useState(null);
     const [status, setStatus] = useState(0);
+    const [confirming, setConfirming] = useState(false);
+    const [fields, setFields] = useState({
+        street: false,
+        city: false,
+        state: false,
+        zipCode: false,
+        firstName: false,
+        lastName: false
+           
+    });
 
+    const { street, city, state, zipCode, firstName, lastName } = fields;
 
     const stateProps = {
         options: states,
         getOptionLabel: (state) => state.code,
     };
-    
+   /* const handlePrices = (event) => {
+        filter(event.target.name);
+        setState({ ...state, [event.target.name]: event.target.checked });
+
+    };*/
+    const valid = () => {
+        console.log("validation ran");
+        let errors = false
+        const inputs = [document.getElementById("billingFirstName"), document.getElementById("billingLastName"), document.getElementById("billingAddress"), document.getElementById("billingCity"),
+            document.getElementById("billingState"), , document.getElementById("billingZipCode")];
+        //create an array with all objects so you don't repeat as much code
+        inputs.forEach((input, i) => {
+            console.log(input);
+            if (input.value === null | input.value.trim() === "") {
+                console.log(input.name);
+                setFields({ ...fields, [input.name]: true});
+            }
+           
+
+        });
+        return errors;
+    }
 
     const handleSubmit = async (event) => {
         // We don't want to let default form submission happen here,
         // which would refresh the page.
         event.preventDefault();
+        console.log("handlesubmit");
+        if (/*valid()*/true) {
+            console.log(valid())
+            return;
+        }
+
+        setConfirming(true);
+       
 
         if (!stripe || !elements) {
             console.log("stripe not loaded");
@@ -137,7 +177,7 @@ export default function StripeCheckout() {
                     name: document.getElementById("billingFirstName").value + " " + document.getElementById("billingLastName").value,
                     address: {
                         city: document.getElementById("billingCity").value,
-                        country: "US",
+                        country: "US", 
                         line1: document.getElementById("billingAddress").value,
                         line2: null,
                         postal_code: document.getElementById("billingZipCode").value,
@@ -162,6 +202,7 @@ export default function StripeCheckout() {
                 // post-payment actions.
             }
         }
+        setConfirming(false);
     };
 
 
@@ -170,12 +211,19 @@ export default function StripeCheckout() {
         console.log(secret);
     }, []);
 
-    if (status !== 0) {
-        console.log(status);
-        console.log(secret);
-    }
-    console.log(response);
 
+    if (confirming) {
+        return (
+            <div class="d-flex justify-content-center">
+                <Grid container direction="column" alignItems="center" justifyItems="center">
+                    <h2>Processing Order. Please Do Not Close This Tab.</h2>
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only"></span>
+                    </div>
+                </Grid>
+            </div>
+            )
+    }
     let deliveryfee = 0;
     let taxes = 0;
     let subTotal = 0;
@@ -197,16 +245,16 @@ export default function StripeCheckout() {
                         <Divider orientation="horizontal" flexItem />
                         <Grid container direction="row" justify="space-between" alignItems="center">
                             <Grid item xs={6}>
-                                <TextField className={classes.cardName} id="standard-basic" label="First Name" size="small" inputProps={{id: "billingFirstName"} } />
+                                <TextField className={classes.cardName} id="standard-basic" label="First Name" size="small" name="firstName" error={firstName} inputProps={{id: "billingFirstName"}} />
                             </Grid>
                             <Grid item xs={6}>
-                                <TextField className={classes.cardName} id="standard-basic" label="Last Name" size="small" inputProps={{ id: "billingLastName" }} />
+                                <TextField className={classes.cardName} id="standard-basic" label="Last Name" size="small" name="lastName" error={lastName} inputProps={{ id: "billingLastName" }} />
                             </Grid>
                         </Grid>
-                        <TextField className={classes.cardName} id="standard-basic" label="Address" size="small" inputProps={{ id: "billingAddress" }} />
+                        <TextField className={classes.cardName} id="standard-basic" label="Address" size="small" error={street} name="street" inputProps={{ id: "billingAddress" }} />
                         <Grid container direction="row" justify="space-between" alignItems="flex-end">
                             <Grid item xs={6}>
-                                <TextField className={classes.cardName} id="standard-basic" label="City" size="small" inputProps={{ id: "billingCity" }} />
+                                <TextField className={classes.cardName} id="standard-basic" label="City" size="small" error={city} name="city" inputProps={{ id: "billingCity" }} />
                             </Grid>
                             <Grid item xs={3}>
                                 <Autocomplete
@@ -214,11 +262,11 @@ export default function StripeCheckout() {
                                     id="auto-select"
                                     autoSelect
                                     size="small" 
-                                    renderInput={(params) => <TextField {...params} label="State" margin="normal" inputProps={{ id: "billingState" }}/>}
+                                    renderInput={(params) => <TextField {...params} label="State" margin="normal" name="state" error={state} inputProps={{ id: "billingState" }}/>}
                                 />
                             </Grid>
                             <Grid item xs={3}>
-                                <TextField className={classes.cardName} id="standard-basic" label="Zip Code" size="small" inputProps={{ id: "billingZipCode" }} />
+                                <TextField className={classes.cardName} id="standard-basic" label="Zip Code" size="small" name="zipCode" error={zipCode} inputProps={{ id: "billingZipCode" }} />
                             </Grid>
 
 
