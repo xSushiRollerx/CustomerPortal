@@ -135,30 +135,26 @@ export default function StripeCheckout() {
     };*/
     const valid = () => {
         console.log("validation ran");
+        let fieldsHolder = "{ ";
         let errors = false
-        const inputs = [document.getElementById("billingFirstName"), document.getElementById("billingLastName"), document.getElementById("billingAddress"), document.getElementById("billingCity"),
+        let inputs = [document.getElementById("billingFirstName"), document.getElementById("billingLastName"), document.getElementById("billingAddress"), document.getElementById("billingCity"),
             document.getElementById("billingState"), document.getElementById("billingZipCode")];
-        //create an array with all objects so you don't repeat as much code
-       /* inputs.forEach((input, i) => {
-            console.log(input);
-            if (input.value === null | input.value.trim() === "") {
-                console.log(input.name);
-                setFields({ ...fields, [input.name]: { error: true, text: "This field is not filled out" } });
-            }
-           
-
-        });*/
 
         for (let input of inputs) {
-            console.log(input);
+            console.log(JSON.parse("{ " + "\"" + input.name + "\": {\"error\": true, \"text\":  \"This field is not filled out\" }}"));
             if (input.value === null | input.value.trim() === "") {
-                console.log(input.name);
+                fieldsHolder += "\"" + input.name + "\": {\"error\": true, \"text\":  \"This field is not filled out\" },"
                 setFields({ ...fields, [input.name]: { error: true, text: "This field is not filled out" } });
+            } else {
+                fieldsHolder += "\"" + input.name + "\": {\"error\": false, \"text\":  null },"
             }
             if (input.name === "zipCode") {
 
             }
-        };
+        }
+        fieldsHolder += " }";
+        console.log(JSON.parse(fieldsHolder));
+        console.log("done");
         return errors;
     }
 
@@ -320,32 +316,38 @@ export default function StripeCheckout() {
                 </Grid>
                 <Grid item xs={3}>
                     <Grid container direction="column" alignItems="stretch" justify="center">
-                        <table className='table table-bordered'>
-                            <thead>
-                                <th><h3>Order Summary</h3></th>
-                            </thead>
-                            <tbody>
-                                <tr className='row border-0'>
-                                    <div className='col-6'>
-                                        {orderNames}
-                                        <p className='m-0'>Delivery: </p>
-                                        <p className='m-0'>Tax: </p>
-                                    </div>
+                        <Divider orientation="horizontal" flexItem />
+                        <h3>Order Summary</h3>
+                        <Divider orientation="horizontal" flexItem />
+                        <Grid item>
+                            <Grid container direction="row">
+                                <Grid item xs={6}>
+                                    {orderNames}
+                                    <p className='m-0'>Delivery: </p>
+                                    <p className='m-0'>Tax: </p>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    {orderTotals}
+                                    <p className='m-0'>${(deliveryfee).toFixed(2)}</p>
+                                    <p className='m-0'>${(taxes).toFixed(2)}</p>
+                                </Grid>
+                            </Grid>
+                        </Grid>
 
-                                    <div className='col-6'>
-                                        {orderTotals}
-                                        <p className='m-0'>${(deliveryfee).toFixed(2)}</p>
-                                        <p className='m-0'>${(taxes).toFixed(2)}</p>
-                                    </div>
-
-                                </tr>
-                                <tr className='row'>
+                        <Divider orientation="horizontal" flexItem />
+                        <Grid item>
+                            <Grid container direction="row">
+                                <Grid item xs={6}>
                                     <p className='col-6 m-0'>Total</p>
+                                </Grid>
+                                <Grid item xs={6}>
                                     <p className='col-6 m-0'>${(subTotal + deliveryfee + taxes).toFixed(2)}</p>
-                                </tr>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                                    
+                        <Divider orientation="horizontal" flexItem />
                                 <button className={classes.placeOrder} data-testId="PlaceOrder" className='w-100 btn btn-secondary rounded-0' onClick={handleSubmit}>Place Order</button>
-                            </tbody>
-                        </table>
                     </Grid>
                 </Grid>
             </Grid>
