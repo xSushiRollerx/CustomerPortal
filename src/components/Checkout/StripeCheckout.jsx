@@ -134,27 +134,25 @@ export default function StripeCheckout() {
 
     };*/
     const valid = () => {
-        console.log("validation ran");
         let fieldsHolder = "{ ";
         let errors = false
         let inputs = [document.getElementById("billingFirstName"), document.getElementById("billingLastName"), document.getElementById("billingAddress"), document.getElementById("billingCity"),
             document.getElementById("billingState"), document.getElementById("billingZipCode")];
 
         for (let input of inputs) {
-            console.log(JSON.parse("{ " + "\"" + input.name + "\": {\"error\": true, \"text\":  \"This field is not filled out\" }}"));
             if (input.value === null | input.value.trim() === "") {
-                fieldsHolder += "\"" + input.name + "\": {\"error\": true, \"text\":  \"This field is not filled out\" },"
-                setFields({ ...fields, [input.name]: { error: true, text: "This field is not filled out" } });
+                fieldsHolder = fieldsHolder.concat("\"" + input.name + "\": {\"error\": true, \"text\":  \"This field is not filled out\" },");
+                errors = true;
             } else {
-                fieldsHolder += "\"" + input.name + "\": {\"error\": false, \"text\":  null },"
+                fieldsHolder = fieldsHolder.concat("\"" + input.name + "\": {\"error\": false, \"text\":  null },");
             }
             if (input.name === "zipCode") {
 
             }
         }
-        fieldsHolder += " }";
-        console.log(JSON.parse(fieldsHolder));
-        console.log("done");
+        fieldsHolder = fieldsHolder.substring(0, (fieldsHolder.length - 1));
+        fieldsHolder = fieldsHolder.concat(" }");
+        setFields(JSON.parse(fieldsHolder));
         return errors;
     }
 
@@ -163,8 +161,7 @@ export default function StripeCheckout() {
         // which would refresh the page.
         event.preventDefault();
         console.log("handlesubmit");
-        if (/*valid()*/true) {
-            console.log(valid())
+        if (valid()) {
             return;
         }
 
@@ -272,7 +269,7 @@ export default function StripeCheckout() {
                         <FormHelperText error={true}>{street.text}</FormHelperText>
                         <Grid container direction="row" justify="space-between" alignItems="flex-end">
                             <Grid item xs={6}>
-                                <TextField className={classes.cardName} id="standard-basic" label="City" helperText={city.text} size="small" error={city.error} name="city" inputProps={{ id: "billingCity" }} />
+                                <TextField className={classes.cardName} id="standard-basic" label="City"  size="small" error={city.error} name="city" inputProps={{ id: "billingCity" }} />
                             </Grid>
                             <Grid item xs={3}>
                                 <Autocomplete
