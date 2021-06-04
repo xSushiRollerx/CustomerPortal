@@ -121,6 +121,7 @@ export default function StripeCheckout() {
            
     });
     const [zipCodeValue, setZipCodeValue] = useState(null);
+    const [stateValue, setStateValue] = useState(null);
     const { street, city, state, zipCode, firstName, lastName } = fields;
     const stateProps = {
         options: states,
@@ -135,6 +136,16 @@ export default function StripeCheckout() {
             document.getElementById("billingState"), document.getElementById("billingZipCode")];
 
         for (let input of inputs) {
+            if (input.id === "billingState") {
+                console.log(input);
+                console.log(input.inputValue);
+                if (stateValue === null | stateValue === undefined) {
+                    fieldsHolder = fieldsHolder.concat("\"" + "state" + "\": {\"error\": true, \"text\":  \"This field is not filled out\" },");
+                    errors = true;
+                }  else {
+                    fieldsHolder = fieldsHolder.concat("\"" + "state" + "\": {\"error\": false, \"text\":  null },");
+                }
+            } 
             if (input.value === null | input.value.trim() === "") {
                 fieldsHolder = fieldsHolder.concat("\"" + input.name + "\": {\"error\": true, \"text\":  \"This field is not filled out\" },");
                 errors = true;
@@ -189,7 +200,7 @@ export default function StripeCheckout() {
                         line1: document.getElementById("billingAddress").value,
                         line2: null,
                         postal_code: document.getElementById("billingZipCode").value,
-                        state: document.getElementById("billingState").value
+                        state: stateValue
                     }
                 }//add the setup for usage? 
             }
@@ -250,6 +261,7 @@ export default function StripeCheckout() {
         o.orderItems.map(item => { sum += item.quantity * item.price });
         return sum;
     }
+    console.log(state);
     let orderTotals = orders.map(o => <p className='m-0'>${getTotal(o).toFixed(2)}</p>);
     return (
         <div>
@@ -284,10 +296,12 @@ export default function StripeCheckout() {
                             <Grid item xs={3}>
                                 <Autocomplete
                                     {...stateProps}
-                                    id="auto-select"
+                                    id="billingState"
                                     autoSelect
                                     size="small" 
-                                    renderInput={(params) => <TextField {...params} label="State" margin="normal" name="state" error={state.error} inputProps={{ id: "billingState" }}/>}
+                                    name="state"
+                                    onChange={(event) => setStateValue(event.target.value) }
+                                    renderInput={(params) => <TextField {...params} error={state.error} label="State" margin="normal"/>}
                                 />
                             </Grid>
                             <Grid item xs={3}>
