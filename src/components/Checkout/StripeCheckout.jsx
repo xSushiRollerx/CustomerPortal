@@ -121,18 +121,13 @@ export default function StripeCheckout() {
            
     });
     const [zipCodeValue, setZipCodeValue] = useState(null);
-
     const { street, city, state, zipCode, firstName, lastName } = fields;
-
     const stateProps = {
         options: states,
         getOptionLabel: (state) => state.code,
     };
-   /* const handlePrices = (event) => {
-        filter(event.target.name);
-        setState({ ...state, [event.target.name]: event.target.checked });
-
-    };*/
+    const [cardErrorText, setCardErrorText] = useState(null);
+  
     const valid = () => {
         let fieldsHolder = "{ ";
         let errors = false
@@ -145,10 +140,19 @@ export default function StripeCheckout() {
                 errors = true;
             } else if (input.name === "zipCode" && input.value.length < 5) {
                 fieldsHolder = fieldsHolder.concat("\"" + input.name + "\": {\"error\": true, \"text\":  \"This field must contain a numeric five digit postal code\" },");
+                errors = true;
             } else {
                 fieldsHolder = fieldsHolder.concat("\"" + input.name + "\": {\"error\": false, \"text\":  null },");
             }
         }
+
+        if (cardErrorText != null) {
+            errors = true;
+        } else if (document.getElementById("cardContainer").classList.contains("StripeElement--empty")) {
+            errors = true;
+            setCardErrorText("Card information must be filled out");
+        }
+
         fieldsHolder = fieldsHolder.substring(0, (fieldsHolder.length - 1));
         fieldsHolder = fieldsHolder.concat(" }");
         setFields(JSON.parse(fieldsHolder));
@@ -173,7 +177,6 @@ export default function StripeCheckout() {
             // Make sure to disable form submission until Stripe.js has loaded.
             return;
         }
-        console.log("stripe loaded");
         const result = await stripe.confirmCardPayment(secret, {
             payment_method: {
                 card: elements.getElement(CardElement),
@@ -210,6 +213,13 @@ export default function StripeCheckout() {
         setConfirming(false);
     };
 
+    const handleCardChange = ({ error }) => {
+        if (error) {
+            setCardErrorText(error.message);
+        } else {
+            setCardErrorText(null);
+        }
+    }
 
     useEffect(() => {
         PaymentService.getClientSecret().then(res => response = res).then(() => { setStatus(response.status); setSecret(response.data); });
@@ -229,6 +239,7 @@ export default function StripeCheckout() {
             </div>
             )
     }
+
     let deliveryfee = 0;
     let taxes = 0;
     let subTotal = 0;
@@ -306,7 +317,8 @@ export default function StripeCheckout() {
 
 
                         </Grid>
-                        <CardElement options={CARD_ELEMENT_OPTIONS} />
+                        <CardElement id="cardContainer" options={CARD_ELEMENT_OPTIONS} onChange={handleCardChange} />
+                        <FormHelperText error={true} >{cardErrorText}</FormHelperText>
                             
                     </Grid>
                 </Grid>
@@ -343,7 +355,7 @@ export default function StripeCheckout() {
                         </Grid>
                                     
                         <Divider orientation="horizontal" flexItem />
-                                <button className={classes.placeOrder} data-testId="PlaceOrder" className='w-100 btn btn-secondary rounded-0' onClick={handleSubmit}>Place Order</button>
+                        <button className={classes.placeOrder} data-testId="PlaceOrder" className='w-100 btn btn-secondary rounded-0' onClick={handleSubmit} disabled={!stripe}>Place Order</button>
                     </Grid>
                 </Grid>
             </Grid>
