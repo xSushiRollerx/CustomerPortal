@@ -8,7 +8,6 @@ import Divider from '@material-ui/core/Divider';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import CustomerOrderService from '../../services/CustomerOrderService';
 
 
 const CARD_ELEMENT_OPTIONS = {
@@ -112,7 +111,6 @@ export default function StripeCheckout() {
     const elements = useElements();
     const [secret, setSecret] = useState(null);
     const [status, setStatus] = useState(0);
-    const [confirming, setConfirming] = useState(false);
     const [fields, setFields] = useState({
         street: {error: false, text: null},
         city: { error: false, text: null },
@@ -131,13 +129,12 @@ export default function StripeCheckout() {
     };
     const [cardErrorText, setCardErrorText] = useState(null);
     const [stripeResponse, setStripeResponse] = useState(null);
-    const [showCard, setShowCard] = useState("block");
     const [divs, setDivs] = useState({
-        main: true,
         confirmingShow: false,
         responseShow: false
     });
-    const { main, confirmingShow, responseShow } = divs;
+    const { confirmingShow, responseShow } = divs;
+    const [main, setMain] = useState(true);
     const notValid = () => {
         let fieldsHolder = "{ ";
         let errors = false
@@ -177,12 +174,6 @@ export default function StripeCheckout() {
         return errors;
     }
 
-
-    const submitToDB = async () => {
-        let response = await CustomerOrderService.submitOrder(JSON.parse(localStorage.getItem('orders')));
-        return response;
-    } 
-
     const handleSubmit = async (event) => {
         // We don't want to let default form submission happen here,
         // which would refresh the page.
@@ -192,9 +183,8 @@ export default function StripeCheckout() {
             return;
         }
 
+        setMain(false);
         setDivs({ ...divs, confirmingShow: true });
-        setShowCard("hidden");
-       
 
         if (!stripe || !elements) {
             console.log("stripe not loaded");
@@ -202,24 +192,6 @@ export default function StripeCheckout() {
             // Make sure to disable form submission until Stripe.js has loaded.
             return;
         }
-        //before this send info to database
-        /*let dbResponse = await CustomerOrderService.submitOrder(JSON.parse(localStorage.getItem('orders')));
-        if (dbResponse.status !== 201) {
-            console.log("DB submission Error");
-            setSubmissionCompletion(
-                <div class="d-flex justify-content-center">
-                    <Grid container direction="column" alignItems="center" justifyItems="center">
-                        <h2>Something Went Wrong. Please Reload Page And Try Again.</h2>
-                        <div class="spinner-border" role="status">
-                            <span class="sr-only"></span>
-                        </div>
-                    </Grid>
-                </div>
-                
-            );
-            setConfirming(false);
-            return;
-        }*/
         console.log("stripe confirmation ran");
         let result = await stripe.confirmCardPayment(secret, {
             payment_method: {
@@ -251,7 +223,6 @@ export default function StripeCheckout() {
                 setStripeResponse({ text: "Your Order Has Been Processed Successfully!", link: "", btnText: "Home"});
             }
         }
-        setConfirming(false);
         console.log("submission end");
     };
 
@@ -268,31 +239,6 @@ export default function StripeCheckout() {
         console.log(secret);
     }, []);
 
-/*    if (stripeResponse !== null) {
-       
-        return (
-            <div class="d-flex justify-content-center">
-                <Grid container direction="column" alignItems="center" justifyItems="center">
-                    <h2>{stripeResponse.text}</h2>
-                    <a href={"/" + stripe.link}>
-                        <button className={classes.placeOrder} className='w-100 btn btn-secondary rounded-0'>{stripeResponse.btnText}</button>
-                    </a>
-                </Grid>
-            </div>
-            );
-    } else if (confirming) {
-        return (
-            <div class="d-flex justify-content-center">
-                <Grid container direction="column" alignItems="center" justifyItems="center">
-                    <h2>Processing Order. Please Do Not Close This Tab.</h2>
-                    <div class="spinner-border" role="status">
-                        <span class="sr-only"></span>
-                    </div>
-                </Grid>
-            </div>
-            )
-    }*/
-
  
 
     let deliveryfee = 0;
@@ -307,15 +253,16 @@ export default function StripeCheckout() {
         
     }
     let orderTotals = orders.map(o => <p className='m-0'>${getTotal(o).toFixed(2)}</p>);
+
     return (
         <div>
-            <div style={{display: main ? "block" : "none"}}>
+            <div hidden={!main}>
             <Grid container direction="row" alignItems="stretch" justify="center" spacing={3}>
                 <Grid item xs={9}>
                     <Grid container direction="column" justify="center" alignItems="stretch">
-                            <Divider orientation="horizontal" flexItem style={{ display: main ? "block" : "none" }}/>
-                            <h3 style={{ padding: '14px' }} style={{ display: main ? "block" : "none" }}>Billing Details</h3>
-                            <Divider orientation="horizontal" flexItem style={{ display: main ? "block" : "none" }}/>
+                            <Divider orientation="horizontal" flexItem />
+                            <h3 style={{ padding: '14px' }}  >Billing Details</h3>
+                            <Divider orientation="horizontal" />
                         <Grid container direction="row" justify="space-between" alignItems="center">
                             <Grid item xs={6}>
                                     <TextField className={classes.cardName} id="standard-basic" label="First Name" size="small" name="firstName" error={firstName.error} inputProps={{ id: "billingFirstName" }}
@@ -377,7 +324,7 @@ export default function StripeCheckout() {
 
 
                         </Grid>
-                        <CardElement style={{display: showCard}} id="cardContainer" options={CARD_ELEMENT_OPTIONS} onChange={handleCardChange} />
+                        <CardElement id="cardContainer" options={CARD_ELEMENT_OPTIONS} onChange={handleCardChange} />
                         <FormHelperText error={true} >{cardErrorText}</FormHelperText>
                             
                     </Grid>
