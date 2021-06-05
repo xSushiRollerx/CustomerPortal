@@ -369,7 +369,7 @@ export default function StripeCheckout() {
             </div>
             <div hidden class="d-flex justify-content-center" style={{display: confirmingShow ? "block" : "none"}}>
                 <Grid container direction="column" alignItems="center" justifyItems="center">
-                    <h2 style={{ display: confirmingShow ? "block" : "none" }}>Processing Order. Please Do Not Close This Tab.</h2>
+                    <h2 style={{ display: confirmingShow ? "block" : "none" }}>Processing Order. Please Do Not Close Or Reload This Tab. This May Take A Few Minutes.</h2>
                     <div style={{ display: confirmingShow ? "block" : "none" }} class="spinner-border" role="status">
                         <span class="sr-only"></span>
                     </div>
