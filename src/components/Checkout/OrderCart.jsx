@@ -79,9 +79,11 @@ class OrderCart extends Component {
 
     }
 
-
+    
     render() {
 
+        console.log(JSON.parse(localStorage.getItem('orders')));
+        console.log(this.state.orders);
         if (this.state.orders=== undefined) {
             return (<h1>LOADING</h1>);
         }

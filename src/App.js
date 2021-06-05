@@ -18,7 +18,7 @@ const stripePromise = loadStripe("pk_test_51Iwe6JI3Xcs3HqD5tqc5jdf19qqrUZ7QzkB1j
 
 function App() {
     return (
-        <Elements stripe={stripePromise}> 
+<Elements stripe={stripePromise}> 
   <div>
     <div>
         <NavBar />
