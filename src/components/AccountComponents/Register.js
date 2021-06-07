@@ -41,7 +41,7 @@ export default class Register extends Component {
             validations = false;
         }
         else if (user.password.length <= 6 || user.password.length >= 20) {
-            document.getElementById("pwValid").textContent = 'Password length should be between 6 and 20 exclusive'
+            document.getElementById("pwValid").textContent = 'Password length should be between 6 and 20 characters long'
             validations = false;
         }
         else if (user.password!==passwordConfirm) {
