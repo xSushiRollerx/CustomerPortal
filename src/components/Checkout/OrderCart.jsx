@@ -1,17 +1,17 @@
 import React, { Component } from 'react'
 import Order from './Order';
 import OrderSummary from './OrderSummary';
-import DropOffForm from './DropOffForm';
+import DeliveryAddress from '../Restaurants/DeliveryAddress';
 
 
 class OrderCart extends Component {
     constructor(props) {
         super(props)
         this.state = {
-
             orders: [],
             address: {},
-            showDropOffForm: false
+            showDropOffForm: false,
+            errorText: ""
         }
         this.changeItemQuantity = this.changeItemQuantity.bind(this);
         this.changeDeliveryAddress = this.changeDeliveryAddress.bind(this);
@@ -20,12 +20,13 @@ class OrderCart extends Component {
     }
 
     checkOut = () => {
-        if (this.state.orders.length === 0 && (this.state.orders[0].address.street === null)) {
-            alert("There are No Order Items In Your Basket And You Haven't Filled Out The Delivery Form Completely");
+        if (this.state.orders.length === 0 && (this.state.address.street === null)) {
+            this.setState({ errorText: "Cannot checkout! There are no order items in your basket and you haven't filled out where you want your order(s) dropped off!" });
         } else if (this.state.orders.length === 0) {
-            alert("There are No Order Items In Your Basket");
+            this.setState({ errorText: "Cannot checkout! There are no order items in your basket!" });
+            //alert("There are No Order Items In Your Basket");
         } else if (this.state.orders[0].address.street === null) {
-            alert("You Haven't Filled Out The Delivery Form Completely");
+            this.setState({ errorText: "Cannot checkout. You haven't filled out where you want your order(s) dropped off!" });
         } else {
             this.props.history.push('/confirmation');
         }
@@ -49,14 +50,22 @@ class OrderCart extends Component {
         localStorage.setItem('orders', JSON.stringify(this.state.orders));
     }
 
-    changeDeliveryAddress = (delivery) => {
-        for (let i = 0; i < this.state.orders.length; i++) {
-            this.state.orders[i].address = delivery;
-        }
-        this.setState({ order: this.state.orders });
-        this.setState({ address: delivery });
+    changeDeliveryAddress = () => {
+        console.log("handle address change run");
+        console.log(document.getElementById('dropOffSelect').value);
+        if (document.getElementById('dropOffSelect').value.trim() !== "") {
+            let temp = document.getElementById('dropOffSelect').value.trim().split(",");
+            let tempOrders = this.state.orders;
+            for (let i = 0; i < this.state.orders.length; i++) {
+                tempOrders[i].address = { streetAddress: temp[0], city: temp[1], state: temp[2], zipCode: null };
+            }
+            this.setState({ orders: tempOrders });
+            this.setState({ address: { streetAddress: temp[0], city: temp[1], state: temp[2], zipCode: null } });
 
-        localStorage.setItem('orders', JSON.stringify(this.state.orders));
+            localStorage.setItem('dropOffAddress', JSON.stringify({ streetAddress: temp[0], city: temp[1], state: temp[2], zipCode: null }));
+            localStorage.setItem('orders', JSON.stringify(this.state.orders));
+        }
+
     }
 
     changeShowDropOffForm = () => {
@@ -64,7 +73,7 @@ class OrderCart extends Component {
     }
 
     componentDidMount() {
-        
+        console.log(JSON.parse(localStorage.getItem('orders')));
         this.setState({ orders: JSON.parse(localStorage.getItem('orders')) });
         this.setState({ address: JSON.parse(localStorage.getItem('dropOffAddress')) });
 
@@ -92,7 +101,6 @@ class OrderCart extends Component {
         let subTotal = 0;
         this.state.orders.map(order => order.orderItems.map(item => subTotal += (item.quantity * item.price)));
         
-        
         return (
             <div className="" data-testid="Order">
             <div className='row'>
@@ -109,11 +117,10 @@ class OrderCart extends Component {
                 <div className='col-4'>
                         <OrderSummary address={this.state.address} subtotal={subTotal}
                             deliveryfee={0.00} taxes={0.00} showDropOffFormHandler={this.changeShowDropOffForm}
-                            showDropOffForm={this.showDropOffForm} checkOut={ this.checkOut } />
+                            showDropOffForm={this.showDropOffForm} checkOut={this.checkOut} errorText={this.state.errorText}/>
                     </div>
                     <div className='position-fixed'>
-                        <DropOffForm address={this.state.address} addressHandler={this.changeDeliveryAddress} 
-                            showDropOffFormHandler={this.changeShowDropOffForm} showDropOffForm={this.state.showDropOffForm} />
+                        <DeliveryAddress open={this.state.showDropOffForm} close={this.changeShowDropOffForm} addressChange={this.changeDeliveryAddress}/>
                     </div>
                 </div>  
             </div>   
