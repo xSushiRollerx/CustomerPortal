@@ -68,7 +68,7 @@ class UpdateAccount extends Component {
                 user.firstName = user.firstName.trim();
             }
             
-            user.lastName = document.getElementById('lastName').value.trim();
+            user.lastName = document.getElementById('lastName').value;
             if (user.lastName === null||user.lastName === ""){
                 document.getElementById("lnValid").textContent = null;
             }
@@ -76,13 +76,13 @@ class UpdateAccount extends Component {
                 document.getElementById("lnValid").textContent = 'Name must contain only letters';
                 validations = false;
             }
-            else if (user.firstName.trim()===""){
+            else if (user.lastName.trim()===""){
                 document.getElementById("lnValid").textContent  = 'Name must not be made of only white spaces'
                 validations = false;
             }
             else{
                 document.getElementById("lnValid").textContent = null;
-                user.firstName = user.firstName.trim();
+                user.lastName = user.lastName.trim();
             }
 
             user.email = document.getElementById('email').value;
@@ -98,7 +98,7 @@ class UpdateAccount extends Component {
                 validations = false;
             }
 
-            user.phone = document.getElementById('phone').value.trim();
+            user.phone = document.getElementById('phone').value;
             if (user.phone === null||user.phone === ""){
                 document.getElementById("pValid").textContent = null;
             }
