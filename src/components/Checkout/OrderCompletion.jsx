@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-//import { useTimer } from 'react-timer-hook';
 
 class OrderCompletion extends Component {
 

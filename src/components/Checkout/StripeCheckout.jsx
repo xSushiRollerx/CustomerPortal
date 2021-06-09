@@ -212,6 +212,7 @@ export default function StripeCheckout() {
             //where to get email
         });
         setDivs({ ...divs, responseShow: true });
+        console.log(result);
         if (result.error) {
             // Show error to your customer (e.g., insufficient funds
             setStripeResponse({ text: "Your Order Was Not Processed Successfully. " + result.error.message, link: "/checkout", btnText: "Back To Checkout" });
@@ -219,9 +220,9 @@ export default function StripeCheckout() {
         } else {
             // The payment has been processed!
             if (result.paymentIntent.status === 'succeeded') {
-                console.log("success")
+                console.log("success");
                 setStripeResponse({ text: "Your Order Has Been Processed Successfully!", link: "", btnText: "Home" });
-                localStorage.setItem("orders", "[]");
+               // localStorage.setItem("orders", "[]")
             }
         }
         console.log("submission end");
@@ -237,10 +238,16 @@ export default function StripeCheckout() {
 
     useEffect(() => {
         PaymentService.getClientSecret().then(res => response = res).then(() => { setStatus(response.status); setSecret(response.data); });
-        console.log(secret);
     }, []);
 
- 
+
+    if (!(status > 199 && status < 300) && status !== 0) {
+        return (
+            <Grid container direction="column" alignItems="center" justifyItems="center">
+                <h2>Something Went Wrong. Please Reload Page and Try Again.</h2>
+            </Grid>
+            );
+    }
 
     let deliveryfee = 0;
     let taxes = 0;

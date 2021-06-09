@@ -13,7 +13,6 @@ import RestaurantTablePagination from './RestaurantTablePagination';
 import RestaurantService from './../../services/RestaurantService';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { useHistory } from "react-router-dom"
 import { useState, useEffect } from 'react';
 
 

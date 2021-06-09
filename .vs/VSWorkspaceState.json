@@ -9,6 +9,6 @@
     "\\src\\tests\\Restaurants",
     "\\src\\__mocks__"
   ],
-  "SelectedNode": "\\src\\components\\Restaurants\\RestaurantSearch.jsx",
+  "SelectedNode": "\\src\\tests\\Restaurants\\RestaurantSearch.test.js",
   "PreviewInSolutionExplorer": false
 }
