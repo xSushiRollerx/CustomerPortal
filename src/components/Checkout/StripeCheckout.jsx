@@ -222,7 +222,7 @@ export default function StripeCheckout() {
             if (result.paymentIntent.status === 'succeeded') {
                 console.log("success");
                 setStripeResponse({ text: "Your Order Has Been Processed Successfully!", link: "", btnText: "Home" });
-               // localStorage.setItem("orders", "[]")
+                localStorage.setItem("orders", "[]")
             }
         }
         console.log("submission end");

@@ -4,7 +4,6 @@ import UserInfo from "./components/AccountComponents/UserInfo"
 import Register from "./components/AccountComponents/Register"
 import UpdateAccount from "./components/AccountComponents/UpdateAccount"
 import OrderCart from './components/Checkout/OrderCart';
-import OrderCompletion from './components/Checkout/OrderCompletion';
 import RestaurantProfile from './components/Restaurants/RestaurantProfile';
 import RestaurantSearch from './components/Restaurants/RestaurantSearch';
 import NavBar from './components/NavBar';
@@ -19,7 +18,7 @@ import Error from './components/Errors/Error';
 const stripePromise = loadStripe("pk_test_51Iwe6JI3Xcs3HqD5tqc5jdf19qqrUZ7QzkB1jmAdgYOFVSNPZswQ3UFtwVANBw2kbB2XWBHvhVjlD6ijn42BwXpN00MOlvXkn5");
 
 function App() {
-    const { location, history } = useHistory();
+    const { location } = useHistory();
     return (
 <Elements stripe={stripePromise}> 
   <div>
@@ -33,7 +32,6 @@ function App() {
                     <Route path = "/profile" exact component = {UserInfo}></Route>
                     <Route path = "/update" exact component = {UpdateAccount}></Route>
                     <Route path='/cart' component={OrderCart}></Route>
-                    <Route path='/completion' component={OrderCompletion}></Route>
                     <Route path='/restaurant/:id' component={RestaurantProfile}></Route>
                     <Route path={'/restaurants/'} component={RestaurantSearch}></Route>
                     <Route path="/error/:error" exact component={Error}></Route>
