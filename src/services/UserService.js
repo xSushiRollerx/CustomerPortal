@@ -5,15 +5,15 @@ const USER_API_BASE_URL = 'http://localhost:8080/users';
 
 class UserService {
 
-    register(user){
+    post(user){
         return axios.post(USER_API_BASE_URL + '/user', user);
     }
 
-    update(user){
+    put(user){
         return axios.put(USER_API_BASE_URL + '/user/' + jwt_decode(localStorage.getItem("jwt")).sub, user);
     }
 
-    read(){
+    get(){
         return axios.get(USER_API_BASE_URL + '/user/' + jwt_decode(localStorage.getItem("jwt")).sub);
     }
 

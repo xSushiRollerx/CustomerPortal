@@ -1,8 +1,17 @@
 import React, { Component } from 'react'
-import { Redirect } from 'react-router';
 import UserService from '../../services/UserService'
 
-export default class UpdateAccount extends Component {
+class UpdateAccount extends Component {
+    constructor(props){
+        super(props);
+        this.state = {
+        }
+        this.cancel = this.cancel.bind(this);
+    }
+    cancel = (e)=> {
+        e.preventDefault();
+        this.props.history.push('profile');
+    };
     render() {
         function submit(e) {
             e.preventDefault();
@@ -16,73 +25,101 @@ export default class UpdateAccount extends Component {
             }
             let validations = true;
             user.username = document.getElementById('username').value;
-            if (user.password!==null){
-                user.username = user.username.trim();
-            }
+            if (user.username===null){
 
+            }
+            else {
+                user.username=user.username.trim();
+            }
+            
             user.password = document.getElementById('password').value;
             let passwordConfirm = document.getElementById('passwordConfirmation').value;
-            if (user.password===""&&(user.password.length <= 6 || user.password.length >= 20)) {
-                document.getElementById("password").value = null;
-                document.getElementById("password").placeholder = 'Password length should be between 6 and 20 exclusive'
+            if (user.password == null||user.password === ""){
+                document.getElementById("pwValid").textContent = null;
+            }
+            else if (user.password.length <= 6 || user.password.length >= 20) {
+                document.getElementById("pwValid").textContent = 'Password length should be between 6 and 20 characters long'
                 validations = false;
             }
             else if (user.password!==passwordConfirm) {
-                document.getElementById("passwordConfirmation").value = null;
-                document.getElementById("passwordConfirmation").placeholder = 'Passwords do not match'
+                document.getElementById("pwValid").textContent = 'Passwords do not match'
                 validations = false;
             }
-            if (user.password!==null)
-                user.password = user.password.trim();
+            else {
+                document.getElementById("pwValid").textContent = null;
+            }
+            
+            user.password = user.password.trim();
             
             user.firstName = document.getElementById('firstName').value;
-            if (user.firstName !== null&&(!/^[A-Za-z ]+$/.test(user.firstName))){
-                document.getElementById('firstName').value = null;
-                document.getElementById("firstName").placeholder = 'Name must contain only letters'
+            if (user.firstName === null||user.firstName === ""){
+                document.getElementById("fnValid").textContent = null;
+            }
+            else if (!/^[A-Za-z ]+$/.test(user.firstName)){
+                document.getElementById("fnValid").textContent  = 'Name must contain only letters'
                 validations = false;
             }
-            if (user.firstName !== null)
+            else if (user.firstName.trim()===""){
+                document.getElementById("fnValid").textContent  = 'Name must not be made of only white spaces'
+                validations = false;
+            }
+            else {
+                document.getElementById("fnValid").textContent = null;
                 user.firstName = user.firstName.trim();
+            }
             
-            user.lastName = document.getElementById('lastName').value.trim();
-            if (user.firstName !== null&&(!/^[A-Za-z ]+$/.test(user.lastName))){
-                document.getElementById('lastName').value = null;
-                document.getElementById("lastName").placeholder = 'Name must contain only letters'
+            user.lastName = document.getElementById('lastName').value;
+            if (user.lastName === null||user.lastName === ""){
+                document.getElementById("lnValid").textContent = null;
+            }
+            else if (!/^[A-Za-z ]+$/.test(user.lastName)){
+                document.getElementById("lnValid").textContent = 'Name must contain only letters';
                 validations = false;
             }
-            if (user.firstName !== null)
-                user.firstName = user.firstName.trim();
+            else if (user.lastName.trim()===""){
+                document.getElementById("lnValid").textContent  = 'Name must not be made of only white spaces'
+                validations = false;
+            }
+            else{
+                document.getElementById("lnValid").textContent = null;
+                user.lastName = user.lastName.trim();
+            }
 
             user.email = document.getElementById('email').value;
-            if (user.email !== null && (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(user.email.trim()))){
-                document.getElementById("email").value = null;
-                document.getElementById("email").placeholder = 'Email format unknown';
-                validations = false;
+            if(user.email===null||user.email === ""){
+                document.getElementById("eValid").textContent = null;
             }
-            if (user.email !== null)
+            else if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(user.email.trim())){
+                document.getElementById("eValid").textContent = null;
                 user.email = user.email.trim();
-
-            user.phone = document.getElementById('phone').value.trim();
-            if (user.phone !== null && (user.phone.trim().length!==10||!/^[A-Za-z ]+$/.test(user.phone.trim()))){
-                document.getElementById("phone").value = null;
-                document.getElementById("phone").placeholder = 'Phone format not supported';
+            }
+            else {
+                document.getElementById("eValid").textContent = 'Email format unknown';
                 validations = false;
             }
-            if (user.phone !== null)
+
+            user.phone = document.getElementById('phone').value;
+            if (user.phone === null||user.phone === ""){
+                document.getElementById("pValid").textContent = null;
+            }
+            else if(!/^\d+$/.test(user.phone.trim())){
+                validations = false;
+                document.getElementById("pValid").textContent = 'Phone format not supported';
+            }
+            else {
+                document.getElementById("pValid").textContent = null;
                 user.phone = user.phone.trim();
-            
-                if (!validations){
-                alert("Fields to be updated are incorrect");
+            }
+
+            if(!validations){
+                console.log("Check your fields");
+                return;
             }
             UserService.put(user).then((resp)=>{
-                alert(user.username + ' has been updated. Please log out for the changes to be applied.');
+                console.log(user.username + ' has been updated. Please log out for the changes to be applied.');
             }).catch((error)=>{
-                alert(error);
+                console.log(error);
             });
-        };
-        function cancel(e) {
-            e.preventDefault();
-            Redirect('/');
         };
         return (
             <div>
@@ -97,22 +134,9 @@ export default class UpdateAccount extends Component {
                     type='text' 
                     id='username'
                     />
-                    <label>First Name: </label>
-                    <input 
-                    placeholder='firstName'
-                    name='firstName'
-                    className='form-control'
-                    type='text' 
-                    id='firstName'
-                    />
-                    <label>Last Name: </label>
-                    <input 
-                    placeholder='lastName'
-                    name='lastName'
-                    className='form-control'
-                    type='text' 
-                    id='lastName'
-                    />
+                    <p1 id='unValid' style={{
+                        color: 'red',
+                    }}></p1>
                     <br/>
                     <label>Password: </label>
                     <input 
@@ -122,6 +146,10 @@ export default class UpdateAccount extends Component {
                     type='password' 
                     id='password'
                     />
+                    <p1 id='pwValid' style={{
+                        color: 'red',
+                    }}></p1>
+                    <br/>
                     <label>Password Confirmation: </label>
                     <input 
                     placeholder='password confirmation'
@@ -130,6 +158,34 @@ export default class UpdateAccount extends Component {
                     type='password' 
                     id='passwordConfirmation'
                     />
+                    <p1 id='pwcValid' style={{
+                        color: 'red',
+                    }}></p1>
+                    <br/>
+                    <label>First Name: </label>
+                    <input 
+                    placeholder='firstName'
+                    name='First'
+                    className='form-control'
+                    type='text' 
+                    id='firstName'
+                    />
+                    <p1 id='fnValid' style={{
+                        color: 'red',
+                    }}></p1>
+                    <br/>
+                    <label>Last Name: </label>
+                    <input 
+                    placeholder='Last'
+                    name='lastName'
+                    className='form-control'
+                    type='text' 
+                    id='lastName'
+                    />
+                    <p1 id='lnValid' style={{
+                        color: 'red',
+                    }}></p1>
+                    <br/>
                     <label>Email: </label>
                     <input 
                     placeholder='email@example.com'
@@ -138,6 +194,9 @@ export default class UpdateAccount extends Component {
                     type='text' 
                     id='email'
                     />
+                    <p1 id='eValid' style={{
+                        color: 'red',
+                    }}></p1>
                     <br/>
                     <label>Phone: </label>
                     <input 
@@ -147,12 +206,16 @@ export default class UpdateAccount extends Component {
                     type='text' 
                     id='phone'
                     />
+                    <p1 id='pValid' style={{
+                        color: 'red',
+                    }}></p1>
+                    <br/>
                     <button className="btn btn-success" 
                     onClick={submit}>
                         Submit
                     </button>
                     <button className="btn btn-danger" 
-                    onClick={cancel}
+                    onClick={this.cancel}
                     style={{marginLeft: "10px"}}>
                         Cancel
                     </button>
@@ -161,3 +224,4 @@ export default class UpdateAccount extends Component {
         )
     }
 }
+export default UpdateAccount;
