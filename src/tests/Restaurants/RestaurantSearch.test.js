@@ -4,8 +4,6 @@ import RestaurantSearch from './../../components/Restaurants/RestaurantSearch';
 import { unmountComponentAtNode } from "react-dom";
 import mockAxios from 'axios';
 
-const mockRouterDOM = require("react-router-dom");
-jest.mock("react-router-dom");
 
 const result = [
     {
@@ -77,10 +75,11 @@ const result = [
         "resultSize": 26,
         "totalPages": 3
     }];
+
+
 let container = null;
 
 beforeEach(() => {
-
     // setup a DOM element as a render target
     container = document.createElement("div");
     document.body.appendChild(container);
@@ -95,30 +94,45 @@ afterEach(() => {
 });
 
 it("Use Effect Runs On Load", async () => {
-
-    mockRouterDOM.useHistory = jest.fn(); 
     let calls = mockAxios.get.mockResolvedValue({
         data: result,
         status: 200
     });
 
+    /*let calls = mockAxios.get.mockImplementation(() => {
+        Promise.resolve({
+            data: result,
+            status: 200
+        });
+    });*/
+
     render(<RestaurantSearch />, container);
 
     await waitFor(() => {
         expect(calls.mock.calls.length).toBe(1);
+        console
     })
     
 });
 
 it("Search Creates API Call", async () => {
 
-    mockRouterDOM.useHistory = jest.fn();
-    let calls = mockAxios.get.mockResolvedValue({
+    mockAxios.get.mockResolvedValue({
         data: result,
         status: 200
     });
 
-    const { getByTestId, findByTestId } = render(<RestaurantSearch />, container);
+   /* let calls = mockAxios.get.mockImplementation(() => {
+        Promise.resolve({
+            data: result,
+            status: 200
+        });
+    });*/
+
+    const page = await render(<RestaurantSearch />, container);
+    console.log(page);
+    
+/*    const { getByTestId, findByTestId } = render(<RestaurantSearch />, container);
 
     expect(getByTestId("Waiting")).toBeInTheDocument();
 
@@ -131,7 +145,7 @@ it("Search Creates API Call", async () => {
 
     await waitFor(() => {
         expect(calls.mock.calls.length).toBe(2);
-    }); 
+    }); */
 
 });
 
