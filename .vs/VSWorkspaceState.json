@@ -3,10 +3,11 @@
     "",
     "\\src",
     "\\src\\components",
-    "\\src\\components\\Restaurants",
-    "\\src\\services",
-    "\\src\\tests"
+    "\\src\\components\\Checkout",
+    "\\src\\tests",
+    "\\src\\tests\\Checkout",
+    "\\src\\__mocks__"
   ],
-  "SelectedNode": "\\src\\services\\RestaurantService.js",
+  "SelectedNode": "\\src\\tests\\Checkout\\OrderCarts.test.js",
   "PreviewInSolutionExplorer": false
 }
