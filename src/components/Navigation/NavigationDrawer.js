@@ -153,6 +153,14 @@ export default function NavigationDrawer () {
                     </Link>
                 </ListItem>
                 <ListItem button>
+                    <Link to="/restaurants/">
+                    <ListItemIcon>
+                    <RestaurantIcon/>
+                    </ListItemIcon>
+                    <ListItemText primary={"Restaurants"}/>
+                    </Link>
+                </ListItem>
+                <ListItem button>
                     <Link to="/loyalty_points">
                     <ListItemIcon>
                     <LoyaltyIcon/>
