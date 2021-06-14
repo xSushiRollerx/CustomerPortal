@@ -4,12 +4,10 @@ import UserInfo from "./components/AccountComponents/UserInfo"
 import Register from "./components/AccountComponents/Register"
 import UpdateAccount from "./components/AccountComponents/UpdateAccount"
 import OrderCart from './components/Checkout/OrderCart';
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import RestaurantProfile from './components/Restaurants/RestaurantProfile';
 import RestaurantSearch from './components/Restaurants/RestaurantSearch';
-import NavBar from './components/NavBar';
 import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom';
 import StripeCheckout from './components/Checkout/StripeCheckout';
 import { Elements } from '@stripe/react-stripe-js';
@@ -38,6 +36,10 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-end',
   },
 }));
+
+const stripePromise = loadStripe("pk_test_51Iwe6JI3Xcs3HqD5tqc5jdf19qqrUZ7QzkB1jmAdgYOFVSNPZswQ3UFtwVANBw2kbB2XWBHvhVjlD6ijn42BwXpN00MOlvXkn5");
+
+
 function App() {
     const { location } = useHistory();
     const classes = useStyles();
@@ -45,8 +47,8 @@ function App() {
 <Elements stripe={stripePromise}> 
       <Router>
         <div className={clsx(classes.content)}>
-        <div className={classes.drawerHeader} />
-          <HeaderComponent/>
+                    <div className={classes.drawerHeader} />
+                    <HeaderComponent />
             <Switch>
                 <Route path = "/login" exact component = {Login}></Route>
                 <Route path = "/register" exact component = {Register}></Route>
@@ -54,13 +56,14 @@ function App() {
                 <Route path = "/update" exact component = {UpdateAccount}></Route>
                 <Route path='/delivery-address' component={DeliveryAddress}></Route>
                 <Route path='/cart' component={OrderCart}></Route>
-                    <Route path="/error/:error" exact component={Error}></Route>
-                                <Route path={'/checkout/'} component={(location.pathname === "/cart" || location.pathname === "/checkout") ? StripeCheckout : CheckoutRedirect}></Route>
-                </Switch>
-            </div>
-    </div>
-            </Router>
-    </Elements>
+                <Route path='/restaurant/:id' component={RestaurantProfile}></Route>
+                <Route path={'/restaurants/'} component={RestaurantSearch}></Route>
+                <Route path="/error/:error" exact component={Error}></Route>
+                <Route path={'/checkout/'} component={(location.pathname === "/cart" || location.pathname === "/checkout") ? StripeCheckout : CheckoutRedirect}></Route>
+            </Switch>
+          </div>
+      </Router>
+</Elements>
   );
 }
 
