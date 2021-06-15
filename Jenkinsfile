@@ -1,14 +1,5 @@
 pipeline {
     agent any
-    environment {
-        COMMIT_HASH = "${sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()}"
-        IMG_NAME = "customer-portal"
-    }
-
-    tools {
-        // Install the Maven version configured as "M3" and add it to the path.
-        maven "M3"
-    }
 
     stages {
         stage('Build') {
@@ -34,10 +25,8 @@ pipeline {
             steps {
                 echo "Docker Build...."
                 sh "aws ecr get-login-password --region us-west-1 | docker login --username AWS --password-stdin 635496629433.dkr.ecr.us-west-1.amazonaws.com"
-                sh "docker build --tag ${IMG_NAME}:${COMMIT_HASH} ."
-                sh "docker tag ${IMG_NAME}:${COMMIT_HASH} 635496629433.dkr.ecr.us-west-1.amazonaws.com/order-service:${COMMIT_HASH}"
-                echo "Docker Push..."
-                sh "docker push 635496629433.dkr.ecr.us-west-1.amazonaws.com/${IMG_NAME}:${COMMIT_HASH}"
+                echo "Push..."
+                sh "aws s3 cp CHANGELOG.md s3://sushibyte-portal-customer upload: ./CHANGELOG.md to s3://sushibyte-portal-customer/CHANGELOG.md"
             }
         }
 //         stage("Deploy") {
@@ -52,7 +41,6 @@ pipeline {
     }
     post {
         always {
-            sh 'mvn clean'
             sh "docker system prune -f"
         }
     }
