@@ -15,6 +15,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { useHistory } from "react-router-dom";
 import CheckoutRedirect from './components/Redirects/CheckoutRedirect';
 import Error from './components/Errors/Error';
+import HeaderComponent from './components/HeaderComponent';
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -54,7 +55,6 @@ function App() {
                 <Route path = "/register" exact component = {Register}></Route>
                 <Route path = "/profile" exact component = {UserInfo}></Route>
                 <Route path = "/update" exact component = {UpdateAccount}></Route>
-                <Route path='/delivery-address' component={DeliveryAddress}></Route>
                 <Route path='/cart' component={OrderCart}></Route>
                 <Route path='/restaurant/:id' component={RestaurantProfile}></Route>
                 <Route path={'/restaurants/'} component={RestaurantSearch}></Route>
