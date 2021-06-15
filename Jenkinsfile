@@ -5,8 +5,10 @@ pipeline {
         stage('Build') {
             steps {
                 // Run Node on a Unix agent.
+                 nodejs('NodeJS') {
                 sh "npm install"
                 sh "npm run build"
+                }
 
             }
         }
