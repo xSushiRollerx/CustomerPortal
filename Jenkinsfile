@@ -24,7 +24,7 @@ pipeline {
         // }
         stage("S3 Build") {
             steps {
-                echo "S3e S3 Build...."
+                echo "S3 Build...."
                 sh "aws ecr get-login-password --region us-west-1 | docker login --username AWS --password-stdin 635496629433.dkr.ecr.us-west-1.amazonaws.com"
                 echo "Push..."
                 sh "npm run build && aws s3 sync build/ s3://sushibyte-portal-customer"
