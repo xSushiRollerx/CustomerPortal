@@ -24,11 +24,11 @@ pipeline {
         //         waitForQualityGate abortPipeline: true
         //     }
         // }
-        stage("S3 Build") {
+        stage("S3 Push") {
             steps {
                 echo "S3 Build...."
                 sh "aws ecr get-login-password --region us-west-1 | docker login --username AWS --password-stdin 635496629433.dkr.ecr.us-west-1.amazonaws.com"
-                echo "Push..."
+                echo "Sync..."
                 sh "aws s3 sync build/ s3://sushibyte-portal-customer"
             }
         }
@@ -44,7 +44,8 @@ pipeline {
     }
     post {
         always {
-            sh "docker system prune -f"
+            echo "cleanup"
+            sh 'rm -rf *'
         }
     }
 }
