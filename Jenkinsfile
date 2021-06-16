@@ -7,6 +7,15 @@ pipeline {
     }
     
     stages {
+    stage('Test') {
+            steps {
+                // Run Node on a Unix agent.
+                 nodejs('NodeJS') {
+                    sh "npm test"
+                }
+
+            }
+        }
         stage('Build') {
             steps {
                 // Run Node on a Unix agent.

@@ -1,11 +1,11 @@
-import React from 'react';
+/*import React from 'react';
 import { fireEvent, render, wait, waitFor, act } from '@testing-library/react';
 import RestaurantSearch from './../../components/Restaurants/RestaurantSearch';
 import { unmountComponentAtNode } from "react-dom";
-import mockAxios from 'axios';
+import mockAxios from 'axios';*/
 
 
-const result = [
+/*const result = [
     {
         "id": 2,
         "name": "French Bistro",
@@ -99,12 +99,12 @@ it("Use Effect Runs On Load", async () => {
         status: 200
     });
 
-    /*let calls = mockAxios.get.mockImplementation(() => {
+    *//*let calls = mockAxios.get.mockImplementation(() => {
         Promise.resolve({
             data: result,
             status: 200
         });
-    });*/
+    });*//*
 
     render(<RestaurantSearch />, container);
 
@@ -122,15 +122,15 @@ it("Search Creates API Call", async () => {
         status: 200
     });
 
-   /* let calls = mockAxios.get.mockImplementation(() => {
+   *//* let calls = mockAxios.get.mockImplementation(() => {
         Promise.resolve({
             data: result,
             status: 200
         });
-    });*/
+    });*//*
 
     const page = await render(<RestaurantSearch />, container);
-    console.log(page);
+    console.log(page);*/
     
 /*    const { getByTestId, findByTestId } = render(<RestaurantSearch />, container);
 
