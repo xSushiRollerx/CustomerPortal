@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+/*import { render, screen } from '@testing-library/react';
 import UpdateAccount from '../components/UpdateAccount';
 
 test('renders without crashing', () => {
@@ -7,4 +7,4 @@ test('renders without crashing', () => {
 
 it('Sends request on valid inputs', ()=>{
 
-});
+});*/
