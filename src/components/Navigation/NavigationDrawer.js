@@ -6,7 +6,6 @@ import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 import RestaurantIcon from '@material-ui/icons/Restaurant';
 import HomeIcon from '@material-ui/icons/Home';
 import MenuIcon from '@material-ui/icons/Menu'
-import LoyaltyIcon from '@material-ui/icons/Loyalty';
 import Divider from '@material-ui/core/Divider';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import clsx from 'clsx';
