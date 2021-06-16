@@ -117,7 +117,7 @@ export default function NavigationDrawer () {
                 <MenuIcon />
                 </IconButton>
                 <Typography variant="h6" noWrap>
-                    Customer Portal App
+                    SushiBytes
                 </Typography>
                 </Toolbar>
             </AppBar>
