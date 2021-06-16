@@ -16,6 +16,7 @@ import { useHistory } from "react-router-dom";
 import CheckoutRedirect from './components/Redirects/CheckoutRedirect';
 import Error from './components/Errors/Error';
 import HeaderComponent from './components/HeaderComponent';
+import UserOrders from './components/AccountComponents/UserOrders';
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -59,7 +60,10 @@ function App() {
                 <Route path='/restaurant/:id' component={RestaurantProfile}></Route>
                 <Route path={'/restaurants/'} component={RestaurantSearch}></Route>
                 <Route path="/error/:error" exact component={Error}></Route>
-                <Route path={'/checkout/'} component={(location.pathname === "/cart" || location.pathname === "/checkout") ? StripeCheckout : CheckoutRedirect}></Route>
+                <Route exact path={'/checkout'} component={(location.pathname === "/cart" || location.pathname === "/checkout") ? StripeCheckout : CheckoutRedirect}></Route>
+                <Route path="/account/:id/orders" exact component={UserOrders}></Route>
+                        
+
             </Switch>
           </div>
       </Router>
