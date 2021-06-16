@@ -53,9 +53,9 @@ function App() {
             <Switch>
                 <Route path = "/login" exact component = {Login}></Route>
                 <Route path = "/register" exact component = {Register}></Route>
-                <Route path = "/profile" exact component = {UserInfo}></Route>
+                <Route path = "/account" exact component = {UserInfo}></Route>
                 <Route path = "/update" exact component = {UpdateAccount}></Route>
-                <Route path='/cart' component={OrderCart}></Route>
+                <Route path='/basket' component={OrderCart}></Route>
                 <Route path='/restaurant/:id' component={RestaurantProfile}></Route>
                 <Route path={'/restaurants/'} component={RestaurantSearch}></Route>
                 <Route path="/error/:error" exact component={Error}></Route>

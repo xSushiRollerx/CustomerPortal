@@ -3,11 +3,7 @@
     "",
     "\\src",
     "\\src\\components",
-    "\\src\\components\\Checkout",
-    "\\src\\tests",
-    "\\src\\tests\\Checkout",
     "\\src\\__mocks__"
   ],
-  "SelectedNode": "\\src\\tests\\Checkout\\OrderCarts.test.js",
   "PreviewInSolutionExplorer": false
 }

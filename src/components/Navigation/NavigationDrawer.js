@@ -7,7 +7,6 @@ import RestaurantIcon from '@material-ui/icons/Restaurant';
 import HomeIcon from '@material-ui/icons/Home';
 import MenuIcon from '@material-ui/icons/Menu'
 import LoyaltyIcon from '@material-ui/icons/Loyalty';
-import HistoryIcon from '@material-ui/icons/History';
 import Divider from '@material-ui/core/Divider';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import clsx from 'clsx';
@@ -15,10 +14,14 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
+import SearchIcon from '@material-ui/icons/Search';
+
+import { useHistory } from "react-router-dom";
 // import { Collapse } from 'bootstrap';
 
 //https://material-ui.com/components/drawers/
-const drawerWidth = 240;
+const drawerWidth = 200;
 const useStyles = makeStyles((theme) => ({
     root: {
       display: 'flex',
@@ -79,6 +82,7 @@ export default function NavigationDrawer () {
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
+    const history = useHistory();
     // const [openAccount, setOpenAccount] = React.useState(false);
 
     const handleDrawerOpen = () => {
@@ -88,6 +92,11 @@ export default function NavigationDrawer () {
     const handleDrawerClose = () => {
         setOpen(false);
     };
+
+    const handleitemClick = (page) => {
+        handleDrawerClose(); 
+        history.push(page);
+    }
     return (
         <div className={classes.root}>
             <CssBaseline />
@@ -112,15 +121,7 @@ export default function NavigationDrawer () {
                 </Typography>
                 </Toolbar>
             </AppBar>
-            <Drawer 
-            className={classes.drawer}
-            variant="persistent"
-            anchor='left'
-            open={open}
-            classes={{
-              paper: classes.drawerPaper,
-            }}
-            >
+            <Drawer    className={classes.drawer} variant="persistent"   anchor='left' open={open} classes={{ paper: classes.drawerPaper,}}>
                 <div className={classes.drawerHeader}>
                 <IconButton onClick={handleDrawerClose}>
                     {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
@@ -128,43 +129,35 @@ export default function NavigationDrawer () {
                 </div>
                 <Divider />
             <List>
-                <ListItem button>
-                    <Link to="/">
+                    <ListItem button onClick={() => { handleitemClick("/") } }>
                     <ListItemIcon>
                     <HomeIcon/>
                     </ListItemIcon>
                     <ListItemText primary={"Home"}/>
-                    </Link>
+                    </ListItem>
+                    <ListItem button onClick={() => { handleitemClick("/restaurants") }}>
+                    <ListItemIcon>
+                    <SearchIcon/>
+                    </ListItemIcon>
+                    <ListItemText primary={"Search"}/>
                 </ListItem>
-                <ListItem button>
-                    <Link to="/orders">
+                    <ListItem button onClick={() => { handleitemClick("/")   }}>
                     <ListItemIcon>
                     <RestaurantIcon/>
                     </ListItemIcon>
-                    <ListItemText primary={"Current Orders"}/>
-                    </Link>
+                    <ListItemText primary={"Orders"}/>
                 </ListItem>
-                <ListItem button>
-                    <Link to="/past_orders">
-                    <ListItemIcon>
-                    <HistoryIcon/>
-                    </ListItemIcon>
-                    <ListItemText primary={"Past Orders"}/>
-                    </Link>
-                </ListItem>
-                <ListItem button>
-                    <Link to="/loyalty_points">
-                    <ListItemIcon>
-                    <LoyaltyIcon/>
-                    </ListItemIcon>
-                    <ListItemText primary={"loyalty points"}/>
-                    </Link>
-                </ListItem>
-                <ListItem>
+                    <ListItem button onClick={() => { handleitemClick("/account") }}>
                     <ListItemIcon>
                     <PersonOutlineIcon/>
                     </ListItemIcon>
                     <ListItemText primary={"Account"}/>
+                    </ListItem>
+                <ListItem button onClick={() => { handleitemClick("/basket") }}>
+                    <ListItemIcon>
+                            <ShoppingBasketIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={"Basket"} />
                 </ListItem>
                 <ListItem>
                    {/* <Collapse in={openAccount}> */}
@@ -185,13 +178,6 @@ export default function NavigationDrawer () {
                         </Link>
                       </ListItem>
                       </>:<>
-                        <ListItem button>
-                        <Link to="/profile">
-                          <ListItemText>
-                            Profile
-                          </ListItemText>
-                        </Link>
-                        </ListItem>
                         <ListItem button onClick={()=>{
                         localStorage.removeItem('jwt');
                         localStorage.removeItem('userId');
