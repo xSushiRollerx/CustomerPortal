@@ -3,17 +3,24 @@ pipeline {
 
     
      environment {
-        AWS_SERVICE = "sushibyte-portal-customer"
+        AWS_SERVICE = credentials('portal-customer')
     }
     tools {
         nodejs "NodeJS"
     }
     
     stages {
-        stage('Build') {
+
+        stage('Install') {
             steps {
                 // Run Node on a Unix agent.
                 sh "npm install"
+
+            }
+        }
+        stage('Build') {
+            steps {
+                // Run Node on a Unix agent.
                 sh "npm run build"
 
             }
@@ -22,7 +29,7 @@ pipeline {
             steps {
                 echo "S3 Build...."
                 echo "Sync..."
-                sh "aws s3 sync build/ s3://${AWS_SERVICE}"
+                sh "aws s3 sync build/ s3://${AWS_SERVICE} --delete"
             }
         }
     }
