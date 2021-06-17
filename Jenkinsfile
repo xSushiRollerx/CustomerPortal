@@ -5,15 +5,16 @@ pipeline {
      environment {
         AWS_SERVICE = "sushibyte-portal-customer"
     }
+    tools {
+        nodejs "NodeJS"
+    }
     
     stages {
         stage('Build') {
             steps {
                 // Run Node on a Unix agent.
-                 nodejs('NodeJS') {
                 sh "npm install"
                 sh "npm run build"
-                }
 
             }
         }
