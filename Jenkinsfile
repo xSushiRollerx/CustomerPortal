@@ -19,12 +19,12 @@ pipeline {
             }
         }
 
-        stage('Test') {
-            steps {
-                echo 'Beginning Tests'
-                sh 'CI=true npm test'
-            }
-        }
+//        stage('Test') {
+//            steps {
+//                echo 'Beginning Tests'
+//                sh 'CI=true npm test'
+//            }
+//        }
 
         stage('Build') {
             steps {
