@@ -5,8 +5,16 @@ import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import OrderService from '../../services/OrderService';
+import { useState, useEffect } from 'react';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     root: {
         minWidth: 275,
     },
@@ -28,19 +36,63 @@ const useStyles = makeStyles({
     p: {
         margin: 0,
         fontSize: 12
+    },
+    card: {
+        borderRadius: 15,
+        marginBottom: 20
+    },
+    backdrop: {
+        zIndex: theme.zIndex.drawer + 1,
+        color: '#fff',
     }
-});
+}));
 
 export default function UserOrders(props) {
 
     const classes = useStyles();
 
+    let response = null;
+    const [orders, setOrders] = useState([]);
+    const [status, setStatus] = useState(0);
+
+    useEffect(() => {
+        OrderService.getOrders(0, 10, "newest").then(res => response = res).then(() => { setOrders(response.data); setStatus(response.status); })
+            .catch(err => console.log(err));
+
+    }, []);
+
+    if (status === 0) {
+        return (
+            <div data-testid="Waiting">
+                <Backdrop className={classes.backdrop} open={true}>
+                    <CircularProgress color="inherit" />
+                </Backdrop>
+            </div>
+            
+            );
+    }
+    console.log(orders);
+    let ordersBlock = orders.map((o) => {
+        return <Order />
+    });
+
+    let sorted = [];
+    for (let order of orders) {
+        if (sorted.length === 0) {
+            sorted.push([order]);
+        } else if (sorted[sorted.length - 1].stripe === order.stripe) {
+            sorted[sorted.length - 1].push(order);
+        } else {
+            sorted.push([order]);
+        }
+    }
+    console.log(ordersBlock);
     return (
         <Grid container direction="row" alignItems="center" justify="center">
             <Grid item xs={10} direction="column">
                 <h1>My Orders</h1>
                 <Divider className={classes.divider}/> 
-                <Order />
+                {ordersBlock}
 
             </Grid>
         </Grid>
@@ -54,19 +106,25 @@ function Order(props) {
     const classes = useStyles();
 
     return (
-        <Card className={classes.root}>
+        <Card className={classes.root, classes.card} elevation={0}>
             <CardContent>
                 <Grid container direction="row" spacing={2} justify="flex-start">
                     <Grid item xs={2}>
                         <Grid container direction="column" >
-                            <p className={classes.p}>Delivery Date</p>
+                            <p className={classes.p}>Order Date</p>
                             <p className={classes.p}>4/08/2020</p>
                         </Grid>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={3}>
                         <Grid container direction="column" >
                             <p className={classes.p}>Delivery Address</p>
                             <p className={classes.p}>123 SmoothStack Ln, Atlanta, GA </p>
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={3}>
+                        <Grid container direction="column" >
+                            <p className={classes.p}>Status</p>
+                            <p className={classes.p}>Pending</p>
                         </Grid>
                     </Grid>
                     <Grid item xs={4}>
@@ -76,7 +134,6 @@ function Order(props) {
                         </Grid>
                     </Grid>
                 </Grid>
-                <Divider className={classes.divider} />
                 <Restaurant />
                 <Restaurant />
             </CardContent>
@@ -90,11 +147,22 @@ function Order(props) {
 function Restaurant(props) {
 
     return (
-        <Grid container direction="row">
-            <h4>Restaurant</h4>
-            <OrderItem />
-            <OrderItem />
-        </Grid>
+        <Accordion elevation={0}>
+                <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                >
+                    <h4>Restaurant</h4>
+                </AccordionSummary>
+            <AccordionDetails>
+                <Grid container direction="column" alignItems="stretch" justify="flex-start">
+                    <OrderItem />
+                    <OrderItem />
+                </Grid>
+                   
+                </AccordionDetails>
+            </Accordion>
     );
 
 }

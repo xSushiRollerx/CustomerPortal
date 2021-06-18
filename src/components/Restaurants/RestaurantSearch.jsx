@@ -201,13 +201,6 @@ export default function RestaurantSearch(props) {
         console.log(status);
         console.log(keywords);
         return (
-            /**
-            <div class="d-flex justify-content-center">
-                <div class="spinner-border" className={style.loading} role="status">
-                    <span class="sr-only"></span>
-                </div>
-            </div>
-            **/
 
            <div data-testid="Waiting">
                 <Backdrop className={style.backdrop} open={true}>

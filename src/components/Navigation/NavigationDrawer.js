@@ -100,6 +100,7 @@ export default function NavigationDrawer () {
         <div className={classes.root}>
             <CssBaseline />
             <AppBar
+                elevation={0}
                 position="fixed"
                 className={clsx(classes.appBar, {
                     [classes.appBarShift]: open,
