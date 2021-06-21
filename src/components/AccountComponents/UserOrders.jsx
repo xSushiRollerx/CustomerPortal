@@ -68,8 +68,10 @@ export default function UserOrders(props) {
                     <CircularProgress color="inherit" />
                 </Backdrop>
             </div>
-            
-            );
+
+        );
+    } else if (status !== 200) {
+        return <h1>Something Went Wrong Please Reload Page And Try Again</h1>
     }
     console.log(orders);
     let ordersBlock = orders.map((o) => {
@@ -86,7 +88,6 @@ export default function UserOrders(props) {
             sorted.push([order]);
         }
     }
-    console.log(ordersBlock);
     return (
         <Grid container direction="row" alignItems="center" justify="center">
             <Grid item xs={10} direction="column">
@@ -177,9 +178,8 @@ function OrderItem(props) {
                 </Grid>
             </Grid>
             <Grid item xs={6}>
-                <Grid container direction="column">
+                <Grid container direction="column" justify="center" alignItems="center">
                     <h6><b>Name</b></h6>
-                    <p>summarry asdahdjb ahd asdhj adsha haja a hsj s ahduas</p>
                 </Grid>
             </Grid>
             <Grid item xs={3}>
