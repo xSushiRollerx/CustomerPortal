@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
 const stripePromise = loadStripe("pk_test_51Iwe6JI3Xcs3HqD5tqc5jdf19qqrUZ7QzkB1jmAdgYOFVSNPZswQ3UFtwVANBw2kbB2XWBHvhVjlD6ijn42BwXpN00MOlvXkn5");
 
 
-function App() {
+export default function App() {
     const { location } = useHistory();
     const classes = useStyles();
     return (
@@ -66,5 +66,3 @@ function App() {
 </Elements>
   );
 }
-
-export default App;

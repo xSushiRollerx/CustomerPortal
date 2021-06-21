@@ -1,11 +1,13 @@
-/*import React from 'react';
-import { fireEvent, render, wait, waitFor, act } from '@testing-library/react';
+import React from 'react';
+import { fireEvent, render, wait, waitFor, act, findByTestId } from '@testing-library/react';
 import RestaurantSearch from './../../components/Restaurants/RestaurantSearch';
 import { unmountComponentAtNode } from "react-dom";
-import mockAxios from 'axios';*/
+import RestaurantService from '../../services/RestaurantService';
 
 
-/*const result = [
+
+
+const result = [
     {
         "id": 2,
         "name": "French Bistro",
@@ -76,6 +78,8 @@ import mockAxios from 'axios';*/
         "totalPages": 3
     }];
 
+jest.mock('../../services/RestaurantService');
+
 
 let container = null;
 
@@ -93,60 +97,26 @@ afterEach(() => {
     container = null;
 });
 
-it("Use Effect Runs On Load", async () => {
-    let calls = mockAxios.get.mockResolvedValue({
+it('render restaurant search', () => {
+    RestaurantService.getAllRestaurants.mockResolvedValue({
         data: result,
         status: 200
+
     });
-
-    *//*let calls = mockAxios.get.mockImplementation(() => {
-        Promise.resolve({
-            data: result,
-            status: 200
-        });
-    });*//*
-
     render(<RestaurantSearch />, container);
-
-    await waitFor(() => {
-        expect(calls.mock.calls.length).toBe(1);
-        console
-    })
-    
+    expect(RestaurantService.getAllRestaurants.mock.calls.length).toBe(1);
 });
 
-it("Search Creates API Call", async () => {
-
-    mockAxios.get.mockResolvedValue({
+it('render restaurant search', async () => {
+    RestaurantService.getAllRestaurants.mockResolvedValue({
         data: result,
         status: 200
+
     });
 
-   *//* let calls = mockAxios.get.mockImplementation(() => {
-        Promise.resolve({
-            data: result,
-            status: 200
-        });
-    });*//*
+    const { findByTestId } = render(<RestaurantSearch />, container);
+    findByTestId('searchBar');
 
-    const page = await render(<RestaurantSearch />, container);
-    console.log(page);*/
-    
-/*    const { getByTestId, findByTestId } = render(<RestaurantSearch />, container);
-
-    expect(getByTestId("Waiting")).toBeInTheDocument();
-
-    const searchBar = await findByTestId('searchBar');
-    
-    act(() => {
-        fireEvent.change(searchBar, { target: { value: "hello" } });
-        fireEvent.keyUp(container, { key: 'Enter', code: 'Enter' });
-    });
-
-    await waitFor(() => {
-        expect(calls.mock.calls.length).toBe(2);
-    }); */
 
 });
-
 
