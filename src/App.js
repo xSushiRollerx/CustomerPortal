@@ -40,13 +40,18 @@ const useStyles = makeStyles((theme) => ({
 
 const stripePromise = loadStripe("pk_test_51Iwe6JI3Xcs3HqD5tqc5jdf19qqrUZ7QzkB1jmAdgYOFVSNPZswQ3UFtwVANBw2kbB2XWBHvhVjlD6ijn42BwXpN00MOlvXkn5");
 
-if (localStorage.getItem('orders') === null) {
-    localStorage.setItem('orders', '[]');
-}
-
 function App() {
     const { location } = useHistory();
     const classes = useStyles();
+
+    if (localStorage.getItem('orders') === null) {
+        localStorage.setItem('orders', '[]');
+    }
+
+    if (localStorage.getItem('dropOffAddress') === null) {
+        localStorage.setItem('dropOffAddress', JSON.stringify({ streetAddress: null, city: null, state: null, zipCode: null } ));
+    }
+
     return (
 <Elements stripe={stripePromise}> 
       <Router>
