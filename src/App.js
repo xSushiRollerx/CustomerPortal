@@ -4,13 +4,17 @@ import UserInfo from "./components/AccountComponents/UserInfo"
 import Register from "./components/AccountComponents/Register"
 import UpdateAccount from "./components/AccountComponents/UpdateAccount"
 import OrderCart from './components/Checkout/OrderCart';
-import Confirmation from './components/Checkout/Confirmation';
-import OrderCompletion from './components/Checkout/OrderCompletion';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import RestaurantProfile from './components/Restaurants/RestaurantProfile';
 import RestaurantSearch from './components/Restaurants/RestaurantSearch';
+import StripeCheckout from './components/Checkout/StripeCheckout';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+import { useHistory } from "react-router-dom";
+import CheckoutRedirect from './components/Redirects/CheckoutRedirect';
+import Error from './components/Errors/Error';
 import HeaderComponent from './components/HeaderComponent';
 
 const useStyles = makeStyles((theme) => ({
@@ -33,30 +37,34 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-end',
   },
 }));
+
+const stripePromise = loadStripe("pk_test_51Iwe6JI3Xcs3HqD5tqc5jdf19qqrUZ7QzkB1jmAdgYOFVSNPZswQ3UFtwVANBw2kbB2XWBHvhVjlD6ijn42BwXpN00MOlvXkn5");
+
+
 function App() {
-  const classes = useStyles();
-  return (
-  <div>
-    <div>
+    const { location } = useHistory();
+    const classes = useStyles();
+    return (
+<Elements stripe={stripePromise}> 
       <Router>
         <div className={clsx(classes.content)}>
-        <div className={classes.drawerHeader} />
-          <HeaderComponent/>
+                    <div className={classes.drawerHeader} />
+                    <HeaderComponent />
             <Switch>
                 <Route path = "/login" exact component = {Login}></Route>
                 <Route path = "/register" exact component = {Register}></Route>
-                <Route path = "/profile" exact component = {UserInfo}></Route>
+                <Route path = "/account" exact component = {UserInfo}></Route>
                 <Route path = "/update" exact component = {UpdateAccount}></Route>
-                <Route path='/cart' component={OrderCart}></Route>
-                <Route path='/confirmation' component={Confirmation}></Route>
-                <Route path='/completion' component={OrderCompletion}></Route>
+
+                <Route path='/basket' component={OrderCart}></Route>
                 <Route path='/restaurant/:id' component={RestaurantProfile}></Route>
                 <Route path={'/restaurants/'} component={RestaurantSearch}></Route>
+                <Route path="/error/:error" exact component={Error}></Route>
+                <Route path={'/checkout/'} component={(location.pathname === "/cart" || location.pathname === "/checkout") ? StripeCheckout : CheckoutRedirect}></Route>
             </Switch>
           </div>
       </Router>
-    </div>
-  </div>
+</Elements>
   );
 }
 

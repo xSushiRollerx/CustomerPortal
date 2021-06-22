@@ -3,10 +3,7 @@
     "",
     "\\src",
     "\\src\\components",
-    "\\src\\components\\Restaurants",
-    "\\src\\services",
-    "\\src\\tests"
+    "\\src\\__mocks__"
   ],
-  "SelectedNode": "\\src\\services\\RestaurantService.js",
   "PreviewInSolutionExplorer": false
 }

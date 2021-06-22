@@ -20,7 +20,7 @@ class OrderCart extends Component {
     }
 
     checkOut = () => {
-        if (this.state.orders.length === 0 && (this.state.address.street === null)) {
+        if (this.state.orders.length === 0 && (this.state.address.streetAddress === null)) {
             this.setState({ errorText: "Cannot checkout! There are no order items in your basket and you haven't filled out where you want your order(s) dropped off!" });
         } else if (this.state.orders.length === 0) {
             this.setState({ errorText: "Cannot checkout! There are no order items in your basket!" });
@@ -28,7 +28,7 @@ class OrderCart extends Component {
         } else if (this.state.orders[0].address.street === null) {
             this.setState({ errorText: "Cannot checkout. You haven't filled out where you want your order(s) dropped off!" });
         } else {
-            this.props.history.push('/confirmation');
+            this.props.history.push('/checkout/');
         }
         
     }
@@ -79,9 +79,11 @@ class OrderCart extends Component {
 
     }
 
-
+    
     render() {
 
+        console.log(JSON.parse(localStorage.getItem('orders')));
+        console.log(this.state.orders);
         if (this.state.orders=== undefined) {
             return (<h1>LOADING</h1>);
         }

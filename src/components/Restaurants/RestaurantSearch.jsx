@@ -13,9 +13,7 @@ import RestaurantTablePagination from './RestaurantTablePagination';
 import RestaurantService from './../../services/RestaurantService';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import {  useParams, useHistory } from "react-router-dom"
 import { useState, useEffect } from 'react';
-
 
 
 const useStyles = makeStyles((theme) => ({
@@ -51,10 +49,8 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 let response = {};
-let query = undefined;
 export default function RestaurantSearch(props) {
     const style = useStyles();
-    const history = useHistory();
     const [sort, setSort] = useState('default');
     const [page, setPage] = useState(0);
     const [pageSize, setPageSize] = useState(10);
@@ -177,7 +173,6 @@ export default function RestaurantSearch(props) {
         RestaurantService.getAllRestaurants(0, 10, "1, 2, 3, 4", 0, "default", "").then(res => response = res)
             .then(() => { setRows(response.data); setStatus(response.status); })
             .catch(err => { setStatus(500); });
-        console.log(response)
         updateAddress(JSON.parse(localStorage.getItem('dropOffAddress')));
         
         //load event listener for when user hits enter
@@ -214,7 +209,7 @@ export default function RestaurantSearch(props) {
             </div>
             **/
 
-           <div>
+           <div data-testid="Waiting">
                 <Backdrop className={style.backdrop} open={true}>
                     <CircularProgress color="inherit" />
                 </Backdrop>
@@ -222,7 +217,7 @@ export default function RestaurantSearch(props) {
         );
     }
     return (
-        <Grid container direction="column">
+        <Grid container direction="column" inputProps={{ 'data-testid': 'SearchPage' }}>
             <Grid item xs={12}>
                 <Grid container alignItems="center" spacing={3}>
                     <Grid item xs={10}>

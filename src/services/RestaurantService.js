@@ -10,8 +10,6 @@ class RestaurantService {
     }
 
     getAllRestaurants(page, pageSize, priceCategories, ratings, sort, keywords) {
-
-        console.log("execution: " + keywords.trim().replace(/ /g, ","));
         if (keywords.trim() === "") {
             return axios.get(RESTAURANT_SERVICE_BASE_URL + "/restaurants/all/" + page + "?pageSize=" + pageSize + "&priceCategories=" + encodeURI(priceCategories)
                 + "&rating=" + ratings + "&sort=" + sort);
