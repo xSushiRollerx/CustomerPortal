@@ -40,6 +40,9 @@ const useStyles = makeStyles((theme) => ({
 
 const stripePromise = loadStripe("pk_test_51Iwe6JI3Xcs3HqD5tqc5jdf19qqrUZ7QzkB1jmAdgYOFVSNPZswQ3UFtwVANBw2kbB2XWBHvhVjlD6ijn42BwXpN00MOlvXkn5");
 
+if (localStorage.getItem('orders') === null) {
+    localStorage.setItem('orders', '[]');
+}
 
 function App() {
     const { location } = useHistory();
