@@ -162,14 +162,12 @@ export default function NavigationDrawer () {
                    {/* <Collapse in={openAccount}> */}
                    <List>
                       {localStorage.getItem('jwt')===null?<>
-                      <ListItem button>
-                        <Link to="/login">
+                      <ListItem button onClick={() => { handleitemClick("/login") }}>
                           <ListItemText>
                             Login
                           </ListItemText>
-                        </Link>
                       </ListItem>
-                      <ListItem button>
+                      <ListItem button onClick={() => { handleitemClick("/register") }}>
                         <Link to="/register">
                           <ListItemText>
                             Register
@@ -181,7 +179,8 @@ export default function NavigationDrawer () {
                         localStorage.removeItem('jwt');
                         localStorage.removeItem('userId');
                         //this.history.push('login');
-                        <Redirect to="/login" />
+                        handleitemClick("/login");
+                        //<Redirect to="/login" />
                         }}>
                           <ListItemText>
                             Logout

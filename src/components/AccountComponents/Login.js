@@ -6,13 +6,13 @@ export default class Login extends Component {
     constructor(props){
         super(props);
         this.state = {
-            passwordValid: false,
-            usernameValid: false,
+            // passwordValid: false,
+            // usernameValid: false,
         }
         this.cancel = this.cancel.bind(this);
         this.login = this.login.bind(this);
-        this.handleChangePassword = this.handleChangePassword.bind(this);
-        this.handleChangeUsername = this.handleChangeUsername.bind(this);
+        // this.handleChangePassword = this.handleChangePassword.bind(this);
+        // this.handleChangeUsername = this.handleChangeUsername.bind(this);
     }
     cancel = (e)=> {
         e.preventDefault();
@@ -21,9 +21,9 @@ export default class Login extends Component {
     //sends user to home page on login
     login = (e) => {
         e.preventDefault();
-        if(!(this.state.passwordValid&&this.state.usernameValid)){
-            return;
-        }
+        // if(!(this.state.passwordValid&&this.state.usernameValid)){
+        //     return;
+        // }
         let authrequest = {
             username: null,
             password: null
@@ -39,32 +39,32 @@ export default class Login extends Component {
         });
     };
 
-    handleChangeUsername(){
-        let username = document.getElementById('username').value;
-        if (username===null||username.trim()===""){
-            document.getElementById('uValid').textContent = "Username invalid";
-            this.setState({usernameValid: false});
-        }
-        else{
-            document.getElementById('uValid').textContent = null;
-            this.setState({usernameValid: true});
-        }
-    };
-    handleChangePassword(){
-        let password = document.getElementById('password').value;
-        if (password==="" || password===null){
-            document.getElementById("pwValid").textContent = 'Password cannot be empty';
-            this.setState({passwordValid: false});
-        }
-        else if (password.length <= 6 || password.length >= 20) {
-            document.getElementById("pwValid").textContent = 'Password length should be between 6 and 20 exclusive';
-            this.setState({passwordValid: false});
-        }
-        else {
-            document.getElementById("pwValid").textContent = null;
-            this.setState({passwordValid: true});
-        }
-    };
+    // handleChangeUsername(){
+    //     let username = document.getElementById('username').value;
+    //     if (username===null||username.trim()===""){
+    //         document.getElementById('uValid').textContent = "Username invalid";
+    //         this.setState({usernameValid: false});
+    //     }
+    //     else{
+    //         document.getElementById('uValid').textContent = null;
+    //         this.setState({usernameValid: true});
+    //     }
+    // };
+    // handleChangePassword(){
+    //     let password = document.getElementById('password').value;
+    //     if (password==="" || password===null){
+    //         document.getElementById("pwValid").textContent = 'Password cannot be empty';
+    //         this.setState({passwordValid: false});
+    //     }
+    //     else if (password.length <= 6 || password.length >= 20) {
+    //         document.getElementById("pwValid").textContent = 'Password length should be between 6 and 20 exclusive';
+    //         this.setState({passwordValid: false});
+    //     }
+    //     else {
+    //         document.getElementById("pwValid").textContent = null;
+    //         this.setState({passwordValid: true});
+    //     }
+    // };
     render() {
         return (
             <div>
@@ -77,7 +77,7 @@ export default class Login extends Component {
                     className='form-control'
                     type='text' 
                     id='username'
-                    onChange={this.handleChangeUsername}
+                    //onChange={this.handleChangeUsername}
                     />
                     <p id='uValid'></p>
                     <br/>
@@ -88,7 +88,7 @@ export default class Login extends Component {
                     className='form-control'
                     type='password' 
                     id='password'
-                    onChange={this.handleChangePassword}
+                    //onChange={this.handleChangePassword}
                     />
                     <p id='pwValid'></p>
                     <button className="btn btn-success" 

@@ -5,13 +5,134 @@ class UpdateAccount extends Component {
     constructor(props){
         super(props);
         this.state = {
+            usernameValid: true,
+            passwordValid: true,
+            emailValid: true,
+            phoneValid: true,
+            firstNameValid: true,
+            lastNameValid: true,
         }
         this.cancel = this.cancel.bind(this);
+        this.handleChangePassword = this.handleChangePassword.bind(this);
+        this.handleChangeUsername = this.handleChangeUsername.bind(this);
+        this.handleChangeEmail = this.handleChangeEmail.bind(this);
+        this.handleChangeFirstName = this.handleChangeFirstName.bind(this);
+        this.handleChangeLastName = this.handleChangeLastName.bind(this);
+        this.handleChangePhone = this.handleChangePhone.bind(this);
+    }
+    componentDidMount() {
+        try{
+            UserService.get().then(res => {
+            let user = res.data;
+                document.getElementById('username').value=user.username;
+                document.getElementById('firstName').value=user.firstName;
+                document.getElementById('lastName').value=user.lastName;
+                document.getElementById('email').value=user.email;
+                document.getElementById('phone').value=user.phone;
+            }).catch((error)=>{
+            console.log(error);
+            console.log(error);
+            });
+        }
+        catch(e){
+            console.log(e);
+        }
     }
     cancel = (e)=> {
         e.preventDefault();
         this.props.history.push('profile');
     };
+    handleChangeUsername(){
+        let username = document.getElementById('username').value;
+        if (username===null||username.trim()===""){
+            document.getElementById('uValid').textContent = "Username invalid";
+            this.setState({usernameValid: false});
+        }
+        else{
+            document.getElementById('uValid').textContent = null;
+            this.setState({usernameValid: true});
+        }
+    };
+    handleChangePassword(){
+        let password = document.getElementById('password').value;
+        let passwordConfirm = document.getElementById('passwordConfirmation').value;
+        if (password==="" || password===null){
+            document.getElementById("pwValid").textContent = null;
+            this.setState({passwordValid: true});
+        }
+        else if (password.length <= 6 || password.length >= 20) {
+            document.getElementById("pwValid").textContent = 'Password length should be between 6 and 20 exclusive';
+            this.setState({passwordValid: false});
+        }
+        else {
+            document.getElementById("pwValid").textContent = null;
+            if (password!==passwordConfirm) {
+                document.getElementById("pwcValid").textContent = 'Passwords do not match';
+                this.setState({passwordValid: false});
+            }
+            else{
+                document.getElementById("pwcValid").textContent = null;
+                this.setState({passwordValid: true});
+            }
+        }
+    };
+    handleChangeEmail(){
+        let email = document.getElementById('email').value;
+            if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)){
+                document.getElementById("eValid").textContent = null;
+                this.setState({emailValid: true});
+            }
+            else {
+                document.getElementById("eValid").textContent = 'Email format unknown';
+                this.setState({emailValid: false});
+            }
+    }
+    handleChangeFirstName(){
+        let firstName = document.getElementById('firstName').value;
+        if (!/^[A-Za-z ]+$/.test(firstName)){
+            document.getElementById("fnValid").textContent  = 'Name must contain only letters'
+            this.setState({firstNameValid: false});
+        }
+        // else if (user.firstName.trim()===""){
+        //     document.getElementById("fnValid").textContent  = 'Name must not be made of only white spaces'
+        //     this.setState({firstNameValid: false});
+        // }
+        else {
+            document.getElementById("fnValid").textContent = null;
+            this.setState({firstNameValid: true});
+        }
+    }
+    handleChangeLastName(){
+        let lastName = document.getElementById('lastName').value;
+        if (!/^[A-Za-z ]+$/.test(lastName)){
+            document.getElementById("lnValid").textContent  = 'Name must contain only letters'
+            this.setState({lastNameValid: false});
+        }
+        // else if (user.firstName.trim()===""){
+        //     document.getElementById("fnValid").textContent  = 'Name must not be made of only white spaces'
+        //     this.setState({firstNameValid: false});
+        // }
+        else {
+            document.getElementById("lnValid").textContent = null;
+            this.setState({lastNameValid: true});
+        }
+    }
+    handleChangePhone(){
+        let phone = document.getElementById('phone').value;
+        if(!/^\d+$/.test(phone)){
+            this.setState({lastNameValid: false});
+            document.getElementById("pValid").textContent = 'Phone should have only numbers';
+        }
+        else if (phone.length!==10){
+            this.setState({lastNameValid: false});
+            document.getElementById("pValid").textContent = 'Phone format not supported. Enter only 10 digits';
+        }
+        else {
+            document.getElementById("pValid").textContent = null;
+            this.setState({lastNameValid: true});
+        }
+
+    }
     render() {
         function submit(e) {
             e.preventDefault();
@@ -133,6 +254,7 @@ class UpdateAccount extends Component {
                     className='form-control'
                     type='text' 
                     id='username'
+                    onChange={this.handleChangeUsername}
                     />
                     <p1 id='unValid' style={{
                         color: 'red',
@@ -145,6 +267,7 @@ class UpdateAccount extends Component {
                     className='form-control'
                     type='password' 
                     id='password'
+                    onChange={this.handleChangePassword}
                     />
                     <p1 id='pwValid' style={{
                         color: 'red',
@@ -157,6 +280,7 @@ class UpdateAccount extends Component {
                     className='form-control'
                     type='password' 
                     id='passwordConfirmation'
+                    onChange={this.handleChangePassword}
                     />
                     <p1 id='pwcValid' style={{
                         color: 'red',
@@ -169,6 +293,7 @@ class UpdateAccount extends Component {
                     className='form-control'
                     type='text' 
                     id='firstName'
+                    onChange={this.handleChangeFirstName}
                     />
                     <p1 id='fnValid' style={{
                         color: 'red',
@@ -181,6 +306,7 @@ class UpdateAccount extends Component {
                     className='form-control'
                     type='text' 
                     id='lastName'
+                    onChange={this.handleChangeLastName}
                     />
                     <p1 id='lnValid' style={{
                         color: 'red',
@@ -193,6 +319,7 @@ class UpdateAccount extends Component {
                     className='form-control'
                     type='text' 
                     id='email'
+                    onChange={this.handleChangeEmail}
                     />
                     <p1 id='eValid' style={{
                         color: 'red',
@@ -205,6 +332,7 @@ class UpdateAccount extends Component {
                     className='form-control'
                     type='text' 
                     id='phone'
+                    onChange={this.handleChangePhone}
                     />
                     <p1 id='pValid' style={{
                         color: 'red',

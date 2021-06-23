@@ -40,6 +40,7 @@ class UserInfo extends Component {
           UserService.delete().then(resp => {
             console.log('User account deleted');
             localStorage.removeItem('jwt');
+            localStorage.removeItem('userId');
             this.props.history.push('login');
           }).catch((e)=>{
             console.log(e);
