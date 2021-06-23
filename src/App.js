@@ -67,7 +67,7 @@ function App() {
                 <Route path='/restaurant/:id' component={RestaurantProfile}></Route>
                 <Route path={'/restaurants/'} component={RestaurantSearch}></Route>
                 <Route path="/error/:error" exact component={Error}></Route>
-                <Route path={'/checkout/'} component={(location.pathname === "/cart" || location.pathname === "/checkout") ? StripeCheckout : CheckoutRedirect}></Route>
+                <Route path={'/checkout/'} component={(true /*location.pathname === "/basket" | location.pathname === "/checkout/"*/) ? StripeCheckout : CheckoutRedirect}></Route>
             </Switch>
           </div>
       </Router>

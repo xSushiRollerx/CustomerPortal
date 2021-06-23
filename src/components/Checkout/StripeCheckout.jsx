@@ -241,7 +241,7 @@ export default function StripeCheckout() {
     }, []);
 
 
-    if (!(status > 199 && status < 300) && status !== 0) {
+    if ((status !== 201) && (status !== 0)) {
         return (
             <Grid container direction="column" alignItems="center" justifyItems="center">
                 <h2>Something Went Wrong. Please Reload Page and Try Again.</h2>
@@ -252,6 +252,7 @@ export default function StripeCheckout() {
     let deliveryfee = 0;
     let taxes = 0;
     let subTotal = 0;
+    console.log(orders);
     orders.map(o => o.orderItems.map(item => subTotal += (item.quantity * item.price)));
     let orderNames = orders.map(o => <p className='m-0'>{o.name}: </p>);
     let getTotal = (o) => {

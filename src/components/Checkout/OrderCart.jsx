@@ -25,7 +25,7 @@ class OrderCart extends Component {
         } else if (this.state.orders.length === 0) {
             this.setState({ errorText: "Cannot checkout! There are no order items in your basket!" });
             //alert("There are No Order Items In Your Basket");
-        } else if (this.state.orders[0].address.street === null) {
+        } else if (this.state.address.streetAddress === null) {
             this.setState({ errorText: "Cannot checkout. You haven't filled out where you want your order(s) dropped off!" });
         } else {
             this.props.history.push('/checkout/');
