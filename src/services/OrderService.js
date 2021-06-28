@@ -3,7 +3,7 @@ import axios from "axios";
 
 const ORDER_SERVICE_BASE_URL = 'http://localhost:8041/customer/96/order';
 //in final pull customer id from local storage
-const jwtToken = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5NiIsImV4cCI6MTYyNDMxMzA2MCwiaWF0IjoxNjIzOTUzMDYwfQ.JOMG41sXIYNdk-7pISREEvPhlil1tcwysm_7UCTCkP0';
+const jwtToken = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5NiIsImV4cCI6MTYyNTI1MzkwNSwiaWF0IjoxNjI0ODkzOTA1fQ.YsmC78HaWeNlB4ReBO7gZDbjJ2cQIZre5PcatwKf7oQ';
 //in final pull jwt from local storage
 const config = {
     headers: {

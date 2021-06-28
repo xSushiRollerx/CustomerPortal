@@ -73,10 +73,7 @@ export default function UserOrders(props) {
     } else if (status !== 200) {
         return <h1>Something Went Wrong Please Reload Page And Try Again</h1>
     }
-    console.log(orders);
-    let ordersBlock = orders.map((o) => {
-        return <Order />
-    });
+    
 
     let sorted = [];
     for (let order of orders) {
@@ -88,6 +85,12 @@ export default function UserOrders(props) {
             sorted.push([order]);
         }
     }
+    console.log(sorted);
+    let ordersBlock = sorted.map((o) => {
+        return <Order orders={o} />
+    });
+
+
     return (
         <Grid container direction="row" alignItems="center" justify="center">
             <Grid item xs={10} direction="column">
@@ -105,6 +108,10 @@ export default function UserOrders(props) {
 
 function Order(props) {
     const classes = useStyles();
+    console.log(props.orders);
+    let restaurantBlock = props.orders.map((o) => {
+        return <Restaurant order={o} />
+    });
 
     return (
         <Card className={classes.root, classes.card} elevation={0}>
@@ -113,13 +120,13 @@ function Order(props) {
                     <Grid item xs={2}>
                         <Grid container direction="column" >
                             <p className={classes.p}>Order Date</p>
-                            <p className={classes.p}>4/08/2020</p>
+                            <p className={classes.p}>{props.orders[0].dateSubmitted === null ? "--" : props.orders[0].dateSubmitted}</p>
                         </Grid>
                     </Grid>
                     <Grid item xs={3}>
                         <Grid container direction="column" >
                             <p className={classes.p}>Delivery Address</p>
-                            <p className={classes.p}>123 SmoothStack Ln, Atlanta, GA </p>
+                            <p className={classes.p}>{props.orders[0].address.street}, {props.orders[0].address.city}, {props.orders[0].address.state} {props.orders[0].address.zipCode}</p>
                         </Grid>
                     </Grid>
                     <Grid item xs={3}>
@@ -135,8 +142,7 @@ function Order(props) {
                         </Grid>
                     </Grid>
                 </Grid>
-                <Restaurant />
-                <Restaurant />
+                {restaurantBlock}
             </CardContent>
             <CardActions>
             </CardActions>
@@ -146,6 +152,9 @@ function Order(props) {
 }
 
 function Restaurant(props) {
+    let orderItemBlock = props.order.orderItems.map((o) => {
+        return <OrderItem item={o} />
+    });
 
     return (
         <Accordion elevation={0}>
@@ -154,12 +163,11 @@ function Restaurant(props) {
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                 >
-                    <h4>Restaurant</h4>
+                <h4>{props.order.restaurant.name}</h4>
                 </AccordionSummary>
             <AccordionDetails>
                 <Grid container direction="column" alignItems="stretch" justify="flex-start">
-                    <OrderItem />
-                    <OrderItem />
+                    {orderItemBlock}
                 </Grid>
                    
                 </AccordionDetails>
@@ -179,13 +187,13 @@ function OrderItem(props) {
             </Grid>
             <Grid item xs={6}>
                 <Grid container direction="column" justify="center" alignItems="center">
-                    <h6><b>Name</b></h6>
+                    <h6><b>{props.item.name}</b></h6>
                 </Grid>
             </Grid>
             <Grid item xs={3}>
                 <Grid container direction="column" justify="center" alignItems="flex-end">
-                    <p className={classes.p}>$12.99  x  3</p>
-                    <p className={classes.p}>$39.87</p>
+                    <p className={classes.p}>${props.item.price} x  {props.item.quantity}</p>
+                    <p className={classes.p}>${props.item.price * props.item.quantity}</p>
                 </Grid>
             </Grid>
             
