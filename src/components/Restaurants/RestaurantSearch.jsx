@@ -155,11 +155,15 @@ export default function RestaurantSearch(props) {
         }
         setRatings(event.target.value);
     }
-    const handleSort = (event) => {
+    const handleSort = async (event) => {
         console.log("Handle Sort: " + event.target.value);
-        RestaurantService.getAllRestaurants(0, pageSize, priceCategories, ratings, event.target.value, keywords).then(res => response = res)
-            .then(() => { console.log(response); setRows(response.data); setStatus(response.status) })
-            .catch(err => { setStatus(500); });
+        try {
+            let res = await RestaurantService.getAllRestaurants(0, pageSize, priceCategories, ratings, event.target.value, keywords).then(res => response = res);
+            setRows(res.data);
+            setStatus(res.status);
+        } catch (error) {
+            setStatus(500);
+        }
         setPage(0);
         setSort(event.target.value);
     };
