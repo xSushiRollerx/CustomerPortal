@@ -38,16 +38,18 @@ export default function RestaurantTablePagination(props) {
         <div className={classes.root}>
             <IconButton
                 onClick={handleFirstPageButtonClick}
+                inputProps={{ 'data-testid': 'firstPageBtn' }}
                 disabled={page === 0}
                 aria-label="first page"
             >
                 {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
             </IconButton>
-            <IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label="previous page">
+            <IconButton inputProps={{ 'data-testid': 'lastPageBtn' }} onClick={handleBackButtonClick} disabled={page === 0} aria-label="previous page">
                 {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
             </IconButton>
             <IconButton
                 onClick={handleNextButtonClick}
+                inputProps={{ 'data-testid': 'nextPageBtn' }}
                 disabled={page >= Math.ceil(count / rowsPerPage) - 1}
                 aria-label="next page"
             >
@@ -55,6 +57,7 @@ export default function RestaurantTablePagination(props) {
             </IconButton>
             <IconButton
                 onClick={handleLastPageButtonClick}
+                inputProps={{'data-testid': 'previousPageBtn'}}
                 disabled={page >= Math.ceil(count / rowsPerPage) - 1}
                 aria-label="last page"
             >

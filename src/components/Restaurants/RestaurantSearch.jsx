@@ -163,10 +163,15 @@ export default function RestaurantSearch(props) {
         setPage(0);
         setSort(event.target.value);
     };
-    const handleChangePage = (newPage) => {
-        RestaurantService.getAllRestaurants(newPage, pageSize, priceCategories, ratings, sort, keywords).then(res => response = res)
-            .then(() => { console.log(response); setRows(response.data); setStatus(response.status) })
-            .catch(err => { setStatus(500); });
+    const handleChangePage = async (newPage) => {
+        try {
+            let res = await RestaurantService.getAllRestaurants(newPage, pageSize, priceCategories, ratings, sort, keywords).then(res => response = res);
+            setStatus(res.status);
+            console.log(res);
+            setRows(res.data);
+        } catch (error) {
+            setStatus(500);
+        }
         setPage(newPage);
     };
     const handleChangeRowsPerPage = (event) => {
@@ -249,7 +254,7 @@ export default function RestaurantSearch(props) {
                     </Grid>
                     <Grid item xs={2}>
                         <FormControl className={style.sortDisplay}>
-                            <Select value={sort} onChange={handleSort} variant="outlined" size="small" className={style.sort} SelectDisplayProps={style.sortDisplay}>
+                            <Select value={sort} onChange={handleSort} inputProps={{'data-testid': "sortSelect"}} variant="outlined" size="small" className={style.sort} SelectDisplayProps={style.sortDisplay}>
                                 <MenuItem value="default">Default</MenuItem>
                                 <MenuItem hidden={keywords === "" ? true : false} value="relevance"> Relevance</MenuItem>
                                 <MenuItem value="a-to-z">A-To-Z</MenuItem>

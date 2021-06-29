@@ -224,7 +224,7 @@ xit("Ratings API Call", async () => {
 
 });
 
-fit("Clear Ratings API Call", async () => {
+it("Clear Ratings API Call", async () => {
 
     let calls = mockAxios.get.mockResolvedValue({
         data: result,
@@ -245,3 +245,87 @@ fit("Clear Ratings API Call", async () => {
 
 });
 
+
+xit("Pagination API Calls", async () => {
+
+    let calls = mockAxios.get.mockResolvedValue({
+        data: result,
+        status: 200
+    });
+
+
+    let dom;
+    await act(async () => {
+        dom = render(<RestaurantSearch />, container);
+    });
+
+    await act(async () => {
+        fireEvent.click(dom.getByTestId('lastPageBtn'));
+    });
+
+    expect(calls.mock.calls.length).toBe(2);
+
+    await act(async () => {
+        fireEvent.click(dom.getByTestId('previousPageBtn'));
+    });
+
+    expect(calls.mock.calls.length).toBe(3);
+
+    await act(async () => {
+        fireEvent.click(dom.getByTestId('firstPageBtn'));
+    });
+
+    expect(calls.mock.calls.length).toBe(4);
+
+    await act(async () => {
+        fireEvent.click(dom.getByTestId('nextPageBtn'));
+    });
+
+    expect(calls.mock.calls.length).toBe(5);
+
+});
+
+xit("Number of Items Per Page API Calls", async () => {
+
+    let calls = mockAxios.get.mockResolvedValue({
+        data: result,
+        status: 200
+    });
+
+
+    let dom;
+    await act(async () => {
+        dom = render(<RestaurantSearch />, container);
+    });
+
+    await act(async () => {
+        fireEvent.click(dom.getByTestId('lastPageBtn'));
+    });
+
+    expect(calls.mock.calls.length).toBe(2);
+
+
+});
+
+
+it("Sort API Calls", async () => {
+
+    let calls = mockAxios.get.mockResolvedValue({
+        data: result,
+        status: 200
+    });
+
+
+    let dom;
+    await act(async () => {
+        dom = render(<RestaurantSearch />, container);
+    });
+
+    await act(async () => {
+        fireEvent.change(dom.getByTestId('sortSelect'), { target: { value: "a-to-z"}});
+    });
+
+    expect(calls.mock.calls.length).toBe(2);
+
+
+});
