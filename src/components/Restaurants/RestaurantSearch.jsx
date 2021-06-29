@@ -168,22 +168,36 @@ export default function RestaurantSearch(props) {
             localStorage.setItem('dropOffAddress', JSON.stringify({ streetAddress: temp[0], city: temp[1], state: temp[2], zipCode: null}));
         }
     }
-    useEffect(() => {
+    useEffect(async () => {
         //load results of search on page load
-        RestaurantService.getAllRestaurants(0, 10, "1, 2, 3, 4", 0, "default", "").then(res => response = res)
+       /* RestaurantService.getAllRestaurants(0, 10, "1, 2, 3, 4", 0, "default", "").then(res => response = res)
             .then(() => { setRows(response.data); setStatus(response.status); })
             .catch(err => { setStatus(500); });
-        updateAddress(JSON.parse(localStorage.getItem('dropOffAddress')));
+        updateAddress(JSON.parse(localStorage.getItem('dropOffAddress')));*/
+        try {
+            let res = await RestaurantService.getAllRestaurants(0, 10, "1, 2, 3, 4", 0, "default", "");
+            setStatus(res.status);
+            setRows(res.data);
+        } catch (error) {
+            setStatus(500);
+            console.log(res);
+        }
+        
         
         //load event listener for when user hits enter
         window.addEventListener('keyup', (event) => {
             if (event.keyCode === 13) {
                 event.preventDefault();
                 console.log(document.getElementById("searchBar").value);
-                RestaurantService.getAllRestaurants(0, pageSize, "1, 2, 3, 4", 0, "relevance", (document.getElementById("searchBar") !== null ? document.getElementById("searchBar").value : ""))
-                .then(res => response = res)
-                    .then(() => { setRows(response.data); setStatus(response.status); })
-                    .catch(err => { setStatus(500); });
+                try {
+                    let res = RestaurantService.getAllRestaurants(0, pageSize, "1, 2, 3, 4", 0, "relevance", (document.getElementById("searchBar") !== null ? document.getElementById("searchBar").value : ""))
+                    setStatus(res.status);
+                    console.log(res);
+                    setRows(res.data);
+                } catch (error) {
+                    setStatus(500);
+                    console.log(res);
+                }
                 setKeywords(document.getElementById("searchBar").value);
                 setPage(0);
                 setSort("relevance");
@@ -198,8 +212,6 @@ export default function RestaurantSearch(props) {
     }, [])
 
     if (status === 0) {
-        console.log(status);
-        console.log(keywords);
         return (
 
            <div data-testid="Waiting">
@@ -209,6 +221,7 @@ export default function RestaurantSearch(props) {
          </div>
         );
     }
+    console.log(rows);
     return (
         <Grid container direction="column" inputProps={{ 'data-testid': 'SearchPage' }}>
             <Grid item xs={12}>
@@ -217,7 +230,7 @@ export default function RestaurantSearch(props) {
                         < TextField className={style.search} placeholder="Search Restaurants" variant="outlined" inputProps={{ 'data-testid': 'searchBar' }}
                             InputLabelProps={{ shrink: false, }} size="small" color="black" xs={12} id="searchBar" defaultValue={keywords}/>
                     </Grid>
-                    <Grid item xs={2} justify="flex-end">
+                    <Grid item xs={2}>
                         <FormControl className={style.sortDisplay}>
                             <Select value={sort} onChange={handleSort} variant="outlined" size="small" className={style.sort} SelectDisplayProps={style.sortDisplay}>
                                 <MenuItem value="default">Default</MenuItem>

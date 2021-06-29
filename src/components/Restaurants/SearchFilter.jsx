@@ -78,22 +78,22 @@ export default function SearchFilter(props) {
                     
                     <FormControl>
                         <FormControlLabel
-                            control={<Checkbox checked={props.cheap} color="black" icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
+                            control={<Checkbox checked={props.cheap} inputProps={{ 'data-testid': 'cheapBox' }} color="black" icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
                                 checkedIcon={<CheckBoxIcon fontSize="small" />} onChange={props.handleChange} name="cheap" />}
                             label="Cheap Eats"
                         />
                         <FormControlLabel
-                            control={<Checkbox checked={props.mid} color="black"  icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
+                            control={<Checkbox checked={props.mid} color="black" inputProps={{ 'data-testid': 'midBox' }}  icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
                                 checkedIcon={<CheckBoxIcon fontSize="small" />} onChange={props.handleChange} name="mid" />}
                             label="Mid Range"
                         />
                         <FormControlLabel
-                            control={<Checkbox checked={props.fine} color="black"  icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
+                            control={<Checkbox checked={props.fine} color="black" inputProps={{ 'data-testid': 'fineBox' }}  icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
                                 checkedIcon={<CheckBoxIcon fontSize="small" />} onChange={props.handleChange} name="fine" />}
                             label="Fine Dining"
                         />
                         <FormControlLabel
-                            control={<Checkbox checked={props.high} color="black" icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
+                            control={<Checkbox checked={props.high} color="black" inputProps={{ 'data-testid': 'luxBox' }} icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
                                 checkedIcon={<CheckBoxIcon fontSize="small" />} closeAddress={close} onChange={props.handleChange} name="high" />}
                             label="High End Luxury"
                         />

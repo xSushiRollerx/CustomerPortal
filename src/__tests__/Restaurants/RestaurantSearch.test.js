@@ -1,11 +1,12 @@
-/*import React from 'react';
+import React from 'react';
 import { fireEvent, render, wait, waitFor, act } from '@testing-library/react';
 import RestaurantSearch from './../../components/Restaurants/RestaurantSearch';
 import { unmountComponentAtNode } from "react-dom";
-import mockAxios from 'axios';*/
+import mockAxios from 'axios';
+import reactRouterDom from 'react-router-dom';
 
 
-/*const result = [
+const result = [
     {
         "id": 2,
         "name": "French Bistro",
@@ -79,6 +80,13 @@ import mockAxios from 'axios';*/
 
 let container = null;
 
+jest.mock('react-router-dom', () => ({
+    useHistory: () => ({
+        push: jest.fn(),
+        location: []
+    }),
+}));
+
 beforeEach(() => {
     // setup a DOM element as a render target
     container = document.createElement("div");
@@ -99,53 +107,59 @@ it("Use Effect Runs On Load", async () => {
         status: 200
     });
 
-    *//*let calls = mockAxios.get.mockImplementation(() => {
-        Promise.resolve({
-            data: result,
-            status: 200
-        });
-    });*//*
+   
 
-    render(<RestaurantSearch />, container);
-
-    await waitFor(() => {
-        expect(calls.mock.calls.length).toBe(1);
-        console
-    })
+    await act(async () => {
+        render(<RestaurantSearch />, container);
+    });
+    expect(calls.mock.calls.length).toBe(1);
     
 });
 
-it("Search Creates API Call", async () => {
+xit("Search Creates API Call", async () => {
 
-    mockAxios.get.mockResolvedValue({
+    let calls = mockAxios.get.mockResolvedValue({
         data: result,
         status: 200
     });
 
-   *//* let calls = mockAxios.get.mockImplementation(() => {
-        Promise.resolve({
-            data: result,
-            status: 200
-        });
-    });*//*
 
-    const page = await render(<RestaurantSearch />, container);
-    console.log(page);*/
+    let dom;
+    await act(async () => {
+        dom = render(<RestaurantSearch />, container);
+    });
+
+
+
+    const searchBar = await dom.findByTestId('searchBar');
     
-/*    const { getByTestId, findByTestId } = render(<RestaurantSearch />, container);
-
-    expect(getByTestId("Waiting")).toBeInTheDocument();
-
-    const searchBar = await findByTestId('searchBar');
-    
-    act(() => {
+    await act(() => {
         fireEvent.change(searchBar, { target: { value: "hello" } });
         fireEvent.keyUp(container, { key: 'Enter', code: 'Enter' });
     });
+    
+    expect(calls.mock.calls.length).toBe(2);
+    
+});
 
-    await waitFor(() => {
-        expect(calls.mock.calls.length).toBe(2);
-    }); */
+fit("Checkbox Creates API Call", async () => {
+
+    let calls = mockAxios.get.mockResolvedValue({
+        data: result,
+        status: 200
+    });
+
+
+    let dom;
+    await act(async () => {
+        dom = render(<RestaurantSearch />, container);
+    });
+
+    await act(() => {
+        fireEvent.click(dom.getByTestId('cheapBox'), { target: { checked: true} });
+    });
+
+    expect(calls.mock.calls.length).toBe(2);
 
 });
 
