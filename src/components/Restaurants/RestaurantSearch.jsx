@@ -195,18 +195,12 @@ export default function RestaurantSearch(props) {
         }
     }
     useEffect(async () => {
-        //load results of search on page load
-       /* RestaurantService.getAllRestaurants(0, 10, "1, 2, 3, 4", 0, "default", "").then(res => response = res)
-            .then(() => { setRows(response.data); setStatus(response.status); })
-            .catch(err => { setStatus(500); });
-        updateAddress(JSON.parse(localStorage.getItem('dropOffAddress')));*/
         try {
             let res = await RestaurantService.getAllRestaurants(0, 10, "1, 2, 3, 4", 0, "default", "");
             setStatus(res.status);
             setRows(res.data);
         } catch (error) {
             setStatus(500);
-            console.log(res);
         }
         
         
@@ -222,7 +216,6 @@ export default function RestaurantSearch(props) {
                     setRows(res.data);
                 } catch (error) {
                     setStatus(500);
-                    console.log(res);
                 }
                 setKeywords(document.getElementById("searchBar").value);
                 setPage(0);

@@ -1,7 +1,7 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -13,6 +13,11 @@ import OrderService from '../../services/OrderService';
 import { useState, useEffect } from 'react';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import IconButton from '@material-ui/core/IconButton';
+import FirstPageIcon from '@material-ui/icons/FirstPage';
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import LastPageIcon from '@material-ui/icons/LastPage';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -44,20 +49,48 @@ const useStyles = makeStyles((theme) => ({
     backdrop: {
         zIndex: theme.zIndex.drawer + 1,
         color: '#fff',
-    }
+    },
+    pagination: {
+        flexShrink: 0,
+        marginLeft: theme.spacing(2.5),
+    },
 }));
+
 
 export default function UserOrders(props) {
 
     const classes = useStyles();
+    const theme = useTheme();
 
     let response = null;
     const [orders, setOrders] = useState([]);
     const [status, setStatus] = useState(0);
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [count, setCount] = useState(0);
 
-    useEffect(() => {
-        OrderService.getOrders(0, 10, "newest").then(res => response = res).then(() => { setOrders(response.data); setStatus(response.status); })
-            .catch(err => console.log(err));
+    const handleChangePage = async (newPage) => {
+        /*try {
+            let res = await OrderService.getOrders(newPage, 10, "newest").then(res => response = res);
+            setStatus(res.status);
+            console.log(res);
+            setOrders(res.data);
+        } catch (error) {
+            setStatus(500);
+        }
+        setPage(newPage);*/
+    };
+
+    useEffect(async() => {
+        try {
+            let res = await OrderService.getOrders(0, 10, "newest").then(res => response = res);
+            console.log(res.data);
+            setOrders(res.data);
+            setStatus(res.status);
+            setCount(res.data.length);
+        } catch {
+            setStatus(500);
+        }
 
     }, []);
 
@@ -76,6 +109,7 @@ export default function UserOrders(props) {
     
 
     let sorted = [];
+    console.log(orders);
     for (let order of orders) {
         if (sorted.length === 0) {
             sorted.push([order]);
@@ -85,7 +119,7 @@ export default function UserOrders(props) {
             sorted.push([order]);
         }
     }
-    console.log(sorted);
+    console.log(status);
     let ordersBlock = sorted.map((o) => {
         return <Order orders={o} />
     });
@@ -95,6 +129,35 @@ export default function UserOrders(props) {
         <Grid container direction="row" alignItems="center" justify="center">
             <Grid item xs={10} direction="column">
                 <h1>My Orders</h1>
+                <div className={classes.pagination}>
+                    <IconButton
+                        onClick={handleChangePage(0)}
+                        inputProps={{ 'data-testid': 'firstPageBtn' }}
+                        disabled={page === 0}
+                        aria-label="first page"
+                    >
+                        {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+                    </IconButton>
+                    <IconButton inputProps={{ 'data-testid': 'lastPageBtn' }} onClick={handleChangePage(page - 1)} disabled={page === 0} aria-label="previous page">
+                        {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+                    </IconButton>
+                    <IconButton
+                        onClick={handleChangePage(page + 1)}
+                        inputProps={{ 'data-testid': 'nextPageBtn' }}
+                        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                        aria-label="next page"
+                    >
+                        {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+                    </IconButton>
+                    <IconButton
+                        onClick={handleChangePage(Math.max(0, Math.ceil(count / rowsPerPage) - 1))}
+                        inputProps={{ 'data-testid': 'previousPageBtn' }}
+                        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                        aria-label="last page"
+                    >
+                        {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+                    </IconButton>
+                </div>
                 <Divider className={classes.divider}/> 
                 {ordersBlock}
 
@@ -117,27 +180,21 @@ function Order(props) {
         <Card className={classes.root, classes.card} elevation={0}>
             <CardContent>
                 <Grid container direction="row" spacing={2} justify="flex-start">
-                    <Grid item xs={2}>
+                    <Grid item xs={4}>
                         <Grid container direction="column" >
                             <p className={classes.p}>Order Date</p>
                             <p className={classes.p}>{props.orders[0].dateSubmitted === null ? "--" : props.orders[0].dateSubmitted}</p>
                         </Grid>
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={4}>
                         <Grid container direction="column" >
                             <p className={classes.p}>Delivery Address</p>
                             <p className={classes.p}>{props.orders[0].address.street}, {props.orders[0].address.city}, {props.orders[0].address.state} {props.orders[0].address.zipCode}</p>
                         </Grid>
                     </Grid>
-                    <Grid item xs={3}>
-                        <Grid container direction="column" >
-                            <p className={classes.p}>Status</p>
-                            <p className={classes.p}>Pending</p>
-                        </Grid>
-                    </Grid>
                     <Grid item xs={4}>
                         <Grid container direction="column" justify="flex-end" alignItems="flex-end">
-                            <p className={classes.p}>Order Number# XXXXXXXXXX</p>
+                            <br/>
                             <a href=""><p className={classes.p}>View Reciept</p></a>
                         </Grid>
                     </Grid>
@@ -152,6 +209,7 @@ function Order(props) {
 }
 
 function Restaurant(props) {
+    const classes = useStyles();
     let orderItemBlock = props.order.orderItems.map((o) => {
         return <OrderItem item={o} />
     });
@@ -162,14 +220,32 @@ function Restaurant(props) {
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1a-content"
                     id="panel1a-header"
-                >
+            >
                 <h4>{props.order.restaurant.name}</h4>
+                   
+               
                 </AccordionSummary>
             <AccordionDetails>
-                <Grid container direction="column" alignItems="stretch" justify="flex-start">
-                    {orderItemBlock}
-                </Grid>
-                   
+                <Grid container direction="column" justify="flex-start" alignItems="stretch" spacing={2}>
+                    <Grid item>
+                        <Grid container direction="row" justify="flex-start" alignItems="center" spacing={2}>
+                           
+                            
+                            <Grid item xs="3">
+                                <p className={classes.p}>Order Number# {props.order.id}</p>
+                            </Grid>
+                            <Grid item xs="3">
+                                <p className={classes.p}>Pending</p>
+                            </Grid>
+
+                        </Grid>
+                    </Grid>
+                    <Grid item>
+                        <Grid container direction="column" alignItems="stretch" justify="flex-start">
+                            {orderItemBlock}
+                        </Grid>
+                    </Grid>
+                  </Grid>
                 </AccordionDetails>
             </Accordion>
     );

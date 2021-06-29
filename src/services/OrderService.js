@@ -11,22 +11,29 @@ const config = {
     }
 };
 
-class OrderService {
+const OrderService  = {
 
-    submitOrder(foodOrder) {
+    submitOrder: async function (foodOrder) {
         delete foodOrder.name;
 
-        return axios.post((ORDER_SERVICE_BASE_URL), foodOrder, config).catch((err) => err);
-    }
+        try {
+            return await axios.post((ORDER_SERVICE_BASE_URL), foodOrder, config);
+        } catch (error) {
+            return {data: null, status: 500}
+        }
+    },
 
-    getOrders(page, pageSize, sort) {
+    getOrders: async function (page, pageSize, sort) {
 
         console.log('Order Service Run');
-        return axios.get(ORDER_SERVICE_BASE_URL + 's?page=' + page + "&pageSize=" + pageSize + "&sort=" + sort, config)
-            .catch((err) => err);
+        try {
+            return await axios.get(ORDER_SERVICE_BASE_URL + 's?page=' + page + "&pageSize=" + pageSize + "&sort=" + sort, config);
+        } catch (error) {
+            return { data: null, status: 500 }
+        }
     }
 
 
 }
 
-export default new OrderService();
+export default OrderService;
