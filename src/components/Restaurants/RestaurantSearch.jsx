@@ -178,10 +178,15 @@ export default function RestaurantSearch(props) {
         }
         setPage(newPage);
     };
-    const handleChangeRowsPerPage = (event) => {
-        RestaurantService.getAllRestaurants(0, event.target.value, priceCategories, ratings, sort, keywords).then(res => response = res)
-            .then(() => { setRows(response.data); setStatus(response.status) })
-            .catch(err => { setStatus(500); });
+    const handleChangeRowsPerPage = async (event) => {
+        try {
+            let res = await RestaurantService.getAllRestaurants(0, event.target.value, priceCategories, ratings, sort, keywords);
+            setStatus(res.status);
+            setRows(res.data);
+        } catch (error) {
+            setStatus(500);
+        
+        }
         setPage(0);
         setPageSize(event.target.value);
     };
@@ -207,6 +212,7 @@ export default function RestaurantSearch(props) {
         //load event listener for when user hits enter
         window.addEventListener('keyup', (event) => {
             if (event.keyCode === 13) {
+                console.log("event fired");
                 event.preventDefault();
                 console.log(document.getElementById("searchBar").value);
                 try {
@@ -240,7 +246,7 @@ export default function RestaurantSearch(props) {
          </div>
         );
     }
-    console.log(rows);
+
     return (
         <Grid container direction="column" inputProps={{ 'data-testid': 'SearchPage' }}>
             <Grid item xs={12}>
@@ -269,7 +275,7 @@ export default function RestaurantSearch(props) {
                             rowsPerPage={pageSize}
                             page={page}
                             SelectProps={{
-                                inputProps: { 'aria-label': 'rows per page' },
+                                inputProps: {'aria-label': 'rows per page', 'data-testid': 'rowsSelect'},
                                 native: true,
                             }}
                             onChangePage={handleChangePage}

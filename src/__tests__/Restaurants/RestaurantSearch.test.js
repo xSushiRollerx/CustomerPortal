@@ -135,7 +135,8 @@ xit("Search Creates API Call", async () => {
     
     await act(() => {
         fireEvent.change(searchBar, { target: { value: "hello" } });
-        fireEvent.keyUp(container, { key: 'Enter', code: 'Enter' });
+        fireEvent.keyDown(container, { key: 'Enter', code: 13 });
+        fireEvent.keyUp(container, { key: 'Enter', code: 13 });
     });
     
     expect(calls.mock.calls.length).toBe(2);
@@ -246,7 +247,7 @@ it("Clear Ratings API Call", async () => {
 });
 
 
-xit("Pagination API Calls", async () => {
+it("Pagination API Calls", async () => {
 
     let calls = mockAxios.get.mockResolvedValue({
         data: result,
@@ -259,33 +260,35 @@ xit("Pagination API Calls", async () => {
         dom = render(<RestaurantSearch />, container);
     });
 
-    await act(async () => {
-        fireEvent.click(dom.getByTestId('lastPageBtn'));
-    });
-
-    expect(calls.mock.calls.length).toBe(2);
+    expect(calls.mock.calls.length).toBe(1);
+    
 
     await act(async () => {
         fireEvent.click(dom.getByTestId('previousPageBtn'));
     });
 
-    expect(calls.mock.calls.length).toBe(3);
+    expect(calls.mock.calls.length).toBe(2);
 
     await act(async () => {
         fireEvent.click(dom.getByTestId('firstPageBtn'));
     });
 
-    expect(calls.mock.calls.length).toBe(4);
+    expect(calls.mock.calls.length).toBe(3);
 
     await act(async () => {
         fireEvent.click(dom.getByTestId('nextPageBtn'));
     });
 
-    expect(calls.mock.calls.length).toBe(5);
+    expect(calls.mock.calls.length).toBe(4);
+
+     await act(async () => {
+       fireEvent.click(dom.getByTestId('lastPageBtn'));
+     });
+     expect(calls.mock.calls.length).toBe(5);
 
 });
 
-xit("Number of Items Per Page API Calls", async () => {
+it("Number of Items Per Page API Calls", async () => {
 
     let calls = mockAxios.get.mockResolvedValue({
         data: result,
@@ -298,11 +301,13 @@ xit("Number of Items Per Page API Calls", async () => {
         dom = render(<RestaurantSearch />, container);
     });
 
-    await act(async () => {
-        fireEvent.click(dom.getByTestId('lastPageBtn'));
+    expect(calls.mock.calls.length).toBe(1);
+
+    act( () => {
+        fireEvent.change(dom.getByTestId('rowsSelect'), { target: { value: 5 } });
     });
 
-    expect(calls.mock.calls.length).toBe(2);
+   expect(calls.mock.calls.length).toBe(2);
 
 
 });
