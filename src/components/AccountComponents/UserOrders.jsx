@@ -54,6 +54,11 @@ const useStyles = makeStyles((theme) => ({
         flexShrink: 0,
         marginLeft: theme.spacing(2.5),
     },
+    paginationSort: {
+        margin: 0,
+        marginLeft: 10,
+        fontSize: 12
+    }
 }));
 
 
@@ -66,7 +71,7 @@ export default function UserOrders(props) {
     const [orders, setOrders] = useState([]);
     const [status, setStatus] = useState(0);
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
     const [count, setCount] = useState(0);
 
     const handleChangePage = async (newPage) => {
@@ -124,40 +129,52 @@ export default function UserOrders(props) {
         return <Order orders={o} />
     });
 
-
+    console.log(page + " " + count + " " + rowsPerPage);
+    console.log((page >= Math.ceil(count / rowsPerPage) - 1) + "");
     return (
         <Grid container direction="row" alignItems="center" justify="center">
             <Grid item xs={10} direction="column">
                 <h1>My Orders</h1>
-                <div className={classes.pagination}>
-                    <IconButton
-                        onClick={handleChangePage(0)}
-                        inputProps={{ 'data-testid': 'firstPageBtn' }}
-                        disabled={page === 0}
-                        aria-label="first page"
-                    >
-                        {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
-                    </IconButton>
-                    <IconButton inputProps={{ 'data-testid': 'lastPageBtn' }} onClick={handleChangePage(page - 1)} disabled={page === 0} aria-label="previous page">
-                        {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
-                    </IconButton>
-                    <IconButton
-                        onClick={handleChangePage(page + 1)}
-                        inputProps={{ 'data-testid': 'nextPageBtn' }}
-                        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-                        aria-label="next page"
-                    >
-                        {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
-                    </IconButton>
-                    <IconButton
-                        onClick={handleChangePage(Math.max(0, Math.ceil(count / rowsPerPage) - 1))}
-                        inputProps={{ 'data-testid': 'previousPageBtn' }}
-                        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-                        aria-label="last page"
-                    >
-                        {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
-                    </IconButton>
-                </div>
+                <Grid container direction="row" alignItems="center" justify="flex-end">
+                    <Grid item>
+                        <p className={classes.p}>Most Recent</p>
+                    </Grid>
+                    <Grid item >
+                        <p className={classes.p, classes.paginationSort}>0-0 of 0</p>
+                    </Grid>
+                    <Grid item >
+                        <div className={classes.pagination}>
+                            <IconButton
+                                onClick={handleChangePage(0)}
+                                inputProps={{ 'data-testid': 'firstPageBtn' }}
+                                disabled={page === 0}
+                                aria-label="first page"
+                            >
+                                {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+                            </IconButton>
+                            <IconButton inputProps={{ 'data-testid': 'lastPageBtn' }} onClick={handleChangePage(page - 1)} disabled={page === 0} aria-label="previous page">
+                                {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+                            </IconButton>
+                            <IconButton
+                                onClick={handleChangePage(page + 1)}
+                                inputProps={{ 'data-testid': 'nextPageBtn' }}
+                                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                                aria-label="next page"
+                            >
+                                {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+                            </IconButton>
+                            <IconButton
+                                onClick={handleChangePage(Math.max(0, Math.ceil(count / rowsPerPage) - 1))}
+                                inputProps={{ 'data-testid': 'previousPageBtn' }}
+                                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                                aria-label="last page"
+                            >
+                                {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+                            </IconButton>
+                        </div>
+                    </Grid>
+                </Grid>
+                
                 <Divider className={classes.divider}/> 
                 {ordersBlock}
 
