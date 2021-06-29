@@ -69,7 +69,7 @@ export default function RestaurantSearch(props) {
     const [priceCategories, setPriceCategories] = useState("1, 2, 3, 4");
 
     const { cheap, mid, fine, high } = state;
-    const filter = (checkbox) => {
+    const filter = async (checkbox) => {
         console.log(checkbox)
         let cheapHolder = cheap;
         let midHolder = mid;
@@ -106,9 +106,16 @@ export default function RestaurantSearch(props) {
         if (query === "") {
             query = ", 1, 2, 3, 4"
         }
-        RestaurantService.getAllRestaurants(0, pageSize, query.substring(2), ratings, sort, keywords).then(res => response = res)
-            .then(() => { setRows(response.data); setStatus(response.status) })
-            .catch(err => { setStatus(500); });
+
+        try {
+            let res = await RestaurantService.getAllRestaurants(0, pageSize, query.substring(2), ratings, sort, keywords).then(res => response = res);
+            setStatus(res.status);
+            console.log(res);
+            setRows(res.data);
+        } catch (error) {
+            setStatus(500);
+
+        }
 
         setPage(0);
         setPriceCategories(query.substring(2));
@@ -118,10 +125,15 @@ export default function RestaurantSearch(props) {
         setState({ ...state, [event.target.name]: event.target.checked });
     
     };
-    const clearPrices = () => {
-        RestaurantService.getAllRestaurants(0, pageSize, "1, 2, 3, 4", ratings, sort, keywords).then(res => response = res)
-            .then(() => { setRows(response.data); setStatus(response.status) })
-            .catch(err => { setStatus(500); });
+    const clearPrices = async () => {
+        try {
+            let res = await RestaurantService.getAllRestaurants(0, pageSize, "1, 2, 3, 4", ratings, sort, keywords).then(res => response = res)
+            setStatus(res.status);
+            console.log(res);
+            setRows(res.data);
+        } catch (error) {
+            setStatus(500);
+        }
 
         setPage(0);
         setPriceCategories("1, 2, 3, 4");
@@ -131,11 +143,16 @@ export default function RestaurantSearch(props) {
             fine: false,
         });
     }
-    const handleRatingsChange = (event) => {
+    const handleRatingsChange = async (event) => {
         console.log(event.target.value);
-        RestaurantService.getAllRestaurants(0, pageSize, priceCategories, event.target.value, sort, keywords).then(res => response = res)
-            .then(() => { setRows(response.data); setStatus(response.status) })
-            .catch(err => { setStatus(500); });
+        try {
+            let res = await RestaurantService.getAllRestaurants(0, pageSize, priceCategories, event.target.value, sort, keywords).then(res => response = res);
+            setStatus(res.status);
+            console.log(res);
+            setRows(res.data);
+        } catch (error) {
+            setStatus(500);
+        }
         setRatings(event.target.value);
     }
     const handleSort = (event) => {

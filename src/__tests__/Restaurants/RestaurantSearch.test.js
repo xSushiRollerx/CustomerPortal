@@ -142,7 +142,7 @@ xit("Search Creates API Call", async () => {
     
 });
 
-fit("Checkbox Creates API Call", async () => {
+it("Checkbox Creates API Call", async () => {
 
     let calls = mockAxios.get.mockResolvedValue({
         data: result,
@@ -155,12 +155,93 @@ fit("Checkbox Creates API Call", async () => {
         dom = render(<RestaurantSearch />, container);
     });
 
-    await act(() => {
+    await act(async () => {
         fireEvent.click(dom.getByTestId('cheapBox'), { target: { checked: true} });
+    });
+
+    expect(calls.mock.calls.length).toBe(2);
+
+    await act(async () => {
+        fireEvent.click(dom.getByTestId('midBox'), { target: { checked: true } });
+    });
+
+    expect(calls.mock.calls.length).toBe(3);
+
+    await act(async () => {
+        fireEvent.click(dom.getByTestId('fineBox'), { target: { checked: true } });
+    });
+
+    expect(calls.mock.calls.length).toBe(4);
+
+    await act(async () => {
+        fireEvent.click(dom.getByTestId('luxBox'), { target: { checked: true } });
+    });
+
+    expect(calls.mock.calls.length).toBe(5);
+
+
+});
+
+it("Clear Price API Call", async () => {
+
+    let calls = mockAxios.get.mockResolvedValue({
+        data: result,
+        status: 200
+    });
+
+
+    let dom;
+    await act(async () => {
+        dom = render(<RestaurantSearch />, container);
+    });
+
+    await act(async () => {
+        fireEvent.click(dom.getByTestId('clearPricesBox'));
     });
 
     expect(calls.mock.calls.length).toBe(2);
 
 });
 
+xit("Ratings API Call", async () => {
+
+    let calls = mockAxios.get.mockResolvedValue({
+        data: result,
+        status: 200
+    });
+
+
+    let dom;
+    await act(async () => {
+        dom = render(<RestaurantSearch />, container);
+    });
+
+    await act(async () => {
+        fireEvent.change(dom.getByTestId('ratings'), { target: { value: 4 } });
+    });
+
+    expect(calls.mock.calls.length).toBe(2);
+
+});
+
+fit("Clear Ratings API Call", async () => {
+
+    let calls = mockAxios.get.mockResolvedValue({
+        data: result,
+        status: 200
+    });
+
+
+    let dom;
+    await act(async () => {
+        dom = render(<RestaurantSearch />, container);
+    });
+
+    await act(async () => {
+        fireEvent.click(dom.getByTestId('clearRatings'));
+    });
+
+    expect(calls.mock.calls.length).toBe(2);
+
+});
 

@@ -71,7 +71,7 @@ export default function SearchFilter(props) {
                     <Grid item>
                         <Grid container direction="row" justify="space-between" alignItems="center">
                             <h5>Price Category</h5>
-                            <Checkbox color="black" icon={<ClearIcon fontSize="small" style={{ margin: "0px" }} />}
+                            <Checkbox color="black" inputProps={{ 'data-testid': 'clearPricesBox' }} icon={<ClearIcon  fontSize="small" style={{ margin: "0px" }} />}
                                 checkedIcon={<ClearIcon fontSize="small" style={{ margin: "0px" }}/>} onChange={props.clearPrices} name="clear-ratings-filter" />
                         </Grid>
                     </Grid>
@@ -104,14 +104,14 @@ export default function SearchFilter(props) {
             <Grid item>
                 <Grid container direction="row" justify="space-between" alignItems="center">
                     <h5>Rating</h5>
-                    <Checkbox id="clearRatings" color="black" icon={<ClearIcon fontSize="small" style={{ margin: "0px" }} />}
+                    <Checkbox id="clearRatings" inputProps={{ 'data-testid': 'clearRatings' }} color="black" icon={<ClearIcon fontSize="small" style={{ margin: "0px" }} />}
                         checkedIcon={<ClearIcon fontSize="small" style={{ margin: "0px" }} />} onChange={props.handleRatings} value={0}
                         name="clear-ratings-filter" />
                 </Grid>
             </Grid>
             <Grid item>
                 <Grid container direction="row" alignItems="center">
-                    <Rating name="selectRating" defaultValue={props.ratings} emptyIcon={<StarBorderIcon fontSize="inherit" />}
+                    <Rating name="selectRating" inputProps={{ 'data-testid': 'ratings' }} defaultValue={props.ratings} emptyIcon={<StarBorderIcon fontSize="inherit" />}
                         onChange={props.handleRatings} value={props.ratings} />
                 </Grid>
             </Grid>
