@@ -87,7 +87,6 @@ export default function UserOrders(props) {
     useEffect(async() => {
         try {
             let res = await OrderService.getOrders(0, 10, "newest").then(res => response = res);
-            console.log(res.data);
             setOrders(res.data);
             setStatus(res.status);
         } catch {
@@ -111,7 +110,6 @@ export default function UserOrders(props) {
     
 
     let sorted = [];
-    console.log(orders);
     for (let order of orders) {
         if (sorted.length === 0) {
             sorted.push([order]);
@@ -121,7 +119,6 @@ export default function UserOrders(props) {
             sorted.push([order]);
         }
     }
-    console.log(status);
     let ordersBlock = sorted.map((o) => {
         return <Order orders={o} />
     });
@@ -185,7 +182,6 @@ export default function UserOrders(props) {
 
 function Order(props) {
     const classes = useStyles();
-    console.log(props.orders);
     let restaurantBlock = props.orders.map((o) => {
         return <Restaurant order={o} />
     });
@@ -228,6 +224,29 @@ function Restaurant(props) {
         return <OrderItem item={o} />
     });
 
+    const getOrderState = () => {
+        console.log("orderstate ranss");
+        switch (props.order.state) {
+            case 0:
+                // code block
+                return "PENDING";
+            case 1:
+                // code block
+                return "IN PROGRESS";
+            case 2:
+                // code block
+                return "READY FOR PICKUP";
+            case 3:
+                // code block
+                return "EN ROUTE";
+            case 4:
+                // code block
+                return "COMPLETE";
+            default:
+            // code block
+        }
+    }
+
     return (
         <Accordion elevation={0}>
                 <AccordionSummary
@@ -249,7 +268,7 @@ function Restaurant(props) {
                                 <p className={classes.p}>Order Number# {props.order.id}</p>
                             </Grid>
                             <Grid item xs="3">
-                                <p className={classes.p}>Pending</p>
+                                <p className={classes.p}>{ getOrderState()}</p>
                             </Grid>
 
                         </Grid>
