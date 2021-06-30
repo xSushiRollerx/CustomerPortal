@@ -111,7 +111,7 @@ export default function SearchFilter(props) {
             </Grid>
             <Grid item>
                 <Grid container direction="row" alignItems="center">
-                    <Rating name="selectRating" inputProps={{ 'data-testid': 'ratings' }} defaultValue={props.ratings} emptyIcon={<StarBorderIcon fontSize="inherit" />}
+                    <Rating name="selectRating" data-testid= 'ratings' defaultValue={props.ratings} emptyIcon={<StarBorderIcon fontSize="inherit" />}
                         onChange={props.handleRatings} value={props.ratings} />
                 </Grid>
             </Grid>

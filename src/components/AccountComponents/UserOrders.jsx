@@ -71,19 +71,17 @@ export default function UserOrders(props) {
     const [orders, setOrders] = useState([]);
     const [status, setStatus] = useState(0);
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(5);
-    const [count, setCount] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
 
-    const handleChangePage = async (newPage) => {
-        /*try {
+    const handlePageChange = async (newPage) => {
+        try {
             let res = await OrderService.getOrders(newPage, 10, "newest").then(res => response = res);
             setStatus(res.status);
-            console.log(res);
             setOrders(res.data);
         } catch (error) {
             setStatus(500);
         }
-        setPage(newPage);*/
+        setPage(newPage);
     };
 
     useEffect(async() => {
@@ -92,7 +90,6 @@ export default function UserOrders(props) {
             console.log(res.data);
             setOrders(res.data);
             setStatus(res.status);
-            setCount(res.data.length);
         } catch {
             setStatus(500);
         }
@@ -129,8 +126,6 @@ export default function UserOrders(props) {
         return <Order orders={o} />
     });
 
-    console.log(page + " " + count + " " + rowsPerPage);
-    console.log((page >= Math.ceil(count / rowsPerPage) - 1) + "");
     return (
         <Grid container direction="row" alignItems="center" justify="center">
             <Grid item xs={10} direction="column">
@@ -140,33 +135,35 @@ export default function UserOrders(props) {
                         <p className={classes.p}>Most Recent</p>
                     </Grid>
                     <Grid item >
-                        <p className={classes.p, classes.paginationSort}>0-0 of 0</p>
+                        <p className={classes.p, classes.paginationSort}>{page * rowsPerPage + 1}-{ page * rowsPerPage + orders.length } of {orders[0].numberOfOrders}</p>
                     </Grid>
                     <Grid item >
                         <div className={classes.pagination}>
                             <IconButton
-                                onClick={handleChangePage(0)}
+                                onClick={() => { handlePageChange(0) }}
                                 inputProps={{ 'data-testid': 'firstPageBtn' }}
                                 disabled={page === 0}
                                 aria-label="first page"
                             >
                                 {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
                             </IconButton>
-                            <IconButton inputProps={{ 'data-testid': 'lastPageBtn' }} onClick={handleChangePage(page - 1)} disabled={page === 0} aria-label="previous page">
+                            <IconButton
+                                inputProps={{ 'data-testid': 'lastPageBtn' }}
+                                onClick={() => { handlePageChange(page - 1) }} disabled={page === 0} aria-label="previous page">
                                 {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
                             </IconButton>
                             <IconButton
-                                onClick={handleChangePage(page + 1)}
+                                onClick={() => { handlePageChange(page + 1) }}
                                 inputProps={{ 'data-testid': 'nextPageBtn' }}
-                                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                                disabled={page >= Math.ceil(orders[0].numberOfOrders / rowsPerPage) - 1}
                                 aria-label="next page"
                             >
                                 {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
                             </IconButton>
                             <IconButton
-                                onClick={handleChangePage(Math.max(0, Math.ceil(count / rowsPerPage) - 1))}
+                                onClick={() => { handlePageChange(Math.max(0, Math.ceil(orders[0].numberOfOrders / rowsPerPage) - 1)) }}
                                 inputProps={{ 'data-testid': 'previousPageBtn' }}
-                                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                                disabled={page >= Math.ceil(orders[0].numberOfOrders / rowsPerPage) - 1}
                                 aria-label="last page"
                             >
                                 {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}

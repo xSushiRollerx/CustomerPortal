@@ -204,7 +204,7 @@ it("Clear Price API Call", async () => {
 
 });
 
-xit("Ratings API Call", async () => {
+fit("Ratings API Call", async () => {
 
     let calls = mockAxios.get.mockResolvedValue({
         data: result,
@@ -218,7 +218,7 @@ xit("Ratings API Call", async () => {
     });
 
     await act(async () => {
-        fireEvent.change(dom.getByTestId('ratings'), { target: { value: 4 } });
+        fireEvent.click(dom.getByTestId('ratings').querySelector('option'));
     });
 
     expect(calls.mock.calls.length).toBe(2);
