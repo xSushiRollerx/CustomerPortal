@@ -75,7 +75,7 @@ export default function UserOrders(props) {
 
     const handlePageChange = async (newPage) => {
         try {
-            let res = await OrderService.getOrders(newPage, 10, "newest").then(res => response = res);
+            let res = await OrderService.getOrders(newPage, 10, "newest");
             setStatus(res.status);
             setOrders(res.data);
         } catch (error) {
@@ -86,7 +86,7 @@ export default function UserOrders(props) {
 
     useEffect(async() => {
         try {
-            let res = await OrderService.getOrders(0, 10, "newest").then(res => response = res);
+            let res = await OrderService.getOrders(0, 10, "newest");
             setOrders(res.data);
             setStatus(res.status);
         } catch {
@@ -94,7 +94,7 @@ export default function UserOrders(props) {
         }
 
     }, []);
-
+    
     if (status === 0) {
         return (
             <div data-testid="Waiting">
@@ -138,20 +138,20 @@ export default function UserOrders(props) {
                         <div className={classes.pagination}>
                             <IconButton
                                 onClick={() => { handlePageChange(0) }}
-                                inputProps={{ 'data-testid': 'firstPageBtn' }}
+                                data-testid='firstPageBtn'
                                 disabled={page === 0}
                                 aria-label="first page"
                             >
                                 {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
                             </IconButton>
                             <IconButton
-                                inputProps={{ 'data-testid': 'lastPageBtn' }}
+                                data-testid='lastPageBtn'
                                 onClick={() => { handlePageChange(page - 1) }} disabled={page === 0} aria-label="previous page">
                                 {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
                             </IconButton>
                             <IconButton
                                 onClick={() => { handlePageChange(page + 1) }}
-                                inputProps={{ 'data-testid': 'nextPageBtn' }}
+                                data-testid='nextPageBtn'
                                 disabled={page >= Math.ceil(orders[0].numberOfOrders / rowsPerPage) - 1}
                                 aria-label="next page"
                             >
@@ -159,7 +159,8 @@ export default function UserOrders(props) {
                             </IconButton>
                             <IconButton
                                 onClick={() => { handlePageChange(Math.max(0, Math.ceil(orders[0].numberOfOrders / rowsPerPage) - 1)) }}
-                                inputProps={{ 'data-testid': 'previousPageBtn' }}
+                                data-testid='previousPageBtn' 
+                                id='previousPage'
                                 disabled={page >= Math.ceil(orders[0].numberOfOrders / rowsPerPage) - 1}
                                 aria-label="last page"
                             >

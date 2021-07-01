@@ -116,7 +116,7 @@ it("Use Effect Runs On Load", async () => {
     
 });
 
-xit("Search Creates API Call", async () => {
+fit("Search Creates API Call", async () => {
 
     let calls = mockAxios.get.mockResolvedValue({
         data: result,
@@ -135,8 +135,8 @@ xit("Search Creates API Call", async () => {
     
     await act(() => {
         fireEvent.change(searchBar, { target: { value: "hello" } });
-        fireEvent.keyDown(container, { key: 'Enter', code: 13 });
-        fireEvent.keyUp(container, { key: 'Enter', code: 13 });
+        fireEvent.keyDown(searchBar, { key: 'Enter', code: 13 });
+        fireEvent.keyUp(searchBar, { key: 'Enter', code: 13 });
     });
     
     expect(calls.mock.calls.length).toBe(2);
@@ -204,7 +204,7 @@ it("Clear Price API Call", async () => {
 
 });
 
-fit("Ratings API Call", async () => {
+it("Ratings API Call", async () => {
 
     let calls = mockAxios.get.mockResolvedValue({
         data: result,
@@ -218,7 +218,7 @@ fit("Ratings API Call", async () => {
     });
 
     await act(async () => {
-        fireEvent.click(dom.getByTestId('ratings').querySelector('option'));
+        fireEvent.click(dom.getAllByTestId('ratings')[3]);
     });
 
     expect(calls.mock.calls.length).toBe(2);
@@ -261,7 +261,6 @@ it("Pagination API Calls", async () => {
     });
 
     expect(calls.mock.calls.length).toBe(1);
-    
 
     await act(async () => {
         fireEvent.click(dom.getByTestId('previousPageBtn'));

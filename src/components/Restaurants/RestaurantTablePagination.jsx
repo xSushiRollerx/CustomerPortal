@@ -44,7 +44,9 @@ export default function RestaurantTablePagination(props) {
             >
                 {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
             </IconButton>
-            <IconButton data-testid='lastPageBtn' onClick={handleBackButtonClick} disabled={page === 0} aria-label="previous page">
+            <IconButton
+                data-testid='lastPageBtn'
+                onClick={handleBackButtonClick} disabled={page === 0} aria-label="previous page">
                 {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
             </IconButton>
             <IconButton

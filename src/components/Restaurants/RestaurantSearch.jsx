@@ -212,7 +212,7 @@ export default function RestaurantSearch(props) {
         //load event listener for when user hits enter
         window.addEventListener('keyup', (event) => {
             if (event.keyCode === 13) {
-                console.log("event fired");
+                console.log("key event fired");
                 event.preventDefault();
                 console.log(document.getElementById("searchBar").value);
                 try {

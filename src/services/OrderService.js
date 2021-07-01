@@ -24,8 +24,6 @@ const OrderService  = {
     },
 
     getOrders: async function (page, pageSize, sort) {
-
-        console.log('Order Service Run');
         try {
             return await axios.get(ORDER_SERVICE_BASE_URL + 's?page=' + page + "&pageSize=" + pageSize + "&sort=" + sort, config);
         } catch (error) {
