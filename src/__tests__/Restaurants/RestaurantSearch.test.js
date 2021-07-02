@@ -116,7 +116,7 @@ it("Use Effect Runs On Load", async () => {
     
 });
 
-fit("Search Creates API Call", async () => {
+it("Search Creates API Call", async () => {
 
     let calls = mockAxios.get.mockResolvedValue({
         data: result,
@@ -132,14 +132,14 @@ fit("Search Creates API Call", async () => {
 
 
     const searchBar = await dom.findByTestId('searchBar');
-    
+
     await act(() => {
         fireEvent.change(searchBar, { target: { value: "hello" } });
-        fireEvent.keyDown(searchBar, { key: 'Enter', code: 13 });
-        fireEvent.keyUp(searchBar, { key: 'Enter', code: 13 });
+        fireEvent.keyUp(searchBar, { keyCode: 13 });
     });
-    
-    expect(calls.mock.calls.length).toBe(2);
+
+    //Third call caused by clear ratings function
+    expect(calls.mock.calls.length).toBe(3);
     
 });
 

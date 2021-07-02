@@ -2,8 +2,14 @@
   "ExpandedNodes": [
     "",
     "\\src",
-    "\\src\\components",
-    "\\src\\__mocks__"
+    "\\src\\components\\AccountComponents",
+    "\\src\\components\\Restaurants",
+    "\\src\\services",
+    "\\src\\__tests__",
+    "\\src\\__tests__\\Account",
+    "\\src\\__tests__\\Checkout",
+    "\\src\\__tests__\\Restaurants"
   ],
+  "SelectedNode": "\\src\\__tests__\\Account\\UserOrders.test.js",
   "PreviewInSolutionExplorer": false
 }

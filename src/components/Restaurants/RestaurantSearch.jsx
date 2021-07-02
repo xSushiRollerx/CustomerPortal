@@ -210,15 +210,14 @@ export default function RestaurantSearch(props) {
         
         
         //load event listener for when user hits enter
-        window.addEventListener('keyup', (event) => {
+        window.addEventListener('keyup', async (event) => {
             if (event.keyCode === 13) {
-                console.log("key event fired");
+
                 event.preventDefault();
-                console.log(document.getElementById("searchBar").value);
                 try {
-                    let res = RestaurantService.getAllRestaurants(0, pageSize, "1, 2, 3, 4", 0, "relevance", (document.getElementById("searchBar") !== null ? document.getElementById("searchBar").value : ""))
+                    let res = await RestaurantService.getAllRestaurants(0, pageSize, "1, 2, 3, 4", 0, "relevance", (document.getElementById("searchBar") !== null ? document.getElementById("searchBar").value : ""))
+            
                     setStatus(res.status);
-                    console.log(res);
                     setRows(res.data);
                 } catch (error) {
                     setStatus(500);
