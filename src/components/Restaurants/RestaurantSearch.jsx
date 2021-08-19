@@ -69,7 +69,7 @@ export default function RestaurantSearch(props) {
     const [priceCategories, setPriceCategories] = useState("1, 2, 3, 4");
 
     const { cheap, mid, fine, high } = state;
-    const filter = (checkbox) => {
+    const filter = async (checkbox) => {
         console.log(checkbox)
         let cheapHolder = cheap;
         let midHolder = mid;
@@ -106,9 +106,16 @@ export default function RestaurantSearch(props) {
         if (query === "") {
             query = ", 1, 2, 3, 4"
         }
-        RestaurantService.getAllRestaurants(0, pageSize, query.substring(2), ratings, sort, keywords).then(res => response = res)
-            .then(() => { setRows(response.data); setStatus(response.status) })
-            .catch(err => { setStatus(500); });
+
+        try {
+            let res = await RestaurantService.getAllRestaurants(0, pageSize, query.substring(2), ratings, sort, keywords).then(res => response = res);
+            setStatus(res.status);
+            console.log(res);
+            setRows(res.data);
+        } catch (error) {
+            setStatus(500);
+
+        }
 
         setPage(0);
         setPriceCategories(query.substring(2));
@@ -118,10 +125,15 @@ export default function RestaurantSearch(props) {
         setState({ ...state, [event.target.name]: event.target.checked });
     
     };
-    const clearPrices = () => {
-        RestaurantService.getAllRestaurants(0, pageSize, "1, 2, 3, 4", ratings, sort, keywords).then(res => response = res)
-            .then(() => { setRows(response.data); setStatus(response.status) })
-            .catch(err => { setStatus(500); });
+    const clearPrices = async () => {
+        try {
+            let res = await RestaurantService.getAllRestaurants(0, pageSize, "1, 2, 3, 4", ratings, sort, keywords).then(res => response = res)
+            setStatus(res.status);
+            console.log(res);
+            setRows(res.data);
+        } catch (error) {
+            setStatus(500);
+        }
 
         setPage(0);
         setPriceCategories("1, 2, 3, 4");
@@ -131,31 +143,50 @@ export default function RestaurantSearch(props) {
             fine: false,
         });
     }
-    const handleRatingsChange = (event) => {
+    const handleRatingsChange = async (event) => {
         console.log(event.target.value);
-        RestaurantService.getAllRestaurants(0, pageSize, priceCategories, event.target.value, sort, keywords).then(res => response = res)
-            .then(() => { setRows(response.data); setStatus(response.status) })
-            .catch(err => { setStatus(500); });
+        try {
+            let res = await RestaurantService.getAllRestaurants(0, pageSize, priceCategories, event.target.value, sort, keywords).then(res => response = res);
+            setStatus(res.status);
+            console.log(res);
+            setRows(res.data);
+        } catch (error) {
+            setStatus(500);
+        }
         setRatings(event.target.value);
     }
-    const handleSort = (event) => {
+    const handleSort = async (event) => {
         console.log("Handle Sort: " + event.target.value);
-        RestaurantService.getAllRestaurants(0, pageSize, priceCategories, ratings, event.target.value, keywords).then(res => response = res)
-            .then(() => { console.log(response); setRows(response.data); setStatus(response.status) })
-            .catch(err => { setStatus(500); });
+        try {
+            let res = await RestaurantService.getAllRestaurants(0, pageSize, priceCategories, ratings, event.target.value, keywords).then(res => response = res);
+            setRows(res.data);
+            setStatus(res.status);
+        } catch (error) {
+            setStatus(500);
+        }
         setPage(0);
         setSort(event.target.value);
     };
-    const handleChangePage = (newPage) => {
-        RestaurantService.getAllRestaurants(newPage, pageSize, priceCategories, ratings, sort, keywords).then(res => response = res)
-            .then(() => { console.log(response); setRows(response.data); setStatus(response.status) })
-            .catch(err => { setStatus(500); });
+    const handleChangePage = async (newPage) => {
+        try {
+            let res = await RestaurantService.getAllRestaurants(newPage, pageSize, priceCategories, ratings, sort, keywords).then(res => response = res);
+            setStatus(res.status);
+            console.log(res);
+            setRows(res.data);
+        } catch (error) {
+            setStatus(500);
+        }
         setPage(newPage);
     };
-    const handleChangeRowsPerPage = (event) => {
-        RestaurantService.getAllRestaurants(0, event.target.value, priceCategories, ratings, sort, keywords).then(res => response = res)
-            .then(() => { setRows(response.data); setStatus(response.status) })
-            .catch(err => { setStatus(500); });
+    const handleChangeRowsPerPage = async (event) => {
+        try {
+            let res = await RestaurantService.getAllRestaurants(0, event.target.value, priceCategories, ratings, sort, keywords);
+            setStatus(res.status);
+            setRows(res.data);
+        } catch (error) {
+            setStatus(500);
+        
+        }
         setPage(0);
         setPageSize(event.target.value);
     };
@@ -168,22 +199,29 @@ export default function RestaurantSearch(props) {
             localStorage.setItem('dropOffAddress', JSON.stringify({ streetAddress: temp[0], city: temp[1], state: temp[2], zipCode: null}));
         }
     }
-    useEffect(() => {
-        //load results of search on page load
-        RestaurantService.getAllRestaurants(0, 10, "1, 2, 3, 4", 0, "default", "").then(res => response = res)
-            .then(() => { setRows(response.data); setStatus(response.status); })
-            .catch(err => { setStatus(500); });
-        updateAddress(JSON.parse(localStorage.getItem('dropOffAddress')));
+    useEffect(async () => {
+        try {
+            let res = await RestaurantService.getAllRestaurants(0, 10, "1, 2, 3, 4", 0, "default", "");
+            setStatus(res.status);
+            setRows(res.data);
+        } catch (error) {
+            setStatus(500);
+        }
+        
         
         //load event listener for when user hits enter
-        window.addEventListener('keyup', (event) => {
+        window.addEventListener('keyup', async (event) => {
             if (event.keyCode === 13) {
+
                 event.preventDefault();
-                console.log(document.getElementById("searchBar").value);
-                RestaurantService.getAllRestaurants(0, pageSize, "1, 2, 3, 4", 0, "relevance", (document.getElementById("searchBar") !== null ? document.getElementById("searchBar").value : ""))
-                .then(res => response = res)
-                    .then(() => { setRows(response.data); setStatus(response.status); })
-                    .catch(err => { setStatus(500); });
+                try {
+                    let res = await RestaurantService.getAllRestaurants(0, pageSize, "1, 2, 3, 4", 0, "relevance", (document.getElementById("searchBar") !== null ? document.getElementById("searchBar").value : ""))
+            
+                    setStatus(res.status);
+                    setRows(res.data);
+                } catch (error) {
+                    setStatus(500);
+                }
                 setKeywords(document.getElementById("searchBar").value);
                 setPage(0);
                 setSort("relevance");
@@ -198,16 +236,7 @@ export default function RestaurantSearch(props) {
     }, [])
 
     if (status === 0) {
-        console.log(status);
-        console.log(keywords);
         return (
-            /**
-            <div class="d-flex justify-content-center">
-                <div class="spinner-border" className={style.loading} role="status">
-                    <span class="sr-only"></span>
-                </div>
-            </div>
-            **/
 
            <div data-testid="Waiting">
                 <Backdrop className={style.backdrop} open={true}>
@@ -216,6 +245,7 @@ export default function RestaurantSearch(props) {
          </div>
         );
     }
+
     return (
         <Grid container direction="column" inputProps={{ 'data-testid': 'SearchPage' }}>
             <Grid item xs={12}>
@@ -224,9 +254,9 @@ export default function RestaurantSearch(props) {
                         < TextField className={style.search} placeholder="Search Restaurants" variant="outlined" inputProps={{ 'data-testid': 'searchBar' }}
                             InputLabelProps={{ shrink: false, }} size="small" color="black" xs={12} id="searchBar" defaultValue={keywords}/>
                     </Grid>
-                    <Grid item xs={2} justify="flex-end">
+                    <Grid item xs={2}>
                         <FormControl className={style.sortDisplay}>
-                            <Select value={sort} onChange={handleSort} variant="outlined" size="small" className={style.sort} SelectDisplayProps={style.sortDisplay}>
+                            <Select value={sort} onChange={handleSort} inputProps={{'data-testid': "sortSelect"}} variant="outlined" size="small" className={style.sort} SelectDisplayProps={style.sortDisplay}>
                                 <MenuItem value="default">Default</MenuItem>
                                 <MenuItem hidden={keywords === "" ? true : false} value="relevance"> Relevance</MenuItem>
                                 <MenuItem value="a-to-z">A-To-Z</MenuItem>
@@ -244,7 +274,7 @@ export default function RestaurantSearch(props) {
                             rowsPerPage={pageSize}
                             page={page}
                             SelectProps={{
-                                inputProps: { 'aria-label': 'rows per page' },
+                                inputProps: {'aria-label': 'rows per page', 'data-testid': 'rowsSelect'},
                                 native: true,
                             }}
                             onChangePage={handleChangePage}

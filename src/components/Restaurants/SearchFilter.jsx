@@ -71,29 +71,29 @@ export default function SearchFilter(props) {
                     <Grid item>
                         <Grid container direction="row" justify="space-between" alignItems="center">
                             <h5>Price Category</h5>
-                            <Checkbox color="black" icon={<ClearIcon fontSize="small" style={{ margin: "0px" }} />}
+                            <Checkbox color="black" inputProps={{ 'data-testid': 'clearPricesBox' }} icon={<ClearIcon  fontSize="small" style={{ margin: "0px" }} />}
                                 checkedIcon={<ClearIcon fontSize="small" style={{ margin: "0px" }}/>} onChange={props.clearPrices} name="clear-ratings-filter" />
                         </Grid>
                     </Grid>
                     
                     <FormControl>
                         <FormControlLabel
-                            control={<Checkbox checked={props.cheap} color="black" icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
+                            control={<Checkbox checked={props.cheap} inputProps={{ 'data-testid': 'cheapBox' }} color="black" icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
                                 checkedIcon={<CheckBoxIcon fontSize="small" />} onChange={props.handleChange} name="cheap" />}
                             label="Cheap Eats"
                         />
                         <FormControlLabel
-                            control={<Checkbox checked={props.mid} color="black"  icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
+                            control={<Checkbox checked={props.mid} color="black" inputProps={{ 'data-testid': 'midBox' }}  icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
                                 checkedIcon={<CheckBoxIcon fontSize="small" />} onChange={props.handleChange} name="mid" />}
                             label="Mid Range"
                         />
                         <FormControlLabel
-                            control={<Checkbox checked={props.fine} color="black"  icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
+                            control={<Checkbox checked={props.fine} color="black" inputProps={{ 'data-testid': 'fineBox' }}  icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
                                 checkedIcon={<CheckBoxIcon fontSize="small" />} onChange={props.handleChange} name="fine" />}
                             label="Fine Dining"
                         />
                         <FormControlLabel
-                            control={<Checkbox checked={props.high} color="black" icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
+                            control={<Checkbox checked={props.high} color="black" inputProps={{ 'data-testid': 'luxBox' }} icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
                                 checkedIcon={<CheckBoxIcon fontSize="small" />} closeAddress={close} onChange={props.handleChange} name="high" />}
                             label="High End Luxury"
                         />
@@ -104,14 +104,14 @@ export default function SearchFilter(props) {
             <Grid item>
                 <Grid container direction="row" justify="space-between" alignItems="center">
                     <h5>Rating</h5>
-                    <Checkbox id="clearRatings" color="black" icon={<ClearIcon fontSize="small" style={{ margin: "0px" }} />}
+                    <Checkbox id="clearRatings" inputProps={{ 'data-testid': 'clearRatings' }} color="black" icon={<ClearIcon fontSize="small" style={{ margin: "0px" }} />}
                         checkedIcon={<ClearIcon fontSize="small" style={{ margin: "0px" }} />} onChange={props.handleRatings} value={0}
                         name="clear-ratings-filter" />
                 </Grid>
             </Grid>
             <Grid item>
                 <Grid container direction="row" alignItems="center">
-                    <Rating name="selectRating" defaultValue={props.ratings} emptyIcon={<StarBorderIcon fontSize="inherit" />}
+                    <Rating name="selectRating" defaultValue={props.ratings} emptyIcon={<StarBorderIcon data-testid='ratings' fontSize="inherit" />}
                         onChange={props.handleRatings} value={props.ratings} />
                 </Grid>
             </Grid>

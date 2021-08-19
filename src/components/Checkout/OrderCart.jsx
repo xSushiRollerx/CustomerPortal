@@ -28,7 +28,7 @@ class OrderCart extends Component {
         } else if (this.state.address.streetAddress === null) {
             this.setState({ errorText: "Cannot checkout. You haven't filled out where you want your order(s) dropped off!" });
         } else {
-            this.props.history.push('/checkout/');
+            this.props.history.push('/checkout');
         }
         
     }

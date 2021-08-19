@@ -23,7 +23,7 @@ import { useHistory } from "react-router-dom";
 const drawerWidth = 200;
 const useStyles = makeStyles((theme) => ({
     root: {
-      display: 'flex',
+        display: 'flex',
     },
     appBar: {
       transition: theme.transitions.create(['margin', 'width'], {
@@ -100,10 +100,11 @@ export default function NavigationDrawer () {
         <div className={classes.root}>
             <CssBaseline />
             <AppBar
+                elevation={0}
                 position="fixed"
                 className={clsx(classes.appBar, {
-                [classes.appBarShift]: open,
-                })}
+                    [classes.appBarShift]: open,
+                }), { background: "black" }}
             >
                 <Toolbar>
                 <IconButton
@@ -140,7 +141,7 @@ export default function NavigationDrawer () {
                     </ListItemIcon>
                     <ListItemText primary={"Search"}/>
                 </ListItem>
-                    <ListItem button onClick={() => { handleitemClick("/")   }}>
+                    <ListItem button onClick={() => { handleitemClick("/account/17/orders")   }}>
                     <ListItemIcon>
                     <RestaurantIcon/>
                     </ListItemIcon>
