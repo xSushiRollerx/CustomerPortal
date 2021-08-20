@@ -2,11 +2,11 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
 import Chip from '@material-ui/core/Chip';
-import MenuCategory from './MenuCategory';
+import MenuCategory from './../components/Restaurants/MenuCategory';
 import { makeStyles } from '@material-ui/core/styles';
 import { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom"
-import RestaurantService from './../../services/RestaurantService';
+import RestaurantService from './../services/RestaurantService';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 
 
