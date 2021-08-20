@@ -76,9 +76,9 @@ export default function RestaurantProfile() {
         );
     } 
 
-    console.log(response);
+    console.log(restaurant);
     if (status !== 200) {
-        return <h1>{"Something Went Wrong. " + status + " Error"}</h1>
+        return <h1 data-testid="error-text">{"Something Went Wrong. " + status + " Error"}</h1>
         //return <Redirect to='/login' />;
  
     }

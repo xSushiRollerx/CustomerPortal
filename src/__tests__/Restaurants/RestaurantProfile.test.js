@@ -1,13 +1,12 @@
 import React from 'react';
-import { fireEvent, render, wait, waitFor, act } from '@testing-library/react';
+import { fireEvent, render, wait, waitFor, act, getByTestId } from '@testing-library/react';
 import { unmountComponentAtNode } from "react-dom";
 import mockAxios from 'axios';
 import reactRouterDom from 'react-router-dom';
 import RestaurantProfile from '../../pages/RestaurantProfile';
 
 
-const result = [
-    {
+const result = {
         "id": 2,
         "name": "French Bistro",
         "averageRating": 4.3,
@@ -43,39 +42,7 @@ const result = [
         "relevance": 0,
         "resultSize": 26,
         "totalPages": 3
-    },
-    {
-        "id": 3439,
-        "name": "HelloWord",
-        "averageRating": 2.6,
-        "tags": "hello, hola, salut, bonjour",
-        "isActive": 1,
-        "priceCategory": 1,
-        "streetAddress": "34 Hola",
-        "city": "Hello",
-        "state": "HW",
-        "zipCode": 55555,
-        "menu": [],
-        "relevance": 0,
-        "resultSize": 26,
-        "totalPages": 3
-    },
-    {
-        "id": 3440,
-        "name": "HelloWord",
-        "averageRating": 2.6,
-        "tags": "hello, hola, salut, bonjour",
-        "isActive": 1,
-        "priceCategory": 1,
-        "streetAddress": "34 Hola",
-        "city": "Hello",
-        "state": "HW",
-        "zipCode": 55555,
-        "menu": [],
-        "relevance": 0,
-        "resultSize": 26,
-        "totalPages": 3
-    }];
+    };
 
 
 jest.mock('react-router-dom', () => ({
@@ -101,7 +68,7 @@ afterEach(() => {
     container = null;
 });
 
-it("Use Effect Runs On Load", async () => {
+it("Use Effect Runs On Load 200 Response", async () => {
     let calls = mockAxios.get.mockResolvedValue({
         data: result,
         status: 200
@@ -116,6 +83,90 @@ it("Use Effect Runs On Load", async () => {
     
 });
 
+fit("Use Effect Runs On Load 403 Response", async () => {
+    let calls = mockAxios.get.mockResolvedValue({
+        data: result,
+        status: 403
+    });
+
+   
+    let dom;
+    await act(async () => {
+        dom = render(<RestaurantProfile />, container);
+    });
+    expect(calls.mock.calls.length).toBe(1);
+    expect(dom.getByTestId('error-text')).toBeTruthy();
+    
+});
+
+
+it("add item to cart and is saved to local storage", async () => {
+    let calls = mockAxios.get.mockResolvedValue({
+        data: result,
+        status: 200
+    });
+    localStorage.setItem('orders', '[]')
+
+   
+    let dom;
+    await act(async () => {
+        dom = render(<RestaurantProfile />, container);
+    });
+
+    console.log(container);
+
+    await act(async () => {
+        fireEvent.click(await dom.findByTestId('food-item-button-4'));
+    });
+
+    expect(dom.getByTestId("food-item-add-modal-4")).toBeTruthy();
+
+    await act(async () => {
+        fireEvent.change(await dom.findByTestId('food-item-add-field-'+ 4), {target: {value: 4}});
+        fireEvent.click(await dom.findByTestId('food-item-add-item-button-4'));
+    });
+
+    expect(JSON.parse(localStorage.getItem('orders'))[0].orderItems[0].quantity).toBe(4);
+    
+});
+
+it("Go back and add more items to the cart", async () => {
+    let calls = mockAxios.get.mockResolvedValue({
+        data: result,
+        status: 200
+    });
+    localStorage.setItem('orders', '[]')
+
+   
+    let dom;
+    await act(async () => {
+        dom = render(<RestaurantProfile />, container);
+    });
+
+    console.log(container);
+
+    await act(async () => {
+        fireEvent.click(await dom.findByTestId('food-item-button-4'));
+    });
+
+    await act(async () => {
+        fireEvent.change(await dom.findByTestId('food-item-add-field-'+ 4), {target: {value: 4}});
+        fireEvent.click(await dom.findByTestId('food-item-add-item-button-4'));
+    });
+
+    expect(JSON.parse(localStorage.getItem('orders'))[0].orderItems[0].quantity).toBe(4);
+    
+    await act(async () => {
+        fireEvent.click(await dom.findByTestId('food-item-button-4'));
+    });
+
+    await act(async () => {
+        fireEvent.change(await dom.findByTestId('food-item-add-field-'+ 4), {target: {value: 2}});
+        fireEvent.click(await dom.findByTestId('food-item-add-item-button-4'));
+    });
+
+    expect(JSON.parse(localStorage.getItem('orders'))[0].orderItems[0].quantity).toBe(6);
+});
 
 
 

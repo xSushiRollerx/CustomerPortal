@@ -160,7 +160,7 @@ export default function MenuItem(props) {
                                 <p>${props.item.cost}</p>
                             </Grid>
                             <Grid container item justify="center" alignItems="center" xs={1}>
-                            <IconButton aria-label="Add Food To Cart" fontSize="large" onClick={isLoggedIn}>
+                            <IconButton data-testid={"food-item-button-" + props.item.id} aria-label="Add Food To Cart" fontSize="large" onClick={isLoggedIn}>
                                     <ControlPoint />
                                 </IconButton>
                             </Grid>
@@ -168,7 +168,7 @@ export default function MenuItem(props) {
                     </CardContent>
                 </Card>
 
-            <Modal open={open} onClose={handleClose} aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" >
+            <Modal data-testid={"food-item-add-modal-" + props.item.id} open={open} onClose={handleClose} aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" >
                 <Card variant="outlined">
                     <CardContent className={style.paper}>
                             <Grid container item justify="center" alignItems="center" >Image</Grid>
@@ -181,9 +181,9 @@ export default function MenuItem(props) {
                             
                             <TextField id="standard-number" type="number" className={style.addNumber} deaultValue="1" variant="outlined"
                                 InputLabelProps={{ shrink: false, }} size="small" color="black" onChange={(event) => { setQuantity(event.target.value) }}
-                                InputProps={{ inputProps: { min: 1, max: 20 } }} error={error} />
+                                InputProps={{ inputProps: { min: 1, max: 20, 'data-testid': 'food-item-add-field-'+ props.item.id  } }} error={error} />
                             <FormHelperText error={true}>{errorText}</FormHelperText>
-                            <Button aria-label="Add Food To Cart" fontSize="large" variant="outlined" onClick={addItem} className={style.addToBasket} >
+                            <Button data-testid={'food-item-add-item-button-'+ props.item.id } aria-label="Add Food To Basket" fontSize="large" variant="outlined" onClick={addItem} className={style.addToBasket} >
                                 Add To Basket
                                 </Button>
                             </Grid>

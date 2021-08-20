@@ -1,6 +1,6 @@
 import React from 'react';
 import { fireEvent, render, wait, waitFor, act } from '@testing-library/react';
-import RestaurantSearch from './../../components/Restaurants/RestaurantSearch';
+import RestaurantSearch from './../../pages/RestaurantSearch';
 import { unmountComponentAtNode } from "react-dom";
 import mockAxios from 'axios';
 import reactRouterDom from 'react-router-dom';
