@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
 import Grid from '@material-ui/core/Grid';
-import PaymentService from '../../services/PaymentService';
+import PaymentService from '../services/PaymentService';
 import { useState, useEffect } from 'react';
 import Divider from '@material-ui/core/Divider';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -103,9 +103,10 @@ const states = [
     { state: 'Wisconsim', code: 'WI' },
     { state: 'Wyoming', code: 'WY' },
 ]
-const orders = JSON.parse(localStorage.getItem('orders'));
-console.log(orders);
+
 export default function StripeCheckout() {
+    
+    const orders = JSON.parse(localStorage.getItem('orders'));
     const classes = useStyles();
     const stripe = useStripe();
     const elements = useElements();
@@ -252,7 +253,6 @@ export default function StripeCheckout() {
     let deliveryfee = 0;
     let taxes = 0;
     let subTotal = 0;
-    console.log(orders);
     orders.map(o => o.orderItems.map(item => subTotal += (item.quantity * item.price)));
     let orderNames = orders.map(o => <p className='m-0'>{o.name}: </p>);
     let getTotal = (o) => {
@@ -274,11 +274,11 @@ export default function StripeCheckout() {
                             <Divider orientation="horizontal" />
                         <Grid container direction="row" justify="space-between" alignItems="center">
                             <Grid item xs={6}>
-                                    <TextField className={classes.cardName} id="standard-basic" label="First Name" size="small" name="firstName" error={firstName.error} inputProps={{ id: "billingFirstName" }}
+                                    <TextField className={classes.cardName} id="standard-basic" label="First Name" size="small" name="firstName" error={firstName.error} inputProps={{ id: "billingFirstName", 'data-testid': "first-name" }}
                                          />
                             </Grid>
                             <Grid item xs={6}>
-                                <TextField className={classes.cardName} id="standard-basic" label="Last Name" size="small" name="lastName" error={lastName.error} inputProps={{ id: "billingLastName" }} />
+                                <TextField className={classes.cardName} id="standard-basic" label="Last Name" size="small" name="lastName" error={lastName.error} inputProps={{ id: "billingLastName", 'data-testid': "last-name" }} />
                             </Grid>
                         </Grid>
                         <Grid container direction="row" justify="space-between" alignItems="flex-start">
@@ -289,11 +289,11 @@ export default function StripeCheckout() {
                                 <FormHelperText error={true}>{lastName.text}</FormHelperText>
                             </Grid>
                         </Grid>
-                        <TextField className={classes.cardName} id="standard-basic" label="Address" size="small" error={street.error} name="street" inputProps={{ id: "billingAddress" }} />
+                        <TextField className={classes.cardName} id="standard-basic" label="Address" size="small" error={street.error} name="street" inputProps={{ id: "billingAddress", 'data-testid': "street" }} />
                         <FormHelperText error={true}>{street.text}</FormHelperText>
                         <Grid container direction="row" justify="space-between" alignItems="flex-end">
                             <Grid item xs={6}>
-                                <TextField className={classes.cardName} id="standard-basic" label="City"  size="small" error={city.error} name="city" inputProps={{ id: "billingCity" }} />
+                                <TextField className={classes.cardName} id="standard-basic" label="City"  size="small" error={city.error} name="city" inputProps={{ id: "billingCity", 'data-testid': "city" }} />
                             </Grid>
                             <Grid item xs={3}>
                                 <Autocomplete
@@ -302,12 +302,13 @@ export default function StripeCheckout() {
                                     autoSelect
                                     size="small" 
                                     name="state"
+                                    data-testid='state' 
                                     onChange={(event) => setStateValue(event.target.value) }
                                     renderInput={(params) => <TextField {...params} error={state.error} label="State" margin="normal"/>}
                                 />
                             </Grid>
                             <Grid item xs={3}>
-                                <TextField className={classes.cardName} id="standard-basic" label="Zip Code" size="small" name="zipCode" error={zipCode.error} inputProps={{ id: "billingZipCode" }}
+                                <TextField className={classes.cardName} id="standard-basic" label="Zip Code" size="small" name="zipCode" error={zipCode.error} inputProps={{ id: "billingZipCode", 'data-testid': "zip-code" }}
                                     value={zipCodeValue}
                                     onChange={(event) => {
                                         const regex = /^([0-9]){0,5}$/i;
@@ -371,7 +372,7 @@ export default function StripeCheckout() {
                         </Grid>
                                     
                         <Divider orientation="horizontal" flexItem />
-                        <button className={classes.placeOrder} data-testId="PlaceOrder" className='w-100 btn btn-secondary rounded-0' onClick={handleSubmit} disabled={!stripe}>Place Order</button>
+                        <button id="place-order-button" className={classes.placeOrder} data-testId="PlaceOrder" className='w-100 btn btn-secondary rounded-0' onClick={handleSubmit} disabled={!stripe}>Place Order</button>
                     </Grid>
                 </Grid>
             </Grid>

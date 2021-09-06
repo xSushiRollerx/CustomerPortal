@@ -1,3 +1,4 @@
 export default {
-    get: jest.fn()
+    get: jest.fn(),
+    post: jest.fn()
 };

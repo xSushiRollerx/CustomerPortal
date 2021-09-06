@@ -2,7 +2,6 @@ import React from 'react';
 import { fireEvent, render, wait, waitFor, act, getByTestId } from '@testing-library/react';
 import { unmountComponentAtNode } from "react-dom";
 import mockAxios from 'axios';
-import reactRouterDom from 'react-router-dom';
 import RestaurantProfile from '../../pages/RestaurantProfile';
 
 
@@ -83,7 +82,7 @@ it("Use Effect Runs On Load 200 Response", async () => {
     
 });
 
-fit("Use Effect Runs On Load 403 Response", async () => {
+it("Use Effect Runs On Load 403 Response", async () => {
     let calls = mockAxios.get.mockResolvedValue({
         data: result,
         status: 403

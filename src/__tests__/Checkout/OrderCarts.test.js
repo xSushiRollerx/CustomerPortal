@@ -1,10 +1,10 @@
-/*import React from 'react';
+import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import OrderCart from '../../components/Checkout/OrderCart';
-import { unmountComponentAtNode } from "react-dom";*/
+import { unmountComponentAtNode } from "react-dom";
 
-/*let container = null;*/
-/*beforeEach(() => {
+let container = null;
+beforeEach(() => {
     let foodOrder = [
         {
             'name': 'Tokyo Sushi',
@@ -98,11 +98,12 @@ afterEach(() => {
 	unmountComponentAtNode(container);
 	container.remove();
 	container = null;
-});*/
+});
 
 
-/*it("orders render", () => {
+fit("orders render", () => {
     const { getByTestId } = render(<OrderCart />, container);
+    console.log(localStorage.getItem('orders'));
     for (let i = 0; i < JSON.parse(localStorage.getItem('orders')).length; i++) {
         expect(getByTestId('Order ' + i)).toBeInTheDocument();
     }
@@ -117,9 +118,9 @@ it("order items render", () => {
             expect(getByTestId('Order ' + i + ' Item ' + j)).toBeInTheDocument();
         }
     }
-});*/
+});
 
-/*it("order item quantity changes tests", () => {
+it("order item quantity changes tests", () => {
     const { getByTestId } = render(<OrderCart />, container);
     let orders = JSON.parse(localStorage.getItem('orders'));
 
@@ -140,9 +141,9 @@ it("order items render", () => {
         }
     }
 
-});*/
+});
 
-/*it("order item removal tests", () => {
+it("order item removal tests", () => {
     const { getByTestId } = render(<OrderCart />, container);
 
     fireEvent.click(getByTestId("Order 0 Delete 0"));
@@ -151,9 +152,9 @@ it("order items render", () => {
     expect(JSON.parse(localStorage.getItem('orders'))[0].orderItems.length).toBe(1);
 
     
-});*/
+});
 
-/*it("order item all removal tests", () => {
+it("order item all removal tests", () => {
     const { getByTestId } = render(<OrderCart />, container);
     let orders = JSON.parse(localStorage.getItem('orders'));
 
@@ -166,17 +167,17 @@ it("order items render", () => {
     expect(getByTestId('NoItems')).toBeTruthy();
     expect(getByTestId('NoItems').textContent).toBe('No Orders . . . Go Shopping!');
  
-});*/
+});
 
 
-/*it("check out button functionality", () => {
+it("check out button functionality", () => {
     const historyMock = { push: jest.fn() };
     const { getByTestId } = render(<OrderCart history={historyMock} />, container);
 
     fireEvent.click(getByTestId('OrderSummaryCheckOut'));
 
     expect(historyMock.push.mock.calls[0]).toEqual(['/confirmation'], getByTestId("Order"));
-});*/
+});
 
 
 

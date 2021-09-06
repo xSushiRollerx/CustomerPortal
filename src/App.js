@@ -9,7 +9,7 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import RestaurantProfile from './pages/RestaurantProfile';
 import RestaurantSearch from './pages/RestaurantSearch';
-import StripeCheckout from './components/Checkout/StripeCheckout';
+import StripeCheckout from './pages/StripeCheckout';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { useHistory } from "react-router-dom";
@@ -70,6 +70,7 @@ function App() {
                 <Route path={'/restaurants/'} component={RestaurantSearch}></Route>
                 <Route path="/error/:error" exact component={Error}></Route>
                 <Route exact path={'/checkout'} component={(location.pathname === "/cart" || location.pathname === "/checkout") ? StripeCheckout : CheckoutRedirect}></Route>
+                <Route exact path={'/checkout-test'} component={StripeCheckout}></Route>
                 <Route path="/account/:id/orders" exact component={UserOrders}></Route>
                         
 
