@@ -144,14 +144,14 @@ export default function StripeCheckout() {
 
         for (let input of inputs) {
             if (input.id === "billingState") {
-                if (stateValue === null | stateValue === undefined) {
+                if (input.value === null | input.value === undefined | input.value === "") {
+                    console.log(stateValue);
                     fieldsHolder = fieldsHolder.concat("\"" + "state" + "\": {\"error\": true, \"text\":  \"This field is not filled out\" },");
                     errors = true;
                 }  else {
                     fieldsHolder = fieldsHolder.concat("\"" + "state" + "\": {\"error\": false, \"text\":  null },");
                 }
-            } 
-            if (input.value === null | input.value.trim() === "") {
+            } else if (input.value === null | input.value.trim() === "") {
                 fieldsHolder = fieldsHolder.concat("\"" + input.name + "\": {\"error\": true, \"text\":  \"This field is not filled out\" },");
                 errors = true;
             } else if (input.name === "zipCode" && input.value.length < 5) {
@@ -179,15 +179,18 @@ export default function StripeCheckout() {
         // We don't want to let default form submission happen here,
         // which would refresh the page.
         event.preventDefault();
-        console.log("handlesubmit");
         if (notValid()) {
+            console.log("invalid");
             return;
         }
 
+        console.log("valid")
         setMain(false);
         setDivs({ ...divs, confirmingShow: true });
 
         if (!stripe || !elements) {
+            console.log("stripe: " + !stripe);
+            console.log("elements " + !elements)
             console.log("stripe not loaded");
             // Stripe.js has not yet loaded.
             // Make sure to disable form submission until Stripe.js has loaded.
@@ -206,7 +209,7 @@ export default function StripeCheckout() {
                         line1: document.getElementById("billingAddress").value,
                         line2: null,
                         postal_code: document.getElementById("billingZipCode").value,
-                        state: stateValue
+                        state: document.getElementById("billingState")
                     }
                 }//add the setup for usage? 
             }
@@ -262,7 +265,6 @@ export default function StripeCheckout() {
         
     }
     let orderTotals = orders.map(o => <p className='m-0'>${getTotal(o).toFixed(2)}</p>);
-
     return (
         <div>
             <div hidden={!main}>
@@ -283,14 +285,14 @@ export default function StripeCheckout() {
                         </Grid>
                         <Grid container direction="row" justify="space-between" alignItems="flex-start">
                             <Grid item xs={6}>
-                                <FormHelperText error={true}>{firstName.text}</FormHelperText>
+                                <FormHelperText data-testid='first-name-error-text' error={true}>{firstName.text}</FormHelperText>
                             </Grid>
                             <Grid item xs={6}>
-                                <FormHelperText error={true}>{lastName.text}</FormHelperText>
+                                <FormHelperText data-testid='last-name-error-text' error={true}>{lastName.text}</FormHelperText>
                             </Grid>
                         </Grid>
                         <TextField className={classes.cardName} id="standard-basic" label="Address" size="small" error={street.error} name="street" inputProps={{ id: "billingAddress", 'data-testid': "street" }} />
-                        <FormHelperText error={true}>{street.text}</FormHelperText>
+                        <FormHelperText data-testid='address-error-text' error={true}>{street.text}</FormHelperText>
                         <Grid container direction="row" justify="space-between" alignItems="flex-end">
                             <Grid item xs={6}>
                                 <TextField className={classes.cardName} id="standard-basic" label="City"  size="small" error={city.error} name="city" inputProps={{ id: "billingCity", 'data-testid': "city" }} />
@@ -302,8 +304,9 @@ export default function StripeCheckout() {
                                     autoSelect
                                     size="small" 
                                     name="state"
+                                    value={stateValue}
                                     data-testid='state' 
-                                    onChange={(event) => setStateValue(event.target.value) }
+                                    onChange={(event) => {console.log("state chage"); setStateValue(event.target.value);} }
                                     renderInput={(params) => <TextField {...params} error={state.error} label="State" margin="normal"/>}
                                 />
                             </Grid>
@@ -323,19 +326,19 @@ export default function StripeCheckout() {
                         </Grid>
                         <Grid container direction="row" justify="space-between" alignItems="flex-start">
                             <Grid item xs={6}>
-                                <FormHelperText error={true}>{city.text}</FormHelperText>
+                                <FormHelperText data-testid='city-error-text' error={true}>{city.text}</FormHelperText>
                             </Grid>
                             <Grid item xs={3}>
-                                <FormHelperText error={true}>{state.text}</FormHelperText>
+                                <FormHelperText data-testid='state-error-text' error={true}>{state.text}</FormHelperText>
                             </Grid>
                             <Grid item xs={3}>
-                                <FormHelperText error={true}>{zipCode.text}</FormHelperText>
+                                <FormHelperText data-testid='zip-code-error-text' error={true}>{zipCode.text}</FormHelperText>
                             </Grid>
 
 
                         </Grid>
                         <CardElement id="cardContainer" options={CARD_ELEMENT_OPTIONS} onChange={handleCardChange} />
-                        <FormHelperText error={true} >{cardErrorText}</FormHelperText>
+                        <FormHelperText data-testid='card-error-text' error={true} >{cardErrorText}</FormHelperText>
                             
                     </Grid>
                 </Grid>
@@ -387,7 +390,7 @@ export default function StripeCheckout() {
             </div>
             <div class="d-flex justify-content-center">
                 <Grid container direction="column" alignItems="center" justifyItems="center">
-                    <h2 style={{ display: responseShow ? "block" : "none" }}>{stripeResponse !== null ? stripeResponse.text : "" }</h2>
+                    <h2 data-testid="stripe-response" style={{ display: responseShow ? "block" : "none" }}>{stripeResponse !== null ? stripeResponse.text : "" }</h2>
                     <a style={{ display: responseShow ? "block" : "none" }} href={stripeResponse !== null ? "/" + stripeResponse.link : ""}>
                         <button style={{ display: responseShow ? "block" : "none" }} className={classes.placeOrder} className='w-100 btn btn-secondary rounded-0'>{stripeResponse !== null ? stripeResponse.btnText : ""}</button>
                     </a>

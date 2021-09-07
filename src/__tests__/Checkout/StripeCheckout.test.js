@@ -3,11 +3,22 @@ import { fireEvent, render, wait, waitFor, act, getByTestId } from '@testing-lib
 import { unmountComponentAtNode } from "react-dom";
 import mockAxios from 'axios';
 import StripeCheckout from '../../pages/StripeCheckout';
-import { Elements, } from '@stripe/react-stripe-js';
+import { Elements, useStripe, useElements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import { ExpansionPanelActions } from '@material-ui/core';
 
 let container = null;
+const mockStripe = {
+    confirmCardPayment: jest.fn().mockResolvedValue({error: false})
+}
+jest.mock("@stripe/react-stripe-js", () => {
+    const originalModule = jest.requireActual('@stripe/react-stripe-js');
+    return {
+      __esModule: true,
+      ...originalModule,
+      useStripe: jest.fn(),
+      useElements: jest.fn()
+    };
+  });
   
 
 beforeEach(() => {
@@ -91,12 +102,6 @@ beforeEach(() => {
         'zipCode': 66666
     };
 
-    
-    let mockLocalStorage = jest.spyOn(window.localStorage.__proto__, 'getItem');
-    mockLocalStorage.getItem = jest.fn();
-    mockLocalStorage.getItem.mockReturnValueOnce(order);
-   // mockLocalStorage.getItem.mockReturnValueOnce(address);
-
     localStorage.setItem('orders', JSON.stringify(order));
     localStorage.setItem('dropOffAddress', JSON.stringify(address));
 
@@ -142,11 +147,13 @@ it("Get Stripe Payment Promise from Backend", async () => {
     
 });
 
-it("Submit button is disabled on open", async () => {
+it("Form Validation", async () => {
     let calls = mockAxios.post.mockResolvedValue({
         data: 'stripe_key_id',
         status: 201
     });
+
+    useStripe.mockReturnValue(true);
 
     const stripePromise = loadStripe("pk_test_51Iwe6JI3Xcs3HqD5tqc5jdf19qqrUZ7QzkB1jmAdgYOFVSNPZswQ3UFtwVANBw2kbB2XWBHvhVjlD6ijn42BwXpN00MOlvXkn5");
     let dom;
@@ -154,14 +161,44 @@ it("Submit button is disabled on open", async () => {
         dom = render( <Elements stripe={stripePromise}><StripeCheckout /></Elements>, container);
     });
 
-    expect(document.getElementById("place-order-button").disabled).toBe(true);
+    await act(async () => {
+        fireEvent.click(document.getElementById("place-order-button"));
+    });
+
+    expect(document.getElementById("place-order-button").disabled).toBe(false);
+    expect(dom.getByTestId("first-name-error-text").textContent).toBe("This field is not filled out");
+    expect(dom.getByTestId("last-name-error-text").textContent).toBe("This field is not filled out");
+    expect(dom.getByTestId("address-error-text").textContent).toBe("This field is not filled out");
+    expect(dom.getByTestId("city-error-text").textContent).toBe("This field is not filled out");
+    expect(dom.getByTestId("state-error-text").textContent).toBe("This field is not filled out");
+    expect(dom.getByTestId("zip-code-error-text").textContent).toBe("This field is not filled out");
+
+    
+
+    await act(async () => {
+        fireEvent.change(dom.getByTestId("zip-code"), { target: { value: "344" } });
+        fireEvent.click(document.getElementById("place-order-button"));
+    });
+    expect(dom.getByTestId("zip-code-error-text").textContent).toBe("This field must contain a numeric five digit postal code");
+
+
     
 });
 
-fit("Form Validation", async () => {
+it("Submit Order to Stripe Successfully", async () => {
     let calls = mockAxios.post.mockResolvedValue({
         data: 'stripe_key_id',
         status: 201
+    });
+
+    useStripe.mockReturnValue({
+        confirmCardPayment: jest.fn().mockResolvedValue({
+            error: false,
+            paymentIntent: {status: "succeeded"}
+        })
+    });
+    useElements.mockReturnValue({
+        getElement: () => { return 42424242424}
     });
 
     const stripePromise = loadStripe("pk_test_51Iwe6JI3Xcs3HqD5tqc5jdf19qqrUZ7QzkB1jmAdgYOFVSNPZswQ3UFtwVANBw2kbB2XWBHvhVjlD6ijn42BwXpN00MOlvXkn5");
@@ -172,15 +209,69 @@ fit("Form Validation", async () => {
 
     
     await act(async () => {
-        fireEvent.change(dom.getByTestId("first-name", { target: { value: "First Name" } }));
-        fireEvent.change(dom.getByTestId("last-name", { target: { value: "Last Name" } }));
-        fireEvent.change(dom.getByTestId("street", { target: { value: "Street" } }));
-        fireEvent.change(dom.getByTestId("city", { target: { value: "City" } }));
-        fireEvent.change(dom.getByTestId("state").querySelector('input'), { target: { value: "TX" } });
-        fireEvent.change(dom.getByTestId("zip-code", { target: { value: "34456" } }));
+        fireEvent.change(dom.getByTestId("first-name"), { target: { value: "First Name" } });
+        fireEvent.change(dom.getByTestId("last-name"), { target: { value: "Last Name" } });
+        fireEvent.change(dom.getByTestId("street"), { target: { value: "Street" } });
+        fireEvent.change(dom.getByTestId("city"), { target: { value: "City" } });
+        fireEvent.change(dom.getByTestId("state").querySelector('input'), { target: { value: "GA" } });
+        fireEvent.change(dom.getByTestId("zip-code"), { target: { value: "34456" } });
+        //can't access stripe fields directly so instead manipulate class name which is used for validation
         document.getElementById("cardContainer").classList.remove("StripeElement--empty");
     });
 
-    expect(document.getElementById("place-order-button").disabled).toBe(true);
+    document.getElementById("billingState").value = "MO"
+    console.log(document.getElementById("billingState").value);
+
+    await act(async () => {
+        fireEvent.click(document.getElementById("place-order-button"));
+    });
+
+    //if successfule local storage is cleaned out
+    expect(localStorage.getItem("orders")).toBe("[]");
+    expect(dom.getByTestId("stripe-response").textContent).toBe("Your Order Has Been Processed Successfully!")
+    
+});
+
+it("Submit Order to Stripe Unsuccessfully", async () => {
+    let calls = mockAxios.post.mockResolvedValue({
+        data: 'stripe_key_id',
+        status: 201
+    });
+
+    useStripe.mockReturnValue({
+        confirmCardPayment: jest.fn().mockResolvedValue({
+            error: { message: "insufficient funds"},
+        })
+    });
+    useElements.mockReturnValue({
+        getElement: () => { return 42424242424}
+    });
+
+    const stripePromise = loadStripe("pk_test_51Iwe6JI3Xcs3HqD5tqc5jdf19qqrUZ7QzkB1jmAdgYOFVSNPZswQ3UFtwVANBw2kbB2XWBHvhVjlD6ijn42BwXpN00MOlvXkn5");
+    let dom;
+    await act(async () => {
+        dom = render( <Elements stripe={stripePromise}><StripeCheckout /></Elements>, container);
+    });
+
+    
+    await act(async () => {
+        fireEvent.change(dom.getByTestId("first-name"), { target: { value: "First Name" } });
+        fireEvent.change(dom.getByTestId("last-name"), { target: { value: "Last Name" } });
+        fireEvent.change(dom.getByTestId("street"), { target: { value: "Street" } });
+        fireEvent.change(dom.getByTestId("city"), { target: { value: "City" } });
+        fireEvent.change(dom.getByTestId("state").querySelector('input'), { target: { value: "GA" } });
+        fireEvent.change(dom.getByTestId("zip-code"), { target: { value: "34456" } });
+        //can't access stripe fields directly so instead manipulate class name which is used for validation
+        document.getElementById("cardContainer").classList.remove("StripeElement--empty");
+    });
+
+    document.getElementById("billingState").value = "MO"
+    console.log(document.getElementById("billingState").value);
+
+    await act(async () => {
+        fireEvent.click(document.getElementById("place-order-button"));
+    });
+
+    expect(dom.getByTestId("stripe-response").textContent).toBe("Your Order Was Not Processed Successfully. insufficient funds")
     
 });
