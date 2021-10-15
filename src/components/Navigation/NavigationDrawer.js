@@ -15,6 +15,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 import SearchIcon from '@material-ui/icons/Search';
+import CropSquare from '@material-ui/icons/CropSquare'
 
 import { useHistory } from "react-router-dom";
 // import { Collapse } from 'bootstrap';
@@ -158,6 +159,12 @@ export default function NavigationDrawer () {
                             <ShoppingBasketIcon />
                     </ListItemIcon>
                     <ListItemText primary={"Basket"} />
+                </ListItem>
+                <ListItem button onClick={() => { handleitemClick("/admin_temp") }}>
+                    <ListItemIcon>
+                            <CropSquare />
+                    </ListItemIcon>
+                    <ListItemText primary={"Admin Temp"} />
                 </ListItem>
                 <ListItem>
                    {/* <Collapse in={openAccount}> */}
